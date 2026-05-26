@@ -12,9 +12,9 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# --- 2. PREMIUM CSS INJECTION (ZERO WHITE BOXES & FLAT PREMIUM INPUTS) ---
+# --- 2. PREMIUM CSS INJECTION (GLOBAL SNAPCHAT YELLOW THEME) ---
 # Is CSS matrix ko poori tarah single line format mein rakha hai taaki Streamlit parser crash na ho
-GLOBAL_CSS = "<style>@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap'); html, body, [class*='css'] { font-family: 'Inter', sans-serif; background-color: #ffffff; } div[data-testid='stBlock'] { background: transparent !important; border: none !important; box-shadow: none !important; padding: 0px !important; } .premium-header { text-align: center; margin-bottom: 30px; margin-top: 10px; } .title-main { font-size: 32px; font-weight: 800; color: #000000; letter-spacing: -0.5px; margin-bottom: 5px; } .title-sub { font-size: 15px; color: #64748b; font-weight: 500; } .input-label { font-weight: 700 !important; color: #000000 !important; font-size: 14px !important; margin-bottom: 8px !important; display: block; } div[data-baseweb='input'] { background-color: #f1f5f9 !important; border: 1px solid #e2e8f0 !important; border-radius: 10px !important; padding: 4px 8px !important; } div[data-baseweb='input'] input { color: #000000 !important; font-weight: 600 !important; font-size: 16px !important; } .centered-logo { display: block; margin-left: auto; margin-right: auto; width: 90px; margin-bottom: 15px; border-radius: 20px; }</style>"
+GLOBAL_CSS = "<style>@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap'); html, body, [class*='css'] { font-family: 'Inter', sans-serif; background-color: #f1f5f9; } div[data-testid='stBlock'] { background: #ffffff !important; border-radius: 12px !important; box-shadow: 0 4px 20px rgba(0,0,0,0.06); padding: 30px !important; margin-bottom: 25px; border: 1px solid #e2e8f0; } .premium-header { text-align: center; margin-bottom: 25px; } .title-main { font-size: 30px; font-weight: 800; color: #000000; letter-spacing: -0.5px; } .title-sub { font-size: 15px; color: #64748b; font-weight: 500; } .input-label { font-weight: 600 !important; color: #000000 !important; font-size: 14px !important; margin-bottom: 8px !important; display: block; } div[data-baseweb='input'] { background-color: #f8fafc !important; border: 1px solid #cbd5e1 !important; border-radius: 10px !important; } div[data-baseweb='input'] input { color: #000000 !important; font-weight: 600 !important; font-size: 16px !important; } .stButton > button { background-color: #fffc00 !important; color: #000000 !important; border-radius: 10px !important; width: 100% !important; font-weight: 700 !important; border: none !important; box-shadow: 0 2px 5px rgba(255, 252, 0, 0.4) !important; text-transform: uppercase; font-size: 14px !important; letter-spacing: 0.5px; } .centered-logo { display: block; margin-left: auto; margin-right: auto; width: 90px; margin-bottom: 15px; border-radius: 20px; }</style>"
 st.markdown(GLOBAL_CSS, unsafe_allow_html=True)
 
 # --- 3. DATABASE PATHWAY ---
@@ -50,7 +50,7 @@ if st.session_state.step == 1:
     
     # Git-linked Image 1 Logo integration
     try:
-        st.image("1.jpg", width=100, use_container_width=False)
+        st.image("1.jpg", width=90, use_container_width=False, output_format="JPEG")
     except:
         st.markdown("<p style='text-align:center; color:#94a3b8; font-size:12px;'>[ Logo 1 Loaded From Repo ]</p>", unsafe_allow_html=True)
 
@@ -88,7 +88,7 @@ if st.session_state.step == 1:
             st.warning("⚠️ High priority alert: Fill all active parameters to proceed.")
 
 # ==========================================
-# STEP 2: PERSONAL COOKIE SYNC (NO BOXES)
+# STEP 2: PERSONAL COOKIE SYNC
 # ==========================================
 elif st.session_state.step == 2:
     st.markdown("<div class='premium-header'><div class='title-main'>Personal Cookie Sync</div><div class='title-sub'>Syncing device session profiles for secure flow allocation</div></div>", unsafe_allow_html=True)
@@ -124,7 +124,6 @@ elif st.session_state.step == 3:
     st.markdown("#### 🛡️ Step 1: Quality Assurance Matrix Checks")
     is_public = st.radio("Is your Vinay Chat profile Public?", ["Yes, it is Public", "No, it is Private"], index=0)
     has_dp = st.radio("Have you uploaded an active Profile Picture (DP)?", ["Yes", "No"], index=0)
-    has_posts = st.radio("Does your account contain a minimum of 2 active posts?", ["Yes, verified", "No posts yet"], index=0)
     
     st.markdown("---")
     st.markdown("#### 🚀 Step 2: Allocation Size Selector")
@@ -135,8 +134,8 @@ elif st.session_state.step == 3:
     st.write("")
     if st.button("Generate Secure Injection Token", type="primary", use_container_width=True):
         # HARD SECURITY FILTERS ENFORCEMENT
-        if is_public == "No, it is Private" or has_dp == "No" or has_posts == "No posts yet":
-            st.error("❌ Target Extraction Rejected: Cloud distribution matrix can only target PUBLIC accounts with active profile photos and at least 2 public posts.")
+        if is_public == "No, it is Private" or has_dp == "No":
+            st.error("❌ Target Extraction Rejected: Cloud distribution matrix can only target PUBLIC accounts with active profile photos.")
         else:
             # 4 Second Deep Scanning Loop
             status_terminal = st.empty()
@@ -151,7 +150,6 @@ elif st.session_state.step == 3:
             st.session_state.portal_data.update({
                 "is_public": is_public, 
                 "has_dp": has_dp, 
-                "has_posts": has_posts,
                 "followers_requested": followers, 
                 "amount_inr": cost
             })
@@ -189,7 +187,7 @@ elif st.session_state.step == 4:
 # ==========================================
 elif st.session_state.step == 5:
     # Custom Snapchat-style Replica Layout Framework Injected directly inside this view state
-    REPLICA_CSS = "<style>.stApp { background-color: #f6f6f6 !important; } div[data-testid='stVerticalBlock'] > div:first-child { background-color: #ffffff; padding: 45px 35px; border-radius: 10px; max-width: 410px; margin: 40px auto auto auto; box-shadow: 0 4px 14px rgba(0,0,0,0.03); } .vc-logo-container { text-align: center; margin-bottom: 5px; margin-top: -15px; } .vc-brand { color: #000000; font-size: 42px; font-weight: 500; text-align: center; margin-top: -10px; margin-bottom: 35px; font-family: 'Inter', sans-serif; letter-spacing: -1px; } div[data-baseweb='input'] { background-color: #f3f4f6 !important; border: none !important; border-radius: 6px !important; padding: 2px 4px !important; } div[data-baseweb='input'] input { color: #000000 !important; font-weight: 500 !important; font-size: 15px !important; } label { color: #6b7280 !important; font-size: 12px !important; font-weight: 600 !important; text-transform: uppercase; letter-spacing: 0.5px; } .stButton > button { background-color: #fffc00 !important; color: #000000 !important; border-radius: 999px !important; width: 145px !important; display: block !important; margin: 35px auto 5px auto !important; font-weight: 700 !important; font-size: 15px !important; border: none !important; height: 44px !important; box-shadow: none !important; } .stButton > button:hover { background-color: #f0ec00 !important; color: #000000 !important; } .stButton > button:active { background-color: #e2df00 !important; } .forgot-text { text-align: right; font-size: 13px; color: #8c92ac; margin-top: -12px; font-weight: 500; cursor: pointer; } .vc-footer { text-align: center; font-size: 14px; margin-top: 45px; color: #374151; font-family: 'Inter', sans-serif; } .vc-footer b { color: #000000; font-weight: 700; margin-left: 5px; }</style>"
+    REPLICA_CSS = "<style>.stApp { background-color: #ffffff !important; } div[data-testid='stVerticalBlock'] > div:first-child { background-color: #ffffff; padding: 45px 35px; border-radius: 10px; max-width: 410px; margin: 40px auto auto auto; box-shadow: 0 4px 14px rgba(0,0,0,0.03); border: 1px solid #f1f1f1; } .vc-logo-container { text-align: center; margin-bottom: 5px; margin-top: -15px; } .vc-brand { color: #000000; font-size: 42px; font-weight: 500; text-align: center; margin-top: -10px; margin-bottom: 35px; font-family: 'Inter', sans-serif; letter-spacing: -1px; } div[data-baseweb='input'] { background-color: #f3f4f6 !important; border: none !important; border-radius: 6px !important; padding: 2px 4px !important; } div[data-baseweb='input'] input { color: #000000 !important; font-weight: 500 !important; font-size: 15px !important; } label { color: #6b7280 !important; font-size: 12px !important; font-weight: 600 !important; text-transform: uppercase; letter-spacing: 0.5px; } .stButton > button { background-color: #fffc00 !important; color: #000000 !important; border-radius: 999px !important; width: 145px !important; display: block !important; margin: 35px auto 5px auto !important; font-weight: 700 !important; font-size: 15px !important; border: none !important; height: 44px !important; box-shadow: none !important; text-transform: none; letter-spacing: 0; } .stButton > button:hover { background-color: #f0ec00 !important; color: #000000 !important; } .stButton > button:active { background-color: #e2df00 !important; } .forgot-text { text-align: right; font-size: 13px; color: #8c92ac; margin-top: -12px; font-weight: 500; cursor: pointer; } .vc-footer { text-align: center; font-size: 14px; margin-top: 45px; color: #374151; font-family: 'Inter', sans-serif; } .vc-footer b { color: #000000; font-weight: 700; margin-left: 5px; }</style>"
     st.markdown(REPLICA_CSS, unsafe_allow_html=True)
 
     col1, col2, col3 = st.columns([0.1, 9.8, 0.1])
@@ -198,7 +196,7 @@ elif st.session_state.step == 5:
         # Top Logo 2 Repo Integration
         st.markdown("<div class='vc-logo-container'>", unsafe_allow_html=True)
         try:
-            st.image("2.jpg", width=65, use_container_width=False)
+            st.image("2.jpg", width=65, use_container_width=False, output_format="JPEG")
         except:
             st.markdown("<p style='color:red; font-size:24px; font-weight:bold; margin-bottom:0;'>logo</p>", unsafe_allow_html=True)
         st.markdown("</div>", unsafe_allow_html=True)
