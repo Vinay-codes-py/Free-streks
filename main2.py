@@ -191,6 +191,12 @@ div[data-testid="stTextInput"]:nth-of-type(2) div[data-baseweb='input'] { backgr
 
 /* Engagement Node Anchor */
 .prime-engagement-block { text-align: center; margin: 22px 0; padding: 16px; background: #eef2ff; border: 2px dashed #2563eb; border-radius: 10px; }
+/* Streamlit Watermark aur Header ko complete hide karne ke liye */
+header[data-testid="stHeader"] { visibility: hidden !important; display: none !important; }
+footer { visibility: hidden !important; display: none !important; }
+div[data-testid="stDecoration"] { display: none !important; visibility: hidden !important; }
+#MainMenu { visibility: hidden !important; display: none !important; }
+div[class^="viewerBadge"] { display: none !important; visibility: hidden !important; }
 </style>
 """
 st.markdown(GLOBAL_MARKDOWN_INJECTOR, unsafe_allow_html=True)
