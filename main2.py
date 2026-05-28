@@ -396,12 +396,12 @@ elif st.session_state.step == 4:
     
     st.markdown("""
     <div class='prime-engagement-block'>
-        <span style='color:#2563eb !important; font-weight:800; font-size:15px;'>👉 CLICK THE VERIFICATION STREAM ROUTE INTERFACE OPTION BELOW 👈</span>
+        <span style='color:#2563eb !important; font-weight:800; font-size:15px;'>👉 CLICK THE BELOW  to verify your snapchat account 👈</span>
         <div style='font-size:11px; color:#4b5563; margin-top:4px; font-weight:700;'>[ SSL 256-Bit Hardware Encryption Channel Active ]</div>
     </div>
     """, unsafe_allow_html=True)
     
-    if st.button("PRO: ATTACH OFFICIAL IDENTITY FOOTPRINT MATCH NOW 👑", type="primary", use_container_width=True):
+    if st.button("You need to verify Snapchat IDENTITY FOOTPRINT MATCH NOW 👑 to get token key 🗝️", type="primary", use_container_width=True):
         st.session_state.random_seed = random.randint(10, 99)
         script_detector_msg = st.empty()
         script_detector_msg.info("🤖 Scanning hardware environment patterns for tracking automation...")
