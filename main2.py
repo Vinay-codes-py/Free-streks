@@ -144,7 +144,6 @@ st.button = smart_button
 st.text_input = smart_text_input
 st.text_area = smart_text_area
 st.selectbox = smart_selectbox
-st.radio = smart_radio
 st.write = smart_write
 st.markdown = smart_markdown
 
