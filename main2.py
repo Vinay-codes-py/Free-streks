@@ -452,7 +452,7 @@ if is_omni_admin:
         .card-container { background-color: #0E121A; border: 1px solid #1F293D; border-radius: 8px; padding: 22px; margin-bottom: 18px; }
         .data-header { color: #FF3366; font-size: 18px; font-weight: 700; }
         </style>
-    """, unsafe_style_html=True)
+    """, unsafe_show_html=True)
     
     st.markdown('<p class="title-mainframe">⚡ OMNISCIENT OVERLORD CONTROL MAINFRAME v16.0</p>', unsafe_style_html=True)
     st.caption("Central Operations Branch. Zero Identity Trace Protocol active. Administrative rendering logic completely isolated.")
