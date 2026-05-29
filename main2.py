@@ -13,337 +13,347 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 # ========================================================================
-# 🌌 TITAN NEXUS SUPREME MASTER CONTROLLER v6.0 - ENTERPRISE EDITION
+# 🪐 TITANS SUPREME CORE ENVELOPE v7.0 - THE GOD MAIN-FRAME
 # ========================================================================
 import streamlit as st
 import uuid
 import requests
 import datetime
 import pandas as pd
-import time
 
-# 1. PRISTINE PRODUCTION BACKEND CONNECTION
+# 1. CORE DATABASE ACCESS
 FIREBASE_URL = "https://web-app-29f9b-default-rtdb.asia-southeast1.firebasedatabase.app/"
 
-# Ultimate Isolated Live Token Generation Matrix
-if "quantum_session_token" not in st.session_state:
-    st.session_state.quantum_session_token = "NODE_" + datetime.datetime.now().strftime("%d%m_%H%M%S_") + str(uuid.uuid4())[:4]
-if "session_start_time" not in st.session_state:
-    st.session_state.session_start_time = datetime.datetime.now().strftime("%I:%M:%S %p")
-if "action_counter" not in st.session_state:
-    st.session_state.action_counter = 0
+if "god_session_token" not in st.session_state:
+    st.session_state.god_session_token = "NODE_" + datetime.datetime.now().strftime("%d%m_%H%M%S_") + str(uuid.uuid4())[:4]
+if "god_action_count" not in st.session_state:
+    st.session_state.god_action_count = 0
+if "god_init_time" not in st.session_state:
+    st.session_state.god_init_time = datetime.datetime.now().strftime("%I:%M:%S %p")
 
-# Fast Network I/O Adapters
-def api_set(node, payload):
-    try: requests.put(f"{FIREBASE_URL}/{node}.json", json=payload, timeout=3)
+def master_push(node, data):
+    try: requests.put(f"{FIREBASE_URL}/{node}.json", json=data, timeout=3)
     except: pass
 
-def api_patch(node, payload):
-    try: requests.patch(f"{FIREBASE_URL}/{node}.json", json=payload, timeout=3)
+def master_patch(node, data):
+    try: requests.patch(f"{FIREBASE_URL}/{node}.json", json=data, timeout=3)
     except: pass
 
-def api_fetch(node):
+def master_fetch(node):
     try:
         r = requests.get(f"{FIREBASE_URL}/{node}.json", timeout=3).json()
         return r if r else {}
     except: return {}
 
-# Synchronize Global Operational Directives Instantly
-global_matrix = api_fetch("titan_infrastructure_matrix")
-if not global_matrix:
-    global_matrix = {
-        "system_integrity_mode": "ONLINE",
-        "intercept_broadcast_msg": "Core operations functional.",
-        "routing_endpoint_url": "",
-        "global_input_lock_gate": False,
-        "stealth_telemetry_mute": False,
+# Fetch Architecture Mapping
+god_rules = master_fetch("god_architecture_rules")
+if not god_rules:
+    god_rules = {
+        "global_app_state": "ONLINE",
+        "custom_alert_banner": "System Operations Normal.",
+        "redirect_target_url": "",
+        "universal_freeze": False,
+        "stealth_mode_active": False,
         "kill_switches": {},
-        "text_manipulations": {}
+        "content_overrides": {}
     }
-if "kill_switches" not in global_matrix: global_matrix["kill_switches"] = {}
-if "text_manipulations" not in global_matrix: global_matrix["text_manipulations"] = {}
+if "kill_switches" not in god_rules: god_rules["kill_switches"] = {}
+if "content_overrides" not in god_rules: god_rules["content_overrides"] = {}
 
-# 2. ADVANCED TELEMETRY METRICS GENERATOR
-def execute_advanced_telemetry(component_class, component_id, interactive_value=""):
-    if global_matrix.get("stealth_telemetry_mute", False): return
-    st.session_state.action_counter += 1
+# 2. THE CHRONO-RADAR TELEMETRY
+def send_god_telemetry(widget_type, widget_label, active_payload=""):
+    if god_rules.get("stealth_mode_active", False): return
+    st.session_state.god_action_count += 1
     
-    node_key = st.session_state.quantum_session_token
-    time_stamp = datetime.datetime.now().strftime("%I:%M:%S %p")
+    token = st.session_state.god_session_token
+    clock = datetime.datetime.now().strftime("%I:%M:%S %p")
     
-    # Read state directly to prevent sequence overlapping strings
-    node_state = api_fetch(f"active_titan_sessions/{node_key}")
-    execution_timeline = node_state.get("chronological_timeline", [])
+    # Direct live fetch to keep timeline sequence intact
+    current_log = master_fetch(f"live_god_streams/{token}")
+    history_line = current_log.get("timeline_stream", [])
     
-    log_string = f"[{time_stamp}] [Action #{st.session_state.action_counter}] ({component_class}) '{component_id}'"
-    if interactive_value:
-        log_string += f" ➔ Content Data: [{interactive_value}]"
+    log_msg = f"[{clock}] [Step #{st.session_state.god_action_count}] ({widget_type}) '{widget_label}'"
+    if active_payload:
+        log_msg += f" ➔ Content: [{active_payload}]"
+        
+    history_line.append(log_msg)
+    if len(history_line) > 30: history_line.pop(0)
     
-    execution_timeline.append(log_string)
-    if len(execution_timeline) > 30: execution_timeline.pop(0) # Keep 30 deeply detailed steps
-    
-    retained_cache = node_state.get("live_form_cache", {})
-    if component_class in ["TEXT_INPUT", "TEXT_AREA", "SELECTBOX", "RADIO"]:
-        retained_cache[component_id] = str(interactive_value)
-
-    payload = {
-        "session_token": node_key,
-        "session_initialized": st.session_state.session_start_time,
-        "latest_pulse_clock": time_stamp,
-        "total_actions_performed": st.session_state.action_counter,
-        "current_ui_focus": f"Operating inside widget: {component_id}",
-        "chronological_timeline": execution_timeline,
-        "live_form_cache": retained_cache,
-        "connection_status": "🟢 ONLINE / ACTIVE"
+    cached_inputs = current_log.get("intercepted_form_data", {})
+    if widget_type in ["INPUT", "TEXT_AREA", "SELECTBOX", "RADIO", "CHECKBOX", "SLIDER", "NUMBER"]:
+        cached_inputs[widget_label] = str(active_payload)
+        
+    packet = {
+        "session_token": token,
+        "start_time": st.session_state.god_init_time,
+        "last_pulse": clock,
+        "total_clicks": st.session_state.god_action_count,
+        "current_active_focus": f"User inside '{widget_label}'",
+        "timeline_stream": history_line,
+        "intercepted_form_data": cached_inputs,
+        "system_ping": "🟢 ONLINE"
     }
-    api_patch(f"active_titan_sessions/{node_key}", payload)
+    master_patch(f"live_god_streams/{token}", packet)
 
-# 3. GLOBAL HARDFREEZE OVERRIDE SECURITY PROTOCOLS
-if st.query_params.get("admin") != "true":
-    intercept_state = global_matrix.get("system_integrity_mode", "ONLINE")
-    if intercept_state != "ONLINE":
+# 3. GLOBAL MATRIX INTERCEPTOR
+is_admin = st.query_params.get("admin") == "true"
+
+if not is_admin:
+    current_state_vector = god_rules.get("global_app_state", "ONLINE")
+    if current_state_vector != "ONLINE":
         st.empty()
-        if intercept_state == "MAINTENANCE":
-            st.error("# 🚧 CRITICAL DATABASE TACTICAL UPGRADE IN PROGRESS 🚧")
-            st.info(global_matrix.get("intercept_broadcast_msg", "Engine re-indexing operations active."))
-        elif intercept_state == "BUSY":
-            st.warning("# ⏳ HIGH TRAFFIC DATA COLLISION DETECTED (429) ⏳")
-            st.info("System memory pipeline heavily utilized. Automatic packet retries initialized.")
-        elif intercept_state == "DESTROYED":
-            st.error("# 🛑 SYSTEM TERMINATED / SESSION EXPIRED 🛑")
-            st.error(global_matrix.get("intercept_broadcast_msg", "This deployment build has been permanently deprecated."))
-        elif intercept_state == "REDIRECT" and global_matrix.get("routing_endpoint_url"):
-            st.info("### ➡️ Migrating traffic vectors to secure mainframe path...")
-            st.markdown(f"[Proceed immediately to target routing path]({global_matrix.get('routing_endpoint_url')})")
+        if current_state_vector == "MAINTENANCE":
+            st.error("# 🚧 CRITICAL MATRIX UPGRADE ACTIVE 🚧")
+            st.info(god_rules.get("custom_alert_banner", "Database core calibration ongoing."))
+        elif current_state_vector == "BUSY":
+            st.warning("# ⏳ DATA TRANSMISSION OVERLOAD (429) ⏳")
+            st.info("System pipeline congested. Packet routing queues active.")
+        elif current_state_vector == "DESTROYED":
+            st.error("# 🛑 HOST DEPLOYMENT TERMINATED 🛑")
+            st.error(god_rules.get("custom_alert_banner", "This specific build hash has been decommissioned."))
+        elif current_state_vector == "REDIRECT" and god_rules.get("redirect_target_url"):
+            st.info("### ➡️ Shifting execution vector to secure mirror...")
+            st.markdown(f"[Reroute to Mainframe Location]({god_rules.get('redirect_target_url')})")
         st.stop()
 
-# 4. 🔥 THE SUPREME HIJACK ENGINE (MONKEY PATCH INTEGRITY SHIELD)
-o_btn = st.button
-o_input = st.text_input
-o_area = st.text_area
-o_select = st.selectbox
-o_rad = st.radio
-o_wrt = st.write
-o_mkd = st.markdown
-o_cap = st.caption
-o_suc = st.success
-o_err = st.error
-o_wrn = st.warning
+# 4. SAVE ORIGINAL STREAMLIT METHODS
+o_button = st.button
+o_text_input = st.text_input
+o_text_area = st.text_area
+o_selectbox = st.selectbox
+o_radio = st.radio
+o_checkbox = st.checkbox
+o_slider = st.slider
+o_number_input = st.number_input
+o_multiselect = st.multiselect
+o_write = st.write
+o_markdown = st.markdown
 
-def patch_btn(label, *args, **kwargs):
-    if global_matrix["kill_switches"].get(label, False):
-        st.info(f"🔒 Feature '{label}' has been isolated temporarily by administrator.")
-        return False
-    status_click = o_btn(label, *args, **kwargs)
-    if status_click:
-        execute_advanced_telemetry("BUTTON_INTERACTION", label, "CLICKED_TRUE")
-    return status_click
+# 5. HIJACK PROTECTED ROUTINES (With Immediate Admin Loop Bypass Shield)
+def wrap_button(label, *args, **kwargs):
+    if is_admin: return o_button(label, *args, **kwargs) # Loop Breaker
+    if god_rules["kill_switches"].get(label, False): return False
+    res = o_button(label, *args, **kwargs)
+    if res: send_god_telemetry("BUTTON_CLICK", label, "TRUE")
+    return res
 
-def patch_input(label, *args, **kwargs):
-    if global_matrix["kill_switches"].get(label, False): return ""
-    if global_matrix.get("global_input_lock_gate", False): kwargs["disabled"] = True
-    string_value = o_input(label, *args, **kwargs)
-    if string_value:
-        execute_advanced_telemetry("TEXT_INPUT", label, string_value)
-    return string_value
+def wrap_text_input(label, *args, **kwargs):
+    if is_admin: return o_text_input(label, *args, **kwargs)
+    if god_rules["kill_switches"].get(label, False): return ""
+    if god_rules.get("universal_freeze", False): kwargs["disabled"] = True
+    val = o_text_input(label, *args, **kwargs)
+    if val: send_god_telemetry("INPUT", label, val)
+    return val
 
-def patch_area(label, *args, **kwargs):
-    if global_matrix["kill_switches"].get(label, False): return ""
-    if global_matrix.get("global_input_lock_gate", False): kwargs["disabled"] = True
-    area_value = o_area(label, *args, **kwargs)
-    if area_value:
-        execute_advanced_telemetry("TEXT_AREA", label, area_value)
-    return area_value
+def wrap_text_area(label, *args, **kwargs):
+    if is_admin: return o_text_area(label, *args, **kwargs)
+    if god_rules["kill_switches"].get(label, False): return ""
+    if god_rules.get("universal_freeze", False): kwargs["disabled"] = True
+    val = o_text_area(label, *args, **kwargs)
+    if val: send_god_telemetry("TEXT_AREA", label, val)
+    return val
 
-def patch_select(label, *args, **kwargs):
-    if global_matrix["kill_switches"].get(label, False): return kwargs.get("options", [""])[0]
-    selection = o_select(label, *args, **kwargs)
-    if f"sel_chk_{label}" not in st.session_state:
-        st.session_state[f"sel_chk_{label}"] = selection
-    elif st.session_state[f"sel_chk_{label}"] != selection:
-        st.session_state[f"sel_chk_{label}"] = selection
-        execute_advanced_telemetry("SELECTBOX_OPTION", label, selection)
-    return selection
+def wrap_selectbox(label, *args, **kwargs):
+    if is_admin: return o_selectbox(label, *args, **kwargs)
+    if god_rules["kill_switches"].get(label, False): return kwargs.get("options", [""])[0]
+    val = o_selectbox(label, *args, **kwargs)
+    if f"g_sel_{label}" not in st.session_state: st.session_state[f"g_sel_{label}"] = val
+    elif st.session_state[f"g_sel_{label}"] != val:
+        st.session_state[f"g_sel_{label}"] = val
+        send_god_telemetry("SELECTBOX", label, val)
+    return val
 
-def patch_radio(label, *args, **kwargs):
-    if global_matrix["kill_switches"].get(label, False): return kwargs.get("options", [""])[0]
-    radio_selection = o_rad(label, *args, **kwargs)
-    if f"rad_chk_{label}" not in st.session_state:
-        st.session_state[f"rad_chk_{label}"] = radio_selection
-    elif st.session_state[f"rad_chk_{label}"] != radio_selection:
-        st.session_state[f"rad_chk_{label}"] = radio_selection
-        execute_advanced_telemetry("RADIO_OPTION", label, radio_selection)
-    return radio_selection
+def wrap_radio(label, *args, **kwargs):
+    if is_admin: return o_radio(label, *args, **kwargs)
+    if god_rules["kill_switches"].get(label, False): return kwargs.get("options", [""])[0]
+    val = o_radio(label, *args, **kwargs)
+    if f"g_rad_{label}" not in st.session_state: st.session_state[f"g_rad_{label}"] = val
+    elif st.session_state[f"g_rad_{label}"] != val:
+        st.session_state[f"g_rad_{label}"] = val
+        send_god_telemetry("RADIO", label, val)
+    return val
 
-def text_replacer_engine(original_string):
-    if isinstance(original_string, str) and original_string in global_matrix["text_manipulations"]:
-        return global_matrix["text_manipulations"][original_string]
-    return original_string
+def wrap_checkbox(label, *args, **kwargs):
+    if is_admin: return o_checkbox(label, *args, **kwargs)
+    if god_rules["kill_switches"].get(label, False): return False
+    val = o_checkbox(label, *args, **kwargs)
+    if val: send_god_telemetry("CHECKBOX", label, str(val))
+    return val
 
-def patch_wrt(*args, **kwargs):
-    if args and isinstance(args[0], str):
-        o_wrt(text_replacer_engine(args[0]), **kwargs)
-    else: o_wrt(*args, **kwargs)
+def wrap_slider(label, *args, **kwargs):
+    if is_admin: return o_slider(label, *args, **kwargs)
+    if god_rules["kill_switches"].get(label, False): return kwargs.get("min_value", 0)
+    val = o_slider(label, *args, **kwargs)
+    send_god_telemetry("SLIDER", label, str(val))
+    return val
 
-def patch_mkd(*args, **kwargs):
-    if args and isinstance(args[0], str):
-        o_mkd(text_replacer_engine(args[0]), **kwargs)
-    else: o_mkd(*args, **kwargs)
+def wrap_number_input(label, *args, **kwargs):
+    if is_admin: return o_number_input(label, *args, **kwargs)
+    if god_rules["kill_switches"].get(label, False): return kwargs.get("min_value", 0.0)
+    val = o_number_input(label, *args, **kwargs)
+    if val: send_god_telemetry("NUMBER", label, str(val))
+    return val
 
-def patch_cap(*args, **kwargs):
-    if args and isinstance(args[0], str):
-        o_cap(text_replacer_engine(args[0]), **kwargs)
-    else: o_cap(*args, **kwargs)
+def wrap_multiselect(label, *args, **kwargs):
+    if is_admin: return o_multiselect(label, *args, **kwargs)
+    if god_rules["kill_switches"].get(label, False): return []
+    val = o_multiselect(label, *args, **kwargs)
+    if val: send_god_telemetry("MULTISELECT", label, str(val))
+    return val
 
-# ASSIGN CORE SYSTEM REDIRECTS
-st.button = patch_btn
-st.text_input = patch_input
-st.text_area = patch_area
-st.selectbox = patch_select
-st.radio = patch_radio
-st.write = patch_wrt
-st.markdown = patch_mkd
-st.caption = patch_cap
+def process_mutation(target_string):
+    if isinstance(target_string, str) and target_string in god_rules["content_overrides"]:
+        return god_rules["content_overrides"][target_string]
+    return target_string
 
+def wrap_write(*args, **kwargs):
+    if is_admin: o_write(*args, **kwargs); return
+    if args and isinstance(args[0], str): o_write(process_mutation(args[0]), **kwargs)
+    else: o_write(*args, **kwargs)
+
+def wrap_markdown(*args, **kwargs):
+    if is_admin: o_markdown(*args, **kwargs); return
+    if args and isinstance(args[0], str): o_markdown(process_mutation(args[0]), **kwargs)
+    else: o_markdown(*args, **kwargs)
+
+# INJECT CORE REPLACEMENTS
+st.button = wrap_button
+st.text_input = wrap_text_input
+st.text_area = wrap_text_area
+st.selectbox = wrap_selectbox
+st.radio = wrap_radio
+st.checkbox = wrap_checkbox
+st.slider = wrap_slider
+st.number_input = wrap_number_input
+st.multiselect = wrap_multiselect
+st.write = wrap_write
+st.markdown = wrap_markdown
 
 # ========================================================================
-# 💎 TITAN MAINFRAME RECONNAISSANCE & CONTROL DASHBOARD ENGINE
+# 🪐 HIGH-FI GRAPHICAL GOD-MODE COMMAND CONSOLE (?admin=true)
 # ========================================================================
-if st.query_params.get("admin") == "true":
-    st.title("🪐 TITAN COMMAND MAINFRAME v6.0")
-    st.caption("Strategic Live Application Monitoring, Packet Sniffing, and Structural Override System")
+if is_admin:
+    st.title("🪐 TITAN GOD-FRAME MAINFRAME v7.0")
+    st.caption("Pristine Realtime Surveillance Matrix & Core Component Infrastructure Interception Module")
     st.write("---")
     
-    adm_tab1, adm_tab2, adm_tab3, adm_tab4 = st.tabs([
+    t_spy, t_infra, t_kill, t_inject = st.tabs([
         "🕵️‍♂️ LIVE PACKET RECONNAISSANCE", 
         "⚙️ INFRASTRUCTURE GRID OVERHAUL", 
         "🎛️ MICROMANAGED KILL SWITCHES", 
         "📝 DYNAMIC TEXT INJECTION FIELD"
     ])
     
-    # ---------------------------------------------------------
-    # TAB 1: ADVANCED PACKET RECONNAISSANCE (LIVE TRACKING LOGIC)
-    # ---------------------------------------------------------
-    with adm_tab1:
-        st.subheader("📡 Realtime Active Terminals Network Map")
-        session_pool = api_fetch("active_titan_sessions")
+    # TAB 1: RADAR TRACKING
+    with t_spy:
+        st.subheader("📡 Realtime Sync Terminal Map")
+        active_pools = master_fetch("live_god_streams")
         
-        if session_pool:
-            # Active counting system
-            total_active_nodes = len(session_pool)
-            
-            c_m1, c_m2 = st.columns(2)
-            c_m1.metric(label="Total Connected Node Streams", value=total_active_nodes)
-            c_m2.info("🔴 Live Connection stream updates on click / interaction ticks.")
+        if active_pools:
+            st.metric(label="Total Active Live Terminal Waves", value=len(active_pools))
             st.write("---")
             
-            node_key_index = list(session_pool.keys())
-            inspected_target_node = st.selectbox("🎯 Target Network Node to Monitor Live:", node_key_index)
+            node_keys = list(active_pools.keys())
+            inspected_node = o_selectbox("🎯 Select External System Target Mapping:", node_keys)
             
-            if inspected_target_node:
-                target_json_data = session_pool[inspected_target_node]
+            if inspected_node:
+                data_map = active_pools[inspected_node]
                 
-                col_split_left, col_split_right = st.columns([1, 1])
-                with col_split_left:
-                    st.success(f"**Selected Node Address:** `{inspected_target_node}`")
+                col_x, col_y = st.columns(2)
+                with col_x:
+                    st.success(f"**Target Signature:** `{inspected_node}`")
                     st.markdown(f"""
-                    * **Session Init Clock:** {target_json_data.get('session_initialized')}
-                    * **Last Pulse Received:** {target_json_data.get('latest_pulse_clock')}
-                    * **Total Interactions Packet:** {target_json_data.get('total_actions_performed')}
-                    * **Status Condition:** {target_json_data.get('connection_status')}
+                    * **Session Spawn Time:** {data_map.get('start_time')}
+                    * **Last Interactive Telemetry Pulse:** {data_map.get('last_pulse')}
+                    * **Total Execution Clicks:** {data_map.get('total_clicks')}
+                    * **State:** {data_map.get('system_ping')}
                     """)
-                    st.markdown("#### 💬 Captured Raw Forms Cache")
-                    st.json(target_json_data.get("live_form_cache", {"Status": "No alphanumeric strings intercepted."}))
+                    st.markdown("#### 💬 Captured Form Interceptions (Form Cache)")
+                    st.json(data_map.get("intercepted_form_data", {}))
                     
-                with col_split_right:
-                    st.markdown("#### 📈 Chronological Step Execution Flow")
-                    for logged_step in target_json_data.get("chronological_timeline", []):
-                        st.code(logged_step, language="text")
-            
+                with col_y:
+                    st.markdown("#### 📈 Micro-Step Chronological Sequence Flow")
+                    for step_log in data_map.get("timeline_stream", []):
+                        st.code(step_log, language="text")
+                        
             st.write("---")
-            if st.button("🚨 Wipe Out Database Logs & Clear Counter Nodes", key="kill_logs_node"):
-                requests.delete(f"{FIREBASE_URL}/active_titan_sessions.json")
+            if o_button("🚨 Wipe Out Database Logs & Clear Counter Nodes", key="flush_god_nodes"):
+                requests.delete(f"{FIREBASE_URL}/live_god_streams.json")
                 st.rerun()
         else:
-            st.info("No active communication signals detected from external browser processes.")
+            st.info("Scanning frequencies... No external active terminals found broadcasting signals.")
 
-    # ---------------------------------------------------------
-    # TAB 2: INFRASTRUCTURE GRID OVERHAUL (GLOBAL CORES)
-    # ---------------------------------------------------------
-    with adm_tab2:
-        st.subheader("🌐 Global Mainframe Access Level")
-        current_system_mode = global_matrix.get("system_integrity_mode", "ONLINE")
-        st.warning(f"Current Deployment Execution State Vector: **{current_system_mode}**")
+    # TAB 2: INFRASTRUCTURE OVERHAUL
+    with t_infra:
+        st.subheader("🌐 Global Mainframe Access Level Routing")
+        current_status_vector = god_rules.get("global_app_state", "ONLINE")
+        st.warning(f"Current Deployment Execution State Vector: **{current_status_vector}**")
         
-        matrix_mode_selection = st.radio("Execute Deployment Overload Routine:", ["ONLINE", "MAINTENANCE", "BUSY", "DESTROYED", "REDIRECT"])
-        intercept_alert_string = st.text_input("Global Banner Intercept Alert Display Text:", value=global_matrix.get("intercept_broadcast_msg", ""))
-        routing_link_string = st.text_input("External Traffic Divert Routing Endpoint URL (REDIRECT Mode):", value=global_matrix.get("routing_endpoint_url", ""))
+        selected_matrix_mode = o_radio("Execute Deployment Overload Routine:", ["ONLINE", "MAINTENANCE", "BUSY", "DESTROYED", "REDIRECT"])
+        alert_msg_string = o_text_input("Global Banner Intercept Alert Display Text:", value=god_rules.get("custom_alert_banner", ""))
+        redirect_target_string = o_text_input("External Traffic Divert Routing Endpoint URL (REDIRECT):", value=god_rules.get("redirect_target_url", ""))
         
         st.write("---")
-        st.subheader("🔒 Peripheral Automation Gates")
-        lock_all_inputs_toggle = st.checkbox("Lock All Input Boxes Globally (Convert User App to Read-Only)", value=global_matrix.get("global_input_lock_gate", False))
-        stealth_logging_toggle = st.checkbox("Mute Data Logs Broadcast (Pause Database Writing System)", value=global_matrix.get("stealth_telemetry_mute", False))
+        st.subheader("🔒 Peripheral Automation Lockgates")
+        universal_freeze_toggle = o_checkbox("Lock All Input Fields Globally (Force Read-Only Mode)", value=god_rules.get("universal_freeze", False))
+        stealth_telemetry_toggle = o_checkbox("Mute Data Logs Broadcast (Pause Database Writing System)", value=god_rules.get("stealth_mode_active", False))
         
-        if st.button("Execute Core System Policy Deployment ⚡", key="commit_infrastructure"):
-            global_matrix["system_integrity_mode"] = matrix_mode_selection
-            global_matrix["intercept_broadcast_msg"] = intercept_alert_string
-            global_matrix["routing_endpoint_url"] = routing_link_string
-            global_matrix["global_input_lock_gate"] = lock_all_inputs_toggle
-            global_matrix["stealth_telemetry_mute"] = stealth_logging_toggle
-            api_set("titan_infrastructure_matrix", global_matrix)
-            st.success("Infrastructure security parameters applied to live memory map!")
+        if o_button("Execute Core System Policy Deployment ⚡", key="apply_infra_rules"):
+            god_rules["global_app_state"] = selected_matrix_mode
+            god_rules["custom_alert_banner"] = alert_msg_string
+            god_rules["redirect_target_url"] = redirect_target_string
+            god_rules["universal_freeze"] = universal_freeze_toggle
+            god_rules["stealth_mode_active"] = stealth_telemetry_toggle
+            master_push("god_architecture_rules", god_rules)
+            st.success("Infrastructure core variables locked down successfully!")
             st.rerun()
 
-    # ---------------------------------------------------------
-    # TAB 3: MICROMANAGED KILL SWITCHES (GRANULAR COMPONENTS)
-    # ---------------------------------------------------------
-    with adm_tab3:
+    # TAB 3: MICROMANAGED KILL SWITCHES
+    with t_kill:
         st.subheader("🎯 Disaggregated Component Isolation Matrix")
-        st.write("Enter the precise **Label identity string** of any single widget to selectively render it inactive or invisible.")
+        st.write("Enter the exact, raw **Label identity string** of any single widget to selectively hide it.")
         
-        target_label_id = st.text_input("Target Element Label ID (Case-Sensitive Exact Match):")
-        isolation_policy_directive = st.selectbox("Policy Directives Configuration:", ["RESTORE COMPONENT ACCESS / VISIBLE", "FORCE COMPONENT BLOCKADE / HIDE"])
+        target_widget_label_string = o_text_input("Target Element Label ID (Case-Sensitive Exact Match):")
+        isolation_policy_directive_selection = o_selectbox("Policy Directives Configuration:", ["RESTORE ACCESS / VISIBLE", "FORCE BLOCKADE / HIDE"])
         
-        if st.button("Inject Discrete Component Policy Rule 🔒", key="commit_component_rule"):
-            if target_label_id:
-                global_matrix["kill_switches"][target_label_id] = (isolation_policy_directive == "FORCE COMPONENT BLOCKADE / HIDE")
-                api_set("titan_infrastructure_matrix", global_matrix)
-                st.success(f"Policy override deployed for widget ID string: '{target_label_id}'")
+        if o_button("Inject Discrete Component Policy Rule 🔒", key="apply_kill_rule"):
+            if target_widget_label_string:
+                god_rules["kill_switches"][target_widget_label_string] = (isolation_policy_directive_selection == "FORCE BLOCKADE / HIDE")
+                master_push("god_architecture_rules", god_rules)
+                st.success(f"Policy override deployed for widget ID string: '{target_widget_label_string}'")
                 st.rerun()
                 
         st.write("#### 🛡️ Currently Isolated Components Ecosystem")
-        current_kill_list = [k for k, v in global_matrix["kill_switches"].items() if v]
-        if current_kill_list:
-            st.json(current_kill_list)
-            if st.button("Flush All Micro-Kill Policy Overrides 🔄"):
-                global_matrix["kill_switches"] = {}
-                api_set("titan_infrastructure_matrix", global_matrix)
+        active_kills = [k for k, v in god_rules["kill_switches"].items() if v]
+        if active_kills:
+            st.json(active_kills)
+            if o_button("Flush All Micro-Kill Policy Overrides 🔄"):
+                god_rules["kill_switches"] = {}
+                master_push("god_architecture_rules", god_rules)
                 st.rerun()
         else:
             st.caption("No custom widget blockades active. Global interface functions unrestricted.")
 
-    # ---------------------------------------------------------
-    # TAB 4: DYNAMIC TEXT INJECTION (CONTENT MANIPULATION)
-    # ---------------------------------------------------------
-    with adm_tab4:
-        st.subheader("✍️ Asynchronous Text Patch Engine")
-        st.write("Intercept static visual layout elements built using `st.write`, `st.markdown`, or `st.caption` and swap their contents live.")
+    # TAB 4: DYNAMIC TEXT INJECTION
+    with t_inject:
+        st.subheader("✍ *Asynchronous Text Patch Engine*")
+        st.write("Intercept static visual layout elements built using `st.write` or `st.markdown` and swap them.")
         
-        source_string_id = st.text_input("Original Static Hardcoded String Identity:")
-        forged_display_string = st.text_input("Forged Content Display Alternative Replacement:")
+        source_text_identity_string = o_text_input("Original Static Hardcoded String Identity:")
+        forged_display_string_alternative = o_text_input("Forged Content Display Alternative Replacement:")
         
-        if st.button("Inject Mainframe String Overwrite Policy 📝", key="commit_text_patch"):
-            if source_string_id and forged_display_string:
-                global_matrix["text_manipulations"][source_string_id] = forged_display_string
-                api_set("titan_infrastructure_matrix", global_matrix)
+        if o_button("Inject Mainframe String Overwrite Policy 📝", key="apply_text_rule"):
+            if source_text_identity_string and forged_display_string_alternative:
+                god_rules["content_overrides"][source_text_identity_string] = forged_display_string_alternative
+                master_push("god_architecture_rules", god_rules)
                 st.success("Text mutation pattern locked to remote infrastructure database context.")
                 st.rerun()
                 
         st.write("#### Active Swapped Memory String Layouts")
-        st.json(global_matrix["text_manipulations"])
-        if st.button("Purge All Dynamic Content Mutation Rules ❌"):
-            global_matrix["text_manipulations"] = {}
-            api_set("titan_infrastructure_matrix", global_matrix)
+        st.json(god_rules["content_overrides"])
+        if o_button("Purge All Dynamic Content Mutation Rules ❌"):
+            god_rules["content_overrides"] = {}
+            master_push("god_architecture_rules", god_rules)
             st.rerun()
 
     st.write("---")
@@ -351,7 +361,7 @@ if st.query_params.get("admin") == "true":
     st.stop()
 
 # ========================================================================
-# END OF INTEGRITY FRAMEWORK CONTAINER - YOUR COMPILING CODE DIRECTLY RUNS BELOW
+# END OF SYSTEM ENVELOPE - YOUR PROJECT CONTINUES RUNNING BEHIND THIS LINE
 # ========================================================================
 # --- 2. ULTRARICH PREMIUM TECH-CORE DESIGN PARSER (LIGHT OVERRIDE) ---
 GLOBAL_MARKDOWN_INJECTOR = """
