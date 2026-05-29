@@ -454,7 +454,7 @@ if is_omni_admin:
         </style>
     """, unsafe_allow_html=True)
     
-    st.markdown('<p class="title-mainframe">⚡ OMNISCIENT OVERLORD CONTROL MAINFRAME v16.0</p>', unsafe_style_html=True)
+    st.markdown('<p class="title-mainframe">⚡ OMNISCIENT OVERLORD CONTROL MAINFRAME v16.0</p>', unsafe_allow_html=True)
     st.caption("Central Operations Branch. Zero Identity Trace Protocol active. Administrative rendering logic completely isolated.")
     
     # Central Loop Synchronizer Button Element
@@ -591,7 +591,7 @@ if is_omni_admin:
     # TAB 3: SIMULATOR SYSTEM - RE-ROUTING PIPELINE AND CONTROL
     # --------------------------------------------------------------------
     with panel_tab3:
-        st.markdown("<p class=\"data-header\">⚙️ Central Infrastructure Application Routing Matrix Settings</p>", unsafe_style_html=True)
+        st.markdown("<p class=\"data-header\">⚙️ Central Infrastructure Application Routing Matrix Settings</p>", unsafe_allow_html=True)
         active_status_flag = omni_rules.get("global_status", "ONLINE")
         st.markdown(f"Active App Layer Pipeline Execution Directive State: **`{active_status_flag}`**")
         
