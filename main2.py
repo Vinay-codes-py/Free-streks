@@ -298,14 +298,6 @@ if is_omni_admin:
 # NORMAL APP CODE STARTS HERE (Users will see this, Admin will not)
 # ========================================================================
 
-st.title("Welcome to the Official Portal")
-st.write("Enter your details below to continue.")
-
-user_name = st.text_input("Your Full Name")
-user_class = st.selectbox("Select Class", ["Class 10", "Class 11", "Class 12"])
-if st.button("Submit Information"):
-    st.success("Information submitted successfully!")
-
 # --- 2. ULTRARICH PREMIUM TECH-CORE DESIGN PARSER (LIGHT OVERRIDE) ---
 GLOBAL_MARKDOWN_INJECTOR = """
 <style>
