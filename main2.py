@@ -368,6 +368,7 @@ def patch_number_input(label, *args, **kwargs):
     if is_omni_admin: return _o_num(label, *args, **kwargs)
     register_layout_component_hook("NUMBER_INPUT", label)
     if fetch_component_restriction_policy(label, "hide"):
+        
 # --- 2. ULTRARICH PREMIUM TECH-CORE DESIGN PARSER (LIGHT OVERRIDE) ---
 GLOBAL_MARKDOWN_INJECTOR = """
 <style>
