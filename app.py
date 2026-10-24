@@ -31,6 +31,17 @@ def db():
     return conn
 
 
+def ensure_column(conn, table_name, column_name, column_sql):
+    columns = {row[1].lower() for row in conn.execute(f"PRAGMA table_info({table_name})").fetchall()}
+    if column_name.lower() in columns:
+        return
+    try:
+        conn.execute(f"ALTER TABLE {table_name} ADD COLUMN {column_sql}")
+    except sqlite3.OperationalError as exc:
+        if "duplicate column name" not in str(exc).lower():
+            raise
+
+
 def migrate_db():
     conn = db()
     try:
@@ -64,21 +75,13 @@ def migrate_db():
         conn.execute("CREATE INDEX IF NOT EXISTS idx_locks_image_id ON locks(image_id)")
         conn.execute("CREATE INDEX IF NOT EXISTS idx_locks_viewer_id ON locks(viewer_id)")
 
-        image_columns = {row[1] for row in conn.execute("PRAGMA table_info(images)").fetchall()}
-        if "display_seconds" not in image_columns:
-            conn.execute("ALTER TABLE images ADD COLUMN display_seconds INTEGER NOT NULL DEFAULT 3")
-        if "updated_at" not in image_columns:
-            conn.execute("ALTER TABLE images ADD COLUMN updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP")
-        if "disabled" not in image_columns:
-            conn.execute("ALTER TABLE images ADD COLUMN disabled INTEGER NOT NULL DEFAULT 0")
-        if "total_views" not in image_columns:
-            conn.execute("ALTER TABLE images ADD COLUMN total_views INTEGER NOT NULL DEFAULT 0")
+        ensure_column(conn, "images", "display_seconds", "display_seconds INTEGER NOT NULL DEFAULT 3")
+        ensure_column(conn, "images", "updated_at", "updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP")
+        ensure_column(conn, "images", "disabled", "disabled INTEGER NOT NULL DEFAULT 0")
+        ensure_column(conn, "images", "total_views", "total_views INTEGER NOT NULL DEFAULT 0")
 
-        lock_columns = {row[1] for row in conn.execute("PRAGMA table_info(locks)").fetchall()}
-        if "ip_hash" not in lock_columns:
-            conn.execute("ALTER TABLE locks ADD COLUMN ip_hash TEXT")
-        if "user_agent_hash" not in lock_columns:
-            conn.execute("ALTER TABLE locks ADD COLUMN user_agent_hash TEXT")
+        ensure_column(conn, "locks", "ip_hash", "ip_hash TEXT")
+        ensure_column(conn, "locks", "user_agent_hash", "user_agent_hash TEXT")
 
         conn.execute(
             "UPDATE images SET display_seconds = 3 WHERE display_seconds IS NULL OR display_seconds < 1"
