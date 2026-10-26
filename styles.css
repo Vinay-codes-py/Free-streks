@@ -1,0 +1,143 @@
+:root {
+    --bg: #0b1020;
+    --panel: #121b2d;
+    --panel-2: #1b2942;
+    --accent: #7dd3fc;
+    --accent-2: #8b5cf6;
+    --text: #e5edf9;
+    --muted: #9fb2d3;
+    --success: #34d399;
+    --warning: #fbbf24;
+    --shadow: rgba(15, 23, 42, 0.4);
+}
+
+html, body, [data-testid="stAppViewContainer"] {
+    background: linear-gradient(135deg, #0b1020, #111827 32%, #172554);
+    color: var(--text);
+}
+
+[data-testid="stSidebar"] {
+    background: rgba(15, 23, 42, 0.78);
+    border-right: 1px solid rgba(125, 211, 252, 0.12);
+}
+
+h1, h2, h3 {
+    color: var(--text);
+}
+
+.stApp {
+    animation: fadeIn 0.6s ease-out;
+}
+
+.stMetric {
+    background: rgba(18, 27, 45, 0.9);
+    border: 1px solid rgba(125, 211, 252, 0.12);
+    padding: 0.8rem 1rem;
+    border-radius: 18px;
+    box-shadow: 0 10px 25px var(--shadow);
+}
+
+.stButton > button {
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-weight: 600;
+    padding: 0.7rem 1.2rem;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 8px 22px rgba(75, 85, 255, 0.3);
+}
+
+.stButton > button:hover {
+    transform: translateY(-1px) scale(1.01);
+}
+
+[data-testid="stFileUploaderDropzone"] {
+    border: 1px dashed rgba(125, 211, 252, 0.5);
+    border-radius: 16px;
+    background: rgba(18, 27, 45, 0.75);
+}
+
+div[data-baseweb="select"] > div {
+    background: rgba(18, 27, 45, 0.9);
+    border-radius: 12px;
+}
+
+textarea, input, .stNumberInput input {
+    background: rgba(18, 27, 45, 0.9) !important;
+    color: var(--text) !important;
+    border-radius: 12px !important;
+}
+
+.battery-box {
+    background: linear-gradient(135deg, rgba(15, 118, 110, 0.18), rgba(59, 130, 246, 0.18));
+    border: 1px solid rgba(125, 211, 252, 0.2);
+    border-radius: 20px;
+    padding: 1rem 1.1rem;
+    box-shadow: 0 16px 32px rgba(17, 24, 39, 0.3);
+    animation: pulse 2.5s ease-in-out infinite;
+}
+
+.battery-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+}
+
+.mini-title {
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+}
+
+#battery-value {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-top: 0.2rem;
+}
+
+.battery-outer {
+    width: 120px;
+    height: 52px;
+    border: 2px solid rgba(148, 163, 184, 0.8);
+    border-radius: 12px;
+    padding: 4px;
+    position: relative;
+    background: rgba(15, 23, 42, 0.7);
+}
+
+.battery-outer::after {
+    content: "";
+    position: absolute;
+    right: -8px;
+    top: 17px;
+    width: 6px;
+    height: 16px;
+    background: rgba(148, 163, 184, 0.8);
+    border-radius: 0 5px 5px 0;
+}
+
+.battery-inner {
+    height: 100%;
+    width: 50%;
+    background: linear-gradient(90deg, var(--success), var(--accent));
+    border-radius: 8px;
+    transition: width 0.5s ease, background 0.5s ease;
+}
+
+.battery-meta {
+    margin-top: 0.8rem;
+    color: var(--muted);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.01); }
+}
