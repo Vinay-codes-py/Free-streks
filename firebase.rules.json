@@ -1,0 +1,33 @@
+{
+  "rules": {
+    ".read": false,
+    ".write": false,
+    "rooms": {
+      "$room": {
+        ".read": "auth != null && auth.token.email_verified === true",
+        "messages": {
+          ".indexOn": ["createdAt"],
+          "$message": {
+            ".write": "auth != null && auth.token.email_verified === true && ((!data.exists() && newData.child('uid').val() === auth.uid) || auth.token.email === 'moderator@example.com')",
+            ".validate": "!newData.exists() || newData.hasChildren(['uid', 'email', 'text', 'createdAt'])",
+            "uid": {
+              ".validate": "newData.isString() && ((!data.exists() && newData.val() === auth.uid) || auth.token.email === 'moderator@example.com')"
+            },
+            "email": {
+              ".validate": "newData.isString() && ((!data.exists() && newData.val() === auth.token.email) || auth.token.email === 'moderator@example.com')"
+            },
+            "text": {
+              ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 1000"
+            },
+            "createdAt": {
+              ".validate": "newData.isNumber()"
+            },
+            "$other": {
+              ".validate": false
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -141,3 +141,91 @@ textarea, input, .stNumberInput input {
     0%, 100% { transform: scale(1); }
     50% { transform: scale(1.01); }
 }
+
+:root {
+    --chat-ink: #172321;
+    --chat-muted: #63726d;
+    --chat-paper: #f3f5ef;
+    --chat-green: #236b55;
+    --chat-lime: #c9ef77;
+    --chat-line: #d7ded6;
+}
+
+html, body, [data-testid="stAppViewContainer"] {
+    background: var(--chat-paper);
+    color: var(--chat-ink);
+}
+
+[data-testid="stSidebar"] {
+    background: #e8eee6;
+    border-right: 1px solid var(--chat-line);
+}
+
+[data-testid="stHeader"] {
+    background: transparent;
+}
+
+.stApp {
+    animation: chat-enter 420ms ease-out both;
+}
+
+[data-testid="stChatMessage"] {
+    border: 1px solid var(--chat-line);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.62);
+    padding: 0.4rem 0.8rem;
+    animation: message-enter 240ms ease-out both;
+}
+
+[data-testid="stChatInput"] textarea,
+div[data-baseweb="input"] input,
+div[data-baseweb="textarea"] textarea {
+    background: #fff !important;
+    color: var(--chat-ink) !important;
+    border-radius: 10px !important;
+}
+
+.stButton > button,
+.stFormSubmitButton > button {
+    background: var(--chat-green);
+    color: #fff;
+    border: 1px solid var(--chat-green);
+    border-radius: 9px;
+    box-shadow: none;
+    transition: background 160ms ease, transform 160ms ease;
+}
+
+.stButton > button:hover,
+.stFormSubmitButton > button:hover {
+    background: #174e3e;
+    border-color: #174e3e;
+    transform: translateY(-1px);
+}
+
+.empty-room {
+    margin: 3rem auto;
+    max-width: 460px;
+    padding: 2rem;
+    border: 1px dashed #a9b8ad;
+    border-radius: 12px;
+    color: var(--chat-muted);
+    text-align: center;
+}
+
+@keyframes chat-enter {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes message-enter {
+    from { opacity: 0; transform: translateY(4px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
