@@ -14,6 +14,7 @@ st.set_page_config(page_title="OpenRoom Chat", page_icon="O", layout="wide")
 
 ROOMS = {"general": "General", "study": "Study room", "lounge": "Lounge"}
 MAX_MESSAGE_LENGTH = 1000
+DEFAULT_DATABASE_URL = "https://web-app-29f9b-default-rtdb.asia-southeast1.firebasedatabase.app"
 AUTH_BASE = "https://identitytoolkit.googleapis.com/v1"
 TOKEN_BASE = "https://securetoken.googleapis.com/v1"
 
@@ -40,7 +41,7 @@ def get_config() -> dict[str, Any]:
     }
     return {
         "api_key": get_setting("FIREBASE_API_KEY"),
-        "database_url": get_setting("FIREBASE_DATABASE_URL").rstrip("/"),
+        "database_url": get_setting("FIREBASE_DATABASE_URL", DEFAULT_DATABASE_URL).rstrip("/"),
         "admin_emails": admin_emails,
     }
 

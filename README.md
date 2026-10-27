@@ -19,7 +19,7 @@ OpenRoom is a real-time, room-based chat app built with Streamlit and Firebase A
 
 	```toml
 	FIREBASE_API_KEY = "your-firebase-web-api-key"
-	FIREBASE_DATABASE_URL = "https://your-project-default-rtdb.region.firebasedatabase.app"
+	FIREBASE_DATABASE_URL = "https://web-app-29f9b-default-rtdb.asia-southeast1.firebasedatabase.app"
 	ADMIN_EMAILS = "moderator@example.com"
 	```
 
